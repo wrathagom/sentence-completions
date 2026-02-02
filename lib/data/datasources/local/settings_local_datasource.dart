@@ -85,4 +85,24 @@ class SettingsLocalDatasource {
     final settings = getSettings();
     await saveSettings(settings.copyWith(reminderSettingsJson: jsonSettings));
   }
+
+  Future<void> setHomeAnalyticsWidgets(Set<HomeAnalyticsWidget> widgets) async {
+    final settings = getSettings();
+    await saveSettings(settings.copyWith(homeAnalyticsWidgets: widgets));
+  }
+
+  Future<void> setCardGlowIntensity(CardGlowIntensity intensity) async {
+    final settings = getSettings();
+    await saveSettings(settings.copyWith(cardGlowIntensity: intensity));
+  }
+
+  Future<void> setBackgroundPattern(BackgroundPattern pattern) async {
+    final settings = getSettings();
+    await saveSettings(settings.copyWith(backgroundPattern: pattern));
+  }
+
+  Future<void> setPageTransitionStyle(PageTransitionStyle style) async {
+    final settings = getSettings();
+    await saveSettings(settings.copyWith(pageTransitionStyle: style));
+  }
 }

@@ -36,29 +36,49 @@ class App extends ConsumerWidget {
     final isDesktop = !kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS);
     final hasPattern = settings.backgroundPattern != BackgroundPattern.none;
 
-    // Get base themes and make scaffolds transparent if pattern is active
-    // This must be done at the theme level (not in builder) to avoid flicker during transitions
+    // Get base themes
     var lightTheme = AppTheme.getTheme(settings.colorTheme, Brightness.light);
     var darkTheme = AppTheme.getTheme(settings.colorTheme, Brightness.dark);
-    if (hasPattern) {
-      // Use crossfade transitions when pattern is active to avoid seeing both pages layered
-      const crossfadeTransitions = PageTransitionsTheme(
+
+    // Build page transitions based on user preference
+    PageTransitionsTheme? transitionsTheme;
+    if (settings.pageTransitionStyle != PageTransitionStyle.none) {
+      final PageTransitionsBuilder builder;
+      if (hasPattern) {
+        // When pattern is active, use crossfade variants to avoid layered pages
+        builder = settings.pageTransitionStyle == PageTransitionStyle.slide
+            ? const _CrossfadeSlidePageTransitionsBuilder()
+            : const _CrossfadePageTransitionsBuilder();
+      } else {
+        // No pattern, can use standard transitions
+        builder = settings.pageTransitionStyle == PageTransitionStyle.slide
+            ? const _SlidePageTransitionsBuilder()
+            : const _CrossfadePageTransitionsBuilder();
+      }
+      transitionsTheme = PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: _CrossfadePageTransitionsBuilder(),
-          TargetPlatform.iOS: _CrossfadePageTransitionsBuilder(),
-          TargetPlatform.linux: _CrossfadePageTransitionsBuilder(),
-          TargetPlatform.macOS: _CrossfadePageTransitionsBuilder(),
-          TargetPlatform.windows: _CrossfadePageTransitionsBuilder(),
+          TargetPlatform.android: builder,
+          TargetPlatform.iOS: builder,
+          TargetPlatform.linux: builder,
+          TargetPlatform.macOS: builder,
+          TargetPlatform.windows: builder,
         },
       );
+    }
+
+    // Apply transparent scaffolds and transitions
+    if (hasPattern) {
       lightTheme = lightTheme.copyWith(
         scaffoldBackgroundColor: Colors.transparent,
-        pageTransitionsTheme: crossfadeTransitions,
+        pageTransitionsTheme: transitionsTheme,
       );
       darkTheme = darkTheme.copyWith(
         scaffoldBackgroundColor: Colors.transparent,
-        pageTransitionsTheme: crossfadeTransitions,
+        pageTransitionsTheme: transitionsTheme,
       );
+    } else if (transitionsTheme != null) {
+      lightTheme = lightTheme.copyWith(pageTransitionsTheme: transitionsTheme);
+      darkTheme = darkTheme.copyWith(pageTransitionsTheme: transitionsTheme);
     }
 
     Widget app = MaterialApp.router(
@@ -161,6 +181,92 @@ class _CrossfadePageTransitionsBuilder extends PageTransitionsBuilder {
         // Fade out when this page is being covered by another
         opacity: Tween<double>(begin: 1.0, end: 0.0).animate(secondaryAnimation),
         child: child,
+      ),
+    );
+  }
+}
+
+/// A page transition that slides pages in/out horizontally.
+class _SlidePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _SlidePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // New page slides in from right
+    final slideIn = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    // Old page slides out to left
+    final slideOut = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(-0.3, 0.0),
+    ).animate(CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    return SlideTransition(
+      position: slideOut,
+      child: SlideTransition(
+        position: slideIn,
+        child: child,
+      ),
+    );
+  }
+}
+
+/// A slide transition that also fades to work with transparent scaffolds.
+class _CrossfadeSlidePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _CrossfadeSlidePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // New page slides in from right and fades in
+    final slideIn = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    // Old page slides out to left and fades out
+    final slideOut = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(-0.3, 0.0),
+    ).animate(CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    return SlideTransition(
+      position: slideOut,
+      child: FadeTransition(
+        opacity: Tween<double>(begin: 1.0, end: 0.0).animate(secondaryAnimation),
+        child: SlideTransition(
+          position: slideIn,
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
       ),
     );
   }

@@ -63,6 +63,27 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _showTitleBarStyleDialog(context, ref, settings),
                 ),
+              _SettingsTile(
+                icon: Icons.blur_on,
+                title: 'Card Glow',
+                subtitle: settings.cardGlowIntensity.displayName,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showCardGlowDialog(context, ref, settings),
+              ),
+              _SettingsTile(
+                icon: Icons.texture,
+                title: 'Background Pattern',
+                subtitle: settings.backgroundPattern.displayName,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showBackgroundPatternDialog(context, ref, settings),
+              ),
+              _SettingsTile(
+                icon: Icons.swap_horiz,
+                title: 'Page Transitions',
+                subtitle: settings.pageTransitionStyle.displayName,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showPageTransitionDialog(context, ref, settings),
+              ),
             ],
           ),
           _SettingsSection(
@@ -138,12 +159,19 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               _SettingsTile(
                 icon: Icons.download,
-                title: 'Export Data',
-                subtitle: 'Export entries to PDF, Markdown, or JSON',
+                title: 'Export & Import',
+                subtitle: 'Export entries or restore from backup',
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.go('/export'),
               ),
               _DeletedEntriesTile(),
+              _SettingsTile(
+                icon: Icons.delete_forever,
+                title: 'Delete My Data',
+                subtitle: 'Permanently delete all entries and reset app',
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showDeleteDataDialog(context, ref),
+              ),
             ],
           ),
           // Desktop-only shortcuts section
@@ -188,6 +216,101 @@ class SettingsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showDeleteDataDialog(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete All Data?'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'This will permanently delete:',
+            ),
+            SizedBox(height: 8),
+            Text('  - All journal entries'),
+            Text('  - All goals and progress'),
+            Text('  - All saved prompts'),
+            Text('  - All app settings'),
+            SizedBox(height: 16),
+            Text(
+              'This action cannot be undone. Consider exporting your data first.',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete All'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    // Show second confirmation
+    final doubleConfirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text(
+          'Type "DELETE" to confirm you want to permanently delete all your data.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          _DeleteConfirmationButton(),
+        ],
+      ),
+    );
+
+    if (doubleConfirmed != true || !context.mounted) return;
+
+    // Perform deletion
+    try {
+      final dataService = ref.read(dataManagementServiceProvider);
+      await dataService.deleteAllData();
+
+      if (!context.mounted) return;
+
+      // Invalidate all data providers to clear cached data
+      ref.invalidate(entriesProvider);
+      ref.invalidate(deletedEntriesProvider);
+      ref.invalidate(deletedEntryCountProvider);
+      ref.invalidate(savedStemsProvider);
+      ref.invalidate(savedStemCountProvider);
+      ref.invalidate(activeGoalsWithProgressProvider);
+      ref.invalidate(streakDataProvider);
+      ref.invalidate(analyticsDataProvider);
+      ref.invalidate(favoriteEntriesProvider);
+      ref.invalidate(pendingResurfacingProvider);
+      ref.invalidate(settingsProvider);
+
+      // Navigate to onboarding
+      context.go('/onboarding/welcome');
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to delete data: $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   Future<void> _showQuitDialog(BuildContext context) async {
@@ -343,6 +466,173 @@ class SettingsScreen extends ConsumerWidget {
         return Icons.light_mode;
       case ThemeModePreference.dark:
         return Icons.dark_mode;
+    }
+  }
+
+  Future<void> _showCardGlowDialog(
+    BuildContext context,
+    WidgetRef ref,
+    UserSettings settings,
+  ) async {
+    final result = await showDialog<CardGlowIntensity?>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Card Glow'),
+        children: [
+          for (final intensity in CardGlowIntensity.values)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(intensity),
+              child: ListTile(
+                leading: Icon(_getCardGlowIcon(intensity)),
+                title: Text(intensity.displayName),
+                subtitle: Text(_getCardGlowDescription(intensity)),
+                trailing: settings.cardGlowIntensity == intensity
+                    ? const Icon(Icons.check)
+                    : null,
+              ),
+            ),
+        ],
+      ),
+    );
+
+    if (result != null) {
+      ref.read(settingsProvider.notifier).setCardGlowIntensity(result);
+    }
+  }
+
+  IconData _getCardGlowIcon(CardGlowIntensity intensity) {
+    switch (intensity) {
+      case CardGlowIntensity.none:
+        return Icons.blur_off;
+      case CardGlowIntensity.subtle:
+        return Icons.blur_on;
+      case CardGlowIntensity.medium:
+        return Icons.blur_circular;
+      case CardGlowIntensity.strong:
+        return Icons.auto_awesome;
+    }
+  }
+
+  String _getCardGlowDescription(CardGlowIntensity intensity) {
+    switch (intensity) {
+      case CardGlowIntensity.none:
+        return 'No glow effect on cards';
+      case CardGlowIntensity.subtle:
+        return 'Gentle, barely visible glow';
+      case CardGlowIntensity.medium:
+        return 'Noticeable colored glow';
+      case CardGlowIntensity.strong:
+        return 'Vibrant, prominent glow';
+    }
+  }
+
+  Future<void> _showBackgroundPatternDialog(
+    BuildContext context,
+    WidgetRef ref,
+    UserSettings settings,
+  ) async {
+    final result = await showDialog<BackgroundPattern?>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Background Pattern'),
+        children: [
+          for (final pattern in BackgroundPattern.values)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(pattern),
+              child: ListTile(
+                leading: Icon(_getBackgroundPatternIcon(pattern)),
+                title: Text(pattern.displayName),
+                subtitle: Text(_getBackgroundPatternDescription(pattern)),
+                trailing: settings.backgroundPattern == pattern
+                    ? const Icon(Icons.check)
+                    : null,
+              ),
+            ),
+        ],
+      ),
+    );
+
+    if (result != null) {
+      ref.read(settingsProvider.notifier).setBackgroundPattern(result);
+    }
+  }
+
+  IconData _getBackgroundPatternIcon(BackgroundPattern pattern) {
+    switch (pattern) {
+      case BackgroundPattern.none:
+        return Icons.format_color_reset;
+      case BackgroundPattern.noise:
+        return Icons.grain;
+      case BackgroundPattern.dots:
+        return Icons.grid_on;
+      case BackgroundPattern.diagonalLines:
+        return Icons.line_style;
+    }
+  }
+
+  String _getBackgroundPatternDescription(BackgroundPattern pattern) {
+    switch (pattern) {
+      case BackgroundPattern.none:
+        return 'Solid color background';
+      case BackgroundPattern.noise:
+        return 'Subtle noise texture';
+      case BackgroundPattern.dots:
+        return 'Subtle dot grid overlay';
+      case BackgroundPattern.diagonalLines:
+        return 'Subtle diagonal lines';
+    }
+  }
+
+  Future<void> _showPageTransitionDialog(
+    BuildContext context,
+    WidgetRef ref,
+    UserSettings settings,
+  ) async {
+    final result = await showDialog<PageTransitionStyle?>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Page Transitions'),
+        children: [
+          for (final style in PageTransitionStyle.values)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(style),
+              child: ListTile(
+                leading: Icon(_getPageTransitionIcon(style)),
+                title: Text(style.displayName),
+                subtitle: Text(_getPageTransitionDescription(style)),
+                trailing: settings.pageTransitionStyle == style
+                    ? const Icon(Icons.check)
+                    : null,
+              ),
+            ),
+        ],
+      ),
+    );
+
+    if (result != null) {
+      ref.read(settingsProvider.notifier).setPageTransitionStyle(result);
+    }
+  }
+
+  IconData _getPageTransitionIcon(PageTransitionStyle style) {
+    switch (style) {
+      case PageTransitionStyle.none:
+        return Icons.block;
+      case PageTransitionStyle.fade:
+        return Icons.blur_on;
+      case PageTransitionStyle.slide:
+        return Icons.swap_horiz;
+    }
+  }
+
+  String _getPageTransitionDescription(PageTransitionStyle style) {
+    switch (style) {
+      case PageTransitionStyle.none:
+        return 'Instant page changes';
+      case PageTransitionStyle.fade:
+        return 'Pages crossfade smoothly';
+      case PageTransitionStyle.slide:
+        return 'Pages slide in and out';
     }
   }
 
@@ -864,6 +1154,64 @@ class _DeletedEntriesTile extends ConsumerWidget {
       ),
       trailing: const Icon(Icons.chevron_right),
       onTap: () => context.go('/deleted'),
+    );
+  }
+}
+
+class _DeleteConfirmationButton extends StatefulWidget {
+  @override
+  State<_DeleteConfirmationButton> createState() => _DeleteConfirmationButtonState();
+}
+
+class _DeleteConfirmationButtonState extends State<_DeleteConfirmationButton> {
+  final _controller = TextEditingController();
+  bool _isValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      final valid = _controller.text.toUpperCase() == 'DELETE';
+      if (valid != _isValid) {
+        setState(() {
+          _isValid = valid;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 100,
+          child: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              hintText: 'DELETE',
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            ),
+            textCapitalization: TextCapitalization.characters,
+          ),
+        ),
+        const SizedBox(width: 8),
+        FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+          onPressed: _isValid ? () => Navigator.of(context).pop(true) : null,
+          child: const Text('Delete'),
+        ),
+      ],
     );
   }
 }

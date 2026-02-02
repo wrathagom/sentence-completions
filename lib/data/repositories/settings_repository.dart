@@ -72,4 +72,20 @@ class SettingsRepository {
   Future<void> setReminderSettings(String? jsonSettings) {
     return _datasource.setReminderSettings(jsonSettings);
   }
+
+  Future<void> setHomeAnalyticsWidgets(Set<HomeAnalyticsWidget> widgets) {
+    return _datasource.setHomeAnalyticsWidgets(widgets);
+  }
+
+  Future<void> setCardGlowIntensity(CardGlowIntensity intensity) {
+    return _datasource.setCardGlowIntensity(intensity);
+  }
+
+  Future<void> setBackgroundPattern(BackgroundPattern pattern) {
+    return _datasource.setBackgroundPattern(pattern);
+  }
+
+  Future<void> setPageTransitionStyle(PageTransitionStyle style) {
+    return _datasource.setPageTransitionStyle(style);
+  }
 }

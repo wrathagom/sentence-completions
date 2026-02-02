@@ -31,7 +31,9 @@ import '../../data/models/analytics_data.dart';
 import '../../domain/services/analytics_service.dart';
 import '../../domain/services/anthropic_service.dart';
 import '../../domain/services/completion_service.dart';
+import '../../domain/services/data_management_service.dart';
 import '../../domain/services/export_service.dart';
+import '../../domain/services/import_service.dart';
 import '../../domain/services/intelligent_suggestion_service.dart';
 import '../../domain/services/notification_service.dart';
 import '../../domain/services/resurfacing_service.dart';
@@ -171,6 +173,25 @@ final intelligentSuggestionServiceProvider = Provider<IntelligentSuggestionServi
 final exportServiceProvider = Provider<ExportService>((ref) {
   return ExportService(
     entryRepository: ref.watch(entryRepositoryProvider),
+    settingsRepository: ref.watch(settingsRepositoryProvider),
+    goalRepository: ref.watch(goalRepositoryProvider),
+    savedStemRepository: ref.watch(savedStemRepositoryProvider),
+  );
+});
+
+final importServiceProvider = Provider<ImportService>((ref) {
+  return ImportService(
+    entryRepository: ref.watch(entryRepositoryProvider),
+    stemRepository: ref.watch(stemRepositoryProvider),
+    settingsRepository: ref.watch(settingsRepositoryProvider),
+    goalRepository: ref.watch(goalRepositoryProvider),
+    savedStemRepository: ref.watch(savedStemRepositoryProvider),
+  );
+});
+
+final dataManagementServiceProvider = Provider<DataManagementService>((ref) {
+  return DataManagementService(
+    settingsRepository: ref.watch(settingsRepositoryProvider),
   );
 });
 
@@ -262,6 +283,26 @@ class SettingsNotifier extends StateNotifier<UserSettings> {
 
   Future<void> setReminderSettings(String jsonSettings) async {
     await _repository.setReminderSettings(jsonSettings);
+    state = _repository.getSettings();
+  }
+
+  Future<void> setHomeAnalyticsWidgets(Set<HomeAnalyticsWidget> widgets) async {
+    await _repository.setHomeAnalyticsWidgets(widgets);
+    state = _repository.getSettings();
+  }
+
+  Future<void> setCardGlowIntensity(CardGlowIntensity intensity) async {
+    await _repository.setCardGlowIntensity(intensity);
+    state = _repository.getSettings();
+  }
+
+  Future<void> setBackgroundPattern(BackgroundPattern pattern) async {
+    await _repository.setBackgroundPattern(pattern);
+    state = _repository.getSettings();
+  }
+
+  Future<void> setPageTransitionStyle(PageTransitionStyle style) async {
+    await _repository.setPageTransitionStyle(style);
     state = _repository.getSettings();
   }
 }

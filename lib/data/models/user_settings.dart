@@ -121,6 +121,25 @@ extension BackgroundPatternExtension on BackgroundPattern {
   }
 }
 
+enum PageTransitionStyle {
+  none,
+  fade,
+  slide,
+}
+
+extension PageTransitionStyleExtension on PageTransitionStyle {
+  String get displayName {
+    switch (this) {
+      case PageTransitionStyle.none:
+        return 'None';
+      case PageTransitionStyle.fade:
+        return 'Fade';
+      case PageTransitionStyle.slide:
+        return 'Slide';
+    }
+  }
+}
+
 extension HomeAnalyticsWidgetExtension on HomeAnalyticsWidget {
   String get displayName {
     switch (this) {
@@ -193,6 +212,7 @@ class UserSettings {
   final Set<HomeAnalyticsWidget> homeAnalyticsWidgets;
   final CardGlowIntensity cardGlowIntensity;
   final BackgroundPattern backgroundPattern;
+  final PageTransitionStyle pageTransitionStyle;
 
   const UserSettings({
     this.privacyMode = false,
@@ -211,6 +231,7 @@ class UserSettings {
     this.homeAnalyticsWidgets = const {HomeAnalyticsWidget.wordCloud},
     this.cardGlowIntensity = CardGlowIntensity.none,
     this.backgroundPattern = BackgroundPattern.none,
+    this.pageTransitionStyle = PageTransitionStyle.fade,
   });
 
   // Helper getters for backwards compatibility and convenience
@@ -233,6 +254,7 @@ class UserSettings {
     Set<HomeAnalyticsWidget>? homeAnalyticsWidgets,
     CardGlowIntensity? cardGlowIntensity,
     BackgroundPattern? backgroundPattern,
+    PageTransitionStyle? pageTransitionStyle,
   }) {
     return UserSettings(
       privacyMode: privacyMode ?? this.privacyMode,
@@ -251,6 +273,7 @@ class UserSettings {
       homeAnalyticsWidgets: homeAnalyticsWidgets ?? this.homeAnalyticsWidgets,
       cardGlowIntensity: cardGlowIntensity ?? this.cardGlowIntensity,
       backgroundPattern: backgroundPattern ?? this.backgroundPattern,
+      pageTransitionStyle: pageTransitionStyle ?? this.pageTransitionStyle,
     );
   }
 
@@ -272,6 +295,7 @@ class UserSettings {
       'homeAnalyticsWidgets': homeAnalyticsWidgets.map((w) => w.index).toList(),
       'cardGlowIntensity': cardGlowIntensity.index,
       'backgroundPattern': backgroundPattern.index,
+      'pageTransitionStyle': pageTransitionStyle.index,
     };
   }
 
@@ -322,6 +346,7 @@ class UserSettings {
       homeAnalyticsWidgets: homeAnalyticsWidgets,
       cardGlowIntensity: CardGlowIntensity.values[json['cardGlowIntensity'] as int? ?? 0],
       backgroundPattern: BackgroundPattern.values[json['backgroundPattern'] as int? ?? 0],
+      pageTransitionStyle: PageTransitionStyle.values[json['pageTransitionStyle'] as int? ?? 1], // Default to fade
     );
   }
 }
