@@ -23,6 +23,7 @@ import '../screens/settings/export_screen.dart';
 import '../screens/settings/reminder_settings_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash_screen.dart';
+import '../screens/history/share_card_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -164,6 +165,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             entryId: id,
             showComparison: true,
           );
+        },
+      ),
+      GoRoute(
+        path: '/share/:entryId',
+        builder: (context, state) {
+          final entryId = state.pathParameters['entryId']!;
+          return ShareCardScreen(entryId: entryId);
         },
       ),
     ],

@@ -37,6 +37,7 @@ import '../../domain/services/resurfacing_service.dart';
 import '../../domain/services/streak_service.dart';
 import '../../domain/services/suggestion_service.dart';
 import '../../domain/services/goal_service.dart';
+import '../../domain/services/share_card_service.dart';
 import '../../data/models/streak_data.dart';
 
 // SharedPreferences provider - must be overridden at app startup
@@ -418,4 +419,9 @@ final entryReactionsProvider =
     FutureProvider.family<List<EntryReaction>, String>((ref, entryId) async {
   final repository = ref.watch(reactionRepositoryProvider);
   return repository.getReactionsForEntry(entryId);
+});
+
+// Share card service provider
+final shareCardServiceProvider = Provider<ShareCardService>((ref) {
+  return ShareCardService();
 });

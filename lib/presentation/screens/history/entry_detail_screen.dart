@@ -41,6 +41,11 @@ class EntryDetailScreen extends ConsumerWidget {
         title: Text(showComparison ? 'Comparison' : 'Entry Details'),
         actions: [
           if (!showComparison) ...[
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () => context.push('/share/$entryId'),
+              tooltip: 'Share as image',
+            ),
             entryAsync.when(
               data: (entry) {
                 if (entry == null) return const SizedBox.shrink();
