@@ -1,20 +1,25 @@
 import 'package:uuid/uuid.dart';
 
+import '../datasources/local/deleted_entry_datasource.dart';
 import '../datasources/local/entry_local_datasource.dart';
 import '../datasources/local/resurfacing_local_datasource.dart';
+import '../models/deleted_entry.dart';
 import '../models/entry.dart';
 
 class EntryRepository {
   final EntryLocalDatasource _entryDatasource;
   final ResurfacingLocalDatasource _resurfacingDatasource;
+  final DeletedEntryDatasource _deletedEntryDatasource;
   final Uuid _uuid;
 
   EntryRepository({
     required EntryLocalDatasource entryDatasource,
     required ResurfacingLocalDatasource resurfacingDatasource,
+    DeletedEntryDatasource? deletedEntryDatasource,
     Uuid? uuid,
   })  : _entryDatasource = entryDatasource,
         _resurfacingDatasource = resurfacingDatasource,
+        _deletedEntryDatasource = deletedEntryDatasource ?? DeletedEntryDatasource(),
         _uuid = uuid ?? const Uuid();
 
   Future<Entry> createEntry({
@@ -152,5 +157,43 @@ class EntryRepository {
 
   Future<List<Entry>> getFavoriteEntries() {
     return _entryDatasource.getFavoriteEntries();
+  }
+
+  /// Soft delete an entry (can be restored later)
+  Future<DeletedEntry?> softDeleteEntry(String id) async {
+    await _resurfacingDatasource.deleteScheduleForEntry(id);
+    return _entryDatasource.softDeleteEntry(id);
+  }
+
+  /// Restore a soft-deleted entry
+  Future<Entry?> restoreEntry(String deletedEntryId) async {
+    final entry = await _entryDatasource.restoreEntry(deletedEntryId);
+    if (entry != null) {
+      // Re-schedule resurfacing for restored entries (if not already resurfaced)
+      if (entry.parentEntryId == null) {
+        await _scheduleResurfacing(entry);
+      }
+    }
+    return entry;
+  }
+
+  /// Get all soft-deleted entries
+  Future<List<DeletedEntry>> getDeletedEntries() {
+    return _deletedEntryDatasource.getDeletedEntries();
+  }
+
+  /// Get count of deleted entries
+  Future<int> getDeletedEntryCount() {
+    return _deletedEntryDatasource.getDeletedEntryCount();
+  }
+
+  /// Permanently delete a soft-deleted entry
+  Future<void> permanentlyDeleteEntry(String deletedEntryId) {
+    return _deletedEntryDatasource.permanentlyDeleteEntry(deletedEntryId);
+  }
+
+  /// Clear all expired deleted entries
+  Future<int> clearExpiredDeletedEntries() {
+    return _deletedEntryDatasource.clearExpiredEntries();
   }
 }

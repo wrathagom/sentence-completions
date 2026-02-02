@@ -103,7 +103,7 @@ class EntryDetailScreen extends ConsumerWidget {
       builder: (context) => AlertDialog(
         title: const Text('Delete Entry'),
         content: const Text(
-          'Are you sure you want to delete this entry? This action cannot be undone.',
+          'This entry will be moved to Recently Deleted. You can restore it within 30 days.',
         ),
         actions: [
           TextButton(
@@ -123,13 +123,38 @@ class EntryDetailScreen extends ConsumerWidget {
 
     if (confirmed == true && context.mounted) {
       final repository = ref.read(entryRepositoryProvider);
-      await repository.deleteEntry(entryId);
+      final deletedEntry = await repository.softDeleteEntry(entryId);
       ref.invalidate(entriesProvider);
       ref.invalidate(filteredEntriesProvider);
       ref.invalidate(hasCompletedTodayProvider);
       ref.invalidate(todayEntryProvider);
+      ref.invalidate(deletedEntriesProvider);
+
       if (context.mounted) {
         context.go('/history');
+
+        if (deletedEntry != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Entry deleted'),
+              behavior: SnackBarBehavior.floating,
+              action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () async {
+                  final restoredEntry =
+                      await repository.restoreEntry(deletedEntry.id);
+                  if (restoredEntry != null) {
+                    ref.invalidate(entriesProvider);
+                    ref.invalidate(filteredEntriesProvider);
+                    ref.invalidate(hasCompletedTodayProvider);
+                    ref.invalidate(todayEntryProvider);
+                    ref.invalidate(deletedEntriesProvider);
+                  }
+                },
+              ),
+            ),
+          );
+        }
       }
     }
   }

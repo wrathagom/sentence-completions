@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../models/deleted_entry.dart';
 import '../../models/entry.dart';
 import 'database_helper.dart';
 
@@ -192,5 +194,96 @@ class EntryLocalDatasource {
       orderBy: 'created_at DESC',
     );
     return maps.map((map) => Entry.fromMap(map)).toList();
+  }
+
+  /// Soft delete an entry - moves it to deleted_entries table
+  Future<DeletedEntry?> softDeleteEntry(String id) async {
+    final db = await _db;
+    final entry = await getEntryById(id);
+
+    if (entry == null) return null;
+
+    final deletedEntry = DeletedEntry(
+      id: const Uuid().v4(),
+      originalId: entry.id,
+      stemId: entry.stemId,
+      stemText: entry.stemText,
+      completion: entry.completion,
+      createdAt: entry.createdAt,
+      deletedAt: DateTime.now(),
+      categoryId: entry.categoryId,
+      parentEntryId: entry.parentEntryId,
+      resurfaceMonth: entry.resurfaceMonth,
+      suggestedStems: entry.suggestedStems,
+      preMood: entry.preMoodValue,
+      postMood: entry.postMoodValue,
+      isFavorite: entry.isFavorite,
+    );
+
+    await db.transaction((txn) async {
+      // Insert into deleted_entries
+      await txn.insert(
+        'deleted_entries',
+        deletedEntry.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      // Delete from entries
+      await txn.delete(
+        'entries',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    });
+
+    return deletedEntry;
+  }
+
+  /// Restore a soft-deleted entry
+  Future<Entry?> restoreEntry(String deletedEntryId) async {
+    final db = await _db;
+
+    final maps = await db.query(
+      'deleted_entries',
+      where: 'id = ?',
+      whereArgs: [deletedEntryId],
+    );
+
+    if (maps.isEmpty) return null;
+
+    final deletedEntry = DeletedEntry.fromMap(maps.first);
+
+    final entry = Entry(
+      id: deletedEntry.originalId,
+      stemId: deletedEntry.stemId,
+      stemText: deletedEntry.stemText,
+      completion: deletedEntry.completion,
+      createdAt: deletedEntry.createdAt,
+      categoryId: deletedEntry.categoryId,
+      parentEntryId: deletedEntry.parentEntryId,
+      resurfaceMonth: deletedEntry.resurfaceMonth,
+      suggestedStems: deletedEntry.suggestedStems,
+      preMoodValue: deletedEntry.preMood,
+      postMoodValue: deletedEntry.postMood,
+      isFavorite: deletedEntry.isFavorite,
+    );
+
+    await db.transaction((txn) async {
+      // Insert back into entries
+      await txn.insert(
+        'entries',
+        entry.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      // Delete from deleted_entries
+      await txn.delete(
+        'deleted_entries',
+        where: 'id = ?',
+        whereArgs: [deletedEntryId],
+      );
+    });
+
+    return entry;
   }
 }

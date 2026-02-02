@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'sentence_completion.db';
-  static const int _databaseVersion = 8;
+  static const int _databaseVersion = 9;
 
   static Database? _database;
 
@@ -160,6 +160,29 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_reactions_entry_id ON entry_reactions (entry_id)
     ''');
+
+    await db.execute('''
+      CREATE TABLE deleted_entries (
+        id TEXT PRIMARY KEY,
+        original_id TEXT NOT NULL,
+        stem_id TEXT NOT NULL,
+        stem_text TEXT NOT NULL,
+        completion TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        deleted_at TEXT NOT NULL,
+        category_id TEXT NOT NULL,
+        parent_entry_id TEXT,
+        resurface_month INTEGER,
+        suggested_stems TEXT,
+        pre_mood INTEGER,
+        post_mood INTEGER,
+        is_favorite INTEGER NOT NULL DEFAULT 0
+      )
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_deleted_entries_deleted_at ON deleted_entries (deleted_at)
+    ''');
   }
 
   static Future<void> _onUpgrade(
@@ -260,6 +283,30 @@ class DatabaseHelper {
       ''');
       await db.execute(
         'CREATE INDEX idx_reactions_entry_id ON entry_reactions (entry_id)',
+      );
+    }
+
+    if (oldVersion < 9) {
+      await db.execute('''
+        CREATE TABLE deleted_entries (
+          id TEXT PRIMARY KEY,
+          original_id TEXT NOT NULL,
+          stem_id TEXT NOT NULL,
+          stem_text TEXT NOT NULL,
+          completion TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          deleted_at TEXT NOT NULL,
+          category_id TEXT NOT NULL,
+          parent_entry_id TEXT,
+          resurface_month INTEGER,
+          suggested_stems TEXT,
+          pre_mood INTEGER,
+          post_mood INTEGER,
+          is_favorite INTEGER NOT NULL DEFAULT 0
+        )
+      ''');
+      await db.execute(
+        'CREATE INDEX idx_deleted_entries_deleted_at ON deleted_entries (deleted_at)',
       );
     }
   }

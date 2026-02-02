@@ -25,6 +25,7 @@ import '../../data/repositories/goal_repository.dart';
 import '../../data/repositories/reaction_repository.dart';
 import '../../data/models/stem_rating.dart';
 import '../../data/models/goal.dart';
+import '../../data/models/deleted_entry.dart';
 import '../../data/models/entry_reaction.dart';
 import '../../data/models/analytics_data.dart';
 import '../../domain/services/analytics_service.dart';
@@ -424,4 +425,17 @@ final entryReactionsProvider =
 // Share card service provider
 final shareCardServiceProvider = Provider<ShareCardService>((ref) {
   return ShareCardService();
+});
+
+// Deleted entries provider
+final deletedEntriesProvider = FutureProvider<List<DeletedEntry>>((ref) async {
+  final repository = ref.watch(entryRepositoryProvider);
+  return repository.getDeletedEntries();
+});
+
+final deletedEntryCountProvider = FutureProvider<int>((ref) async {
+  // Watch deletedEntriesProvider to auto-refresh
+  ref.watch(deletedEntriesProvider);
+  final repository = ref.watch(entryRepositoryProvider);
+  return repository.getDeletedEntryCount();
 });

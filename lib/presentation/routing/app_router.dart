@@ -21,6 +21,7 @@ import '../screens/goals/goals_screen.dart';
 import '../screens/goals/create_goal_screen.dart';
 import '../screens/settings/export_screen.dart';
 import '../screens/settings/reminder_settings_screen.dart';
+import '../screens/settings/deleted_entries_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/history/share_card_screen.dart';
@@ -173,6 +174,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final entryId = state.pathParameters['entryId']!;
           return ShareCardScreen(entryId: entryId);
         },
+      ),
+      GoRoute(
+        path: '/deleted',
+        builder: (context, state) => const DeletedEntriesScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

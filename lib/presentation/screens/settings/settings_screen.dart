@@ -143,6 +143,7 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.go('/export'),
               ),
+              _DeletedEntriesTile(),
             ],
           ),
           _SettingsSection(
@@ -830,4 +831,25 @@ class _PreviewColors {
     required this.primary,
     required this.secondary,
   });
+}
+
+class _DeletedEntriesTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final countAsync = ref.watch(deletedEntryCountProvider);
+
+    return ListTile(
+      leading: const Icon(Icons.delete_outline),
+      title: const Text('Recently Deleted'),
+      subtitle: countAsync.when(
+        data: (count) => Text(
+          count == 0 ? 'No deleted entries' : '$count entries',
+        ),
+        loading: () => const Text('Loading...'),
+        error: (_, _) => const Text('Error'),
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => context.go('/deleted'),
+    );
+  }
 }
