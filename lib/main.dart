@@ -8,6 +8,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
+import 'domain/services/notification_service.dart';
 import 'presentation/providers/providers.dart';
 
 void main() async {
@@ -36,6 +37,9 @@ void main() async {
   }
 
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  // Initialize notification service
+  await NotificationService().initialize();
 
   runApp(
     ProviderScope(

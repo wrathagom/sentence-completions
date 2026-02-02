@@ -23,6 +23,7 @@ import '../../domain/services/anthropic_service.dart';
 import '../../domain/services/completion_service.dart';
 import '../../domain/services/export_service.dart';
 import '../../domain/services/intelligent_suggestion_service.dart';
+import '../../domain/services/notification_service.dart';
 import '../../domain/services/resurfacing_service.dart';
 import '../../domain/services/streak_service.dart';
 import '../../domain/services/suggestion_service.dart';
@@ -143,6 +144,10 @@ final analyticsDataProvider = FutureProvider<AnalyticsData>((ref) async {
   return service.getAnalytics();
 });
 
+final notificationServiceProvider = Provider<NotificationService>((ref) {
+  return NotificationService();
+});
+
 // API key status provider
 final hasApiKeyProvider = FutureProvider<bool>((ref) async {
   final secureStorage = ref.watch(secureStorageDatasourceProvider);
@@ -209,6 +214,11 @@ class SettingsNotifier extends StateNotifier<UserSettings> {
 
   Future<void> setTitleBarStyle(TitleBarStyle style) async {
     await _repository.setTitleBarStyle(style);
+    state = _repository.getSettings();
+  }
+
+  Future<void> setReminderSettings(String jsonSettings) async {
+    await _repository.setReminderSettings(jsonSettings);
     state = _repository.getSettings();
   }
 }

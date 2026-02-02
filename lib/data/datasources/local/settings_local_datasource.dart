@@ -80,4 +80,9 @@ class SettingsLocalDatasource {
     final settings = getSettings();
     await saveSettings(settings.copyWith(titleBarStyle: style));
   }
+
+  Future<void> setReminderSettings(String? jsonSettings) async {
+    final settings = getSettings();
+    await saveSettings(settings.copyWith(reminderSettingsJson: jsonSettings));
+  }
 }

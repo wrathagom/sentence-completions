@@ -99,6 +99,18 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
           _SettingsSection(
+            title: 'Notifications',
+            children: [
+              _SettingsTile(
+                icon: Icons.notifications_outlined,
+                title: 'Reminders',
+                subtitle: 'Set daily journal reminders',
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.go('/settings/reminders'),
+              ),
+            ],
+          ),
+          _SettingsSection(
             title: 'Privacy & Security',
             children: [
               SwitchListTile(

@@ -16,6 +16,7 @@ import '../screens/onboarding/onboarding_mode_screen.dart';
 import '../screens/onboarding/onboarding_welcome_screen.dart';
 import '../screens/analytics/analytics_screen.dart';
 import '../screens/settings/export_screen.dart';
+import '../screens/settings/reminder_settings_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash_screen.dart';
 
@@ -114,6 +115,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/analytics',
         builder: (context, state) => const AnalyticsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/reminders',
+        builder: (context, state) => const ReminderSettingsScreen(),
       ),
       GoRoute(
         path: '/stats',

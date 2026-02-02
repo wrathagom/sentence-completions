@@ -68,4 +68,8 @@ class SettingsRepository {
   Future<void> setTitleBarStyle(TitleBarStyle style) {
     return _datasource.setTitleBarStyle(style);
   }
+
+  Future<void> setReminderSettings(String? jsonSettings) {
+    return _datasource.setReminderSettings(jsonSettings);
+  }
 }

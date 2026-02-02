@@ -100,6 +100,7 @@ class UserSettings {
   final GuidedModeType guidedModeType;
   final bool aiConsentEnabled;
   final TitleBarStyle titleBarStyle;
+  final String? reminderSettingsJson;
 
   const UserSettings({
     this.privacyMode = false,
@@ -114,6 +115,7 @@ class UserSettings {
     this.guidedModeType = GuidedModeType.keyword,
     this.aiConsentEnabled = false,
     this.titleBarStyle = TitleBarStyle.minimal,
+    this.reminderSettingsJson,
   });
 
   // Helper getters for backwards compatibility and convenience
@@ -132,6 +134,7 @@ class UserSettings {
     GuidedModeType? guidedModeType,
     bool? aiConsentEnabled,
     TitleBarStyle? titleBarStyle,
+    String? reminderSettingsJson,
   }) {
     return UserSettings(
       privacyMode: privacyMode ?? this.privacyMode,
@@ -146,6 +149,7 @@ class UserSettings {
       guidedModeType: guidedModeType ?? this.guidedModeType,
       aiConsentEnabled: aiConsentEnabled ?? this.aiConsentEnabled,
       titleBarStyle: titleBarStyle ?? this.titleBarStyle,
+      reminderSettingsJson: reminderSettingsJson ?? this.reminderSettingsJson,
     );
   }
 
@@ -163,6 +167,7 @@ class UserSettings {
       'guidedModeType': guidedModeType.index,
       'aiConsentEnabled': aiConsentEnabled,
       'titleBarStyle': titleBarStyle.index,
+      'reminderSettingsJson': reminderSettingsJson,
     };
   }
 
@@ -194,6 +199,7 @@ class UserSettings {
       guidedModeType: guidedModeType,
       aiConsentEnabled: json['aiConsentEnabled'] as bool? ?? false,
       titleBarStyle: TitleBarStyle.values[json['titleBarStyle'] as int? ?? 1],
+      reminderSettingsJson: json['reminderSettingsJson'] as String?,
     );
   }
 }
