@@ -145,4 +145,12 @@ class EntryRepository {
   Future<List<Entry>> getAllEntriesForDate(DateTime date) {
     return _entryDatasource.getAllEntriesForDate(date);
   }
+
+  Future<void> toggleFavorite(String id) {
+    return _entryDatasource.toggleFavorite(id);
+  }
+
+  Future<List<Entry>> getFavoriteEntries() {
+    return _entryDatasource.getFavoriteEntries();
+  }
 }

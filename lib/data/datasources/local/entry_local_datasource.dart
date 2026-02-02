@@ -175,4 +175,22 @@ class EntryLocalDatasource {
     );
     return maps.map((map) => Entry.fromMap(map)).toList();
   }
+
+  Future<void> toggleFavorite(String id) async {
+    final db = await _db;
+    await db.rawUpdate(
+      'UPDATE entries SET is_favorite = 1 - is_favorite WHERE id = ?',
+      [id],
+    );
+  }
+
+  Future<List<Entry>> getFavoriteEntries() async {
+    final db = await _db;
+    final maps = await db.query(
+      'entries',
+      where: 'is_favorite = 1',
+      orderBy: 'created_at DESC',
+    );
+    return maps.map((map) => Entry.fromMap(map)).toList();
+  }
 }

@@ -36,11 +36,28 @@ class EntryDetailScreen extends ConsumerWidget {
         ),
         title: Text(showComparison ? 'Comparison' : 'Entry Details'),
         actions: [
-          if (!showComparison)
+          if (!showComparison) ...[
+            entryAsync.when(
+              data: (entry) {
+                if (entry == null) return const SizedBox.shrink();
+                return IconButton(
+                  icon: Icon(
+                    entry.isFavorite ? Icons.star : Icons.star_border,
+                    color: entry.isFavorite
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                  onPressed: () => _toggleFavorite(ref, entry.id),
+                );
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
+            ),
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: () => _showDeleteDialog(context, ref),
             ),
+          ],
         ],
       ),
       body: entryAsync.when(
@@ -61,6 +78,14 @@ class EntryDetailScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _toggleFavorite(WidgetRef ref, String id) async {
+    final repository = ref.read(entryRepositoryProvider);
+    await repository.toggleFavorite(id);
+    ref.invalidate(entryByIdProvider(id));
+    ref.invalidate(entriesProvider);
+    ref.invalidate(favoriteEntriesProvider);
   }
 
   Future<void> _showDeleteDialog(BuildContext context, WidgetRef ref) async {

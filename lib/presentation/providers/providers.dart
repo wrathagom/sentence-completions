@@ -335,3 +335,10 @@ final selectedCalendarDateProvider = StateProvider<DateTime?>((ref) => null);
 // Mood providers for completion flow
 final preMoodProvider = StateProvider<int?>((ref) => null);
 final postMoodProvider = StateProvider<int?>((ref) => null);
+
+// Favorites provider
+final favoriteEntriesProvider = FutureProvider<List<Entry>>((ref) async {
+  ref.watch(entriesProvider);
+  final repository = ref.watch(entryRepositoryProvider);
+  return repository.getFavoriteEntries();
+});

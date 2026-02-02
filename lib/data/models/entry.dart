@@ -12,6 +12,7 @@ class Entry {
   final List<String>? suggestedStems;
   final int? preMoodValue;
   final int? postMoodValue;
+  final bool isFavorite;
 
   const Entry({
     required this.id,
@@ -25,6 +26,7 @@ class Entry {
     this.suggestedStems,
     this.preMoodValue,
     this.postMoodValue,
+    this.isFavorite = false,
   });
 
   Mood? get preMood => Mood.fromValueNullable(preMoodValue);
@@ -43,6 +45,7 @@ class Entry {
       'suggested_stems': suggestedStems?.join('|||'),
       'pre_mood': preMoodValue,
       'post_mood': postMoodValue,
+      'is_favorite': isFavorite ? 1 : 0,
     };
   }
 
@@ -62,6 +65,7 @@ class Entry {
           : null,
       preMoodValue: map['pre_mood'] as int?,
       postMoodValue: map['post_mood'] as int?,
+      isFavorite: (map['is_favorite'] as int?) == 1,
     );
   }
 
@@ -77,6 +81,7 @@ class Entry {
     List<String>? suggestedStems,
     int? preMoodValue,
     int? postMoodValue,
+    bool? isFavorite,
   }) {
     return Entry(
       id: id ?? this.id,
@@ -90,6 +95,7 @@ class Entry {
       suggestedStems: suggestedStems ?? this.suggestedStems,
       preMoodValue: preMoodValue ?? this.preMoodValue,
       postMoodValue: postMoodValue ?? this.postMoodValue,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
