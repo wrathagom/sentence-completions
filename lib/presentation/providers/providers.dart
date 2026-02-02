@@ -19,6 +19,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/stem_repository.dart';
 import '../../domain/services/anthropic_service.dart';
 import '../../domain/services/completion_service.dart';
+import '../../domain/services/export_service.dart';
 import '../../domain/services/intelligent_suggestion_service.dart';
 import '../../domain/services/resurfacing_service.dart';
 import '../../domain/services/streak_service.dart';
@@ -118,6 +119,12 @@ final intelligentSuggestionServiceProvider = Provider<IntelligentSuggestionServi
   return IntelligentSuggestionService(
     suggestionService: ref.watch(suggestionServiceProvider),
     anthropicService: ref.watch(anthropicServiceProvider),
+  );
+});
+
+final exportServiceProvider = Provider<ExportService>((ref) {
+  return ExportService(
+    entryRepository: ref.watch(entryRepositoryProvider),
   );
 });
 

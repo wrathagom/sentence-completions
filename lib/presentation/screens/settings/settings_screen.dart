@@ -122,6 +122,18 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
           _SettingsSection(
+            title: 'Data',
+            children: [
+              _SettingsTile(
+                icon: Icons.download,
+                title: 'Export Data',
+                subtitle: 'Export entries to PDF, Markdown, or JSON',
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.go('/export'),
+              ),
+            ],
+          ),
+          _SettingsSection(
             title: 'About',
             children: [
               _SettingsTile(

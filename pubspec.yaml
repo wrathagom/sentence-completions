@@ -43,6 +43,11 @@ dependencies:
   # Desktop window management
   window_manager: ^0.4.3
 
+  # Export/Sharing
+  pdf: ^3.10.0
+  share_plus: ^7.0.0
+  path_provider: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
