@@ -24,6 +24,8 @@ class EntryRepository {
     required String categoryId,
     String? parentEntryId,
     int? resurfaceMonth,
+    int? preMoodValue,
+    int? postMoodValue,
   }) async {
     final entry = Entry(
       id: _uuid.v4(),
@@ -34,6 +36,8 @@ class EntryRepository {
       categoryId: categoryId,
       parentEntryId: parentEntryId,
       resurfaceMonth: resurfaceMonth,
+      preMoodValue: preMoodValue,
+      postMoodValue: postMoodValue,
     );
 
     await _entryDatasource.insertEntry(entry);

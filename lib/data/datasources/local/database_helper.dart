@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'sentence_completion.db';
-  static const int _databaseVersion = 3;
+  static const int _databaseVersion = 4;
 
   static Database? _database;
 
@@ -58,6 +58,8 @@ class DatabaseHelper {
         parent_entry_id TEXT,
         resurface_month INTEGER,
         suggested_stems TEXT,
+        pre_mood INTEGER,
+        post_mood INTEGER,
         FOREIGN KEY (stem_id) REFERENCES stems (id),
         FOREIGN KEY (category_id) REFERENCES categories (id),
         FOREIGN KEY (parent_entry_id) REFERENCES entries (id)
@@ -128,6 +130,11 @@ class DatabaseHelper {
       await db.execute('''
         ALTER TABLE entries ADD COLUMN suggested_stems TEXT
       ''');
+    }
+
+    if (oldVersion < 4) {
+      await db.execute('ALTER TABLE entries ADD COLUMN pre_mood INTEGER');
+      await db.execute('ALTER TABLE entries ADD COLUMN post_mood INTEGER');
     }
   }
 

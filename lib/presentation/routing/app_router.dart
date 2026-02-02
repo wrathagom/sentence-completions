@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/providers.dart';
 import '../screens/completion/completion_screen.dart';
+import '../screens/completion/mood_check_screen.dart';
 import '../screens/completion/post_completion_screen.dart';
 import '../screens/completion/resurfacing_screen.dart';
 import '../screens/saved_stems/saved_stems_screen.dart';
@@ -98,6 +99,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final entryId = state.pathParameters['entryId']!;
           return PostCompletionScreen(entryId: entryId);
+        },
+      ),
+      GoRoute(
+        path: '/mood-check/:entryId',
+        builder: (context, state) {
+          final entryId = state.pathParameters['entryId']!;
+          return MoodCheckScreen(entryId: entryId);
         },
       ),
       GoRoute(

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../data/models/mood.dart';
 import '../../../data/models/stem.dart';
 import '../../providers/providers.dart';
+import '../../widgets/mood_selector.dart';
 import '../../widgets/responsive_scaffold.dart';
 
 class CompletionScreen extends ConsumerStatefulWidget {
@@ -30,6 +32,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
   bool _isSaving = false;
   bool _isRefreshing = false;
   final Set<String> _skippedStemIds = {};
+  Mood? _preMood;
 
   // Show refresh button only for "surprise me" mode (no specific stem/text)
   bool get _canRefresh => widget.stemId == null && widget.stemText == null;
@@ -113,6 +116,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
       final entry = await completionService.saveCompletion(
         stem: _stem!,
         completion: _textController.text.trim(),
+        preMoodValue: _preMood?.value,
       );
 
       // If this stem was saved for later, remove it from saved stems
@@ -179,6 +183,35 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'How are you feeling right now?',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                ),
+                                const SizedBox(height: 12),
+                                MoodSelector(
+                                  selectedMood: _preMood,
+                                  onMoodSelected: (mood) {
+                                    setState(() => _preMood = mood);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                         Card(
                           child: Padding(
                             padding: const EdgeInsets.all(20),

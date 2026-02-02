@@ -1,3 +1,5 @@
+import 'mood.dart';
+
 class Entry {
   final String id;
   final String stemId;
@@ -8,6 +10,8 @@ class Entry {
   final String? parentEntryId;
   final int? resurfaceMonth;
   final List<String>? suggestedStems;
+  final int? preMoodValue;
+  final int? postMoodValue;
 
   const Entry({
     required this.id,
@@ -19,7 +23,12 @@ class Entry {
     this.parentEntryId,
     this.resurfaceMonth,
     this.suggestedStems,
+    this.preMoodValue,
+    this.postMoodValue,
   });
+
+  Mood? get preMood => Mood.fromValueNullable(preMoodValue);
+  Mood? get postMood => Mood.fromValueNullable(postMoodValue);
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,6 +41,8 @@ class Entry {
       'parent_entry_id': parentEntryId,
       'resurface_month': resurfaceMonth,
       'suggested_stems': suggestedStems?.join('|||'),
+      'pre_mood': preMoodValue,
+      'post_mood': postMoodValue,
     };
   }
 
@@ -49,6 +60,8 @@ class Entry {
       suggestedStems: suggestedStemsRaw != null && suggestedStemsRaw.isNotEmpty
           ? suggestedStemsRaw.split('|||')
           : null,
+      preMoodValue: map['pre_mood'] as int?,
+      postMoodValue: map['post_mood'] as int?,
     );
   }
 
@@ -62,6 +75,8 @@ class Entry {
     String? parentEntryId,
     int? resurfaceMonth,
     List<String>? suggestedStems,
+    int? preMoodValue,
+    int? postMoodValue,
   }) {
     return Entry(
       id: id ?? this.id,
@@ -73,6 +88,8 @@ class Entry {
       parentEntryId: parentEntryId ?? this.parentEntryId,
       resurfaceMonth: resurfaceMonth ?? this.resurfaceMonth,
       suggestedStems: suggestedStems ?? this.suggestedStems,
+      preMoodValue: preMoodValue ?? this.preMoodValue,
+      postMoodValue: postMoodValue ?? this.postMoodValue,
     );
   }
 

@@ -37,12 +37,16 @@ class CompletionService {
   Future<Entry> saveCompletion({
     required Stem stem,
     required String completion,
+    int? preMoodValue,
+    int? postMoodValue,
   }) async {
     final entry = await _entryRepository.createEntry(
       stemId: stem.id,
       stemText: stem.text,
       completion: completion,
       categoryId: stem.categoryId,
+      preMoodValue: preMoodValue,
+      postMoodValue: postMoodValue,
     );
 
     await _settingsRepository.setLastCompletionDate(DateTime.now());

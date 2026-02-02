@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../data/models/entry.dart';
 import '../../providers/providers.dart';
+import '../../widgets/mood_selector.dart';
 import '../../widgets/responsive_scaffold.dart';
 
 class EntryDetailScreen extends ConsumerWidget {
@@ -202,6 +203,52 @@ class _EntryDetailView extends StatelessWidget {
               ),
             ),
           ),
+          if (entry.preMood != null || entry.postMood != null) ...[
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Mood',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        if (entry.preMood != null)
+                          Expanded(
+                            child: MoodDisplay(
+                              mood: entry.preMood,
+                              label: 'Before',
+                            ),
+                          ),
+                        if (entry.preMood != null && entry.postMood != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Icon(
+                              Icons.arrow_forward,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        if (entry.postMood != null)
+                          Expanded(
+                            child: MoodDisplay(
+                              mood: entry.postMood,
+                              label: 'After',
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
           if (entry.suggestedStems != null && entry.suggestedStems!.isNotEmpty) ...[
             const SizedBox(height: 24),
             Row(

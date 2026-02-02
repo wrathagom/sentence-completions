@@ -331,3 +331,7 @@ final entriesForDateProvider =
 });
 
 final selectedCalendarDateProvider = StateProvider<DateTime?>((ref) => null);
+
+// Mood providers for completion flow
+final preMoodProvider = StateProvider<int?>((ref) => null);
+final postMoodProvider = StateProvider<int?>((ref) => null);
