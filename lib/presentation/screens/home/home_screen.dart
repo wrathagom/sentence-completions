@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/constants.dart';
 import '../../providers/providers.dart';
+import '../../widgets/goal_progress_card.dart';
 import '../../widgets/responsive_scaffold.dart';
 import '../stats/widgets/calendar_widget.dart';
 import '../stats/widgets/day_entries_sheet.dart';
@@ -75,6 +76,7 @@ class HomeScreen extends ConsumerWidget {
     final todayEntryCount = ref.watch(todayEntryCountProvider);
     final pendingResurfacing = ref.watch(pendingResurfacingProvider);
     final streakData = ref.watch(streakDataProvider);
+    final goalsWithProgress = ref.watch(activeGoalsWithProgressProvider);
     // Pre-fetch saved stems so it's ready for "Add Another Entry" dialog
     ref.watch(savedStemsProvider);
 
@@ -82,6 +84,10 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text(AppConstants.appName),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.flag_outlined),
+            onPressed: () => context.go('/goals'),
+          ),
           IconButton(
             icon: const Icon(Icons.star_border),
             onPressed: () => context.go('/favorites'),
@@ -182,6 +188,22 @@ class HomeScreen extends ConsumerWidget {
                           });
                         },
                       ),
+                    ),
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (e, s) => const SizedBox.shrink(),
+              ),
+
+              // Goals progress
+              goalsWithProgress.when(
+                data: (goals) {
+                  if (goals.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: GoalProgressSummary(
+                      goals: goals,
+                      onViewAll: () => context.go('/goals'),
                     ),
                   );
                 },

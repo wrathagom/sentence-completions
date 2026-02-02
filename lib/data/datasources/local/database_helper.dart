@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'sentence_completion.db';
-  static const int _databaseVersion = 6;
+  static const int _databaseVersion = 7;
 
   static Database? _database;
 
@@ -119,6 +119,32 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_stem_ratings_stem_id ON stem_ratings (stem_id)
     ''');
+
+    await db.execute('''
+      CREATE TABLE goals (
+        id TEXT PRIMARY KEY,
+        type TEXT NOT NULL,
+        target INTEGER NOT NULL,
+        period TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        is_active INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE goal_progress (
+        id TEXT PRIMARY KEY,
+        goal_id TEXT NOT NULL,
+        period_start TEXT NOT NULL,
+        period_end TEXT NOT NULL,
+        achieved INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (goal_id) REFERENCES goals (id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_goal_progress_goal_id ON goal_progress (goal_id)
+    ''');
   }
 
   static Future<void> _onUpgrade(
@@ -177,6 +203,32 @@ class DatabaseHelper {
       ''');
       await db.execute(
         'CREATE INDEX idx_stem_ratings_stem_id ON stem_ratings (stem_id)',
+      );
+    }
+
+    if (oldVersion < 7) {
+      await db.execute('''
+        CREATE TABLE goals (
+          id TEXT PRIMARY KEY,
+          type TEXT NOT NULL,
+          target INTEGER NOT NULL,
+          period TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          is_active INTEGER NOT NULL DEFAULT 1
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE goal_progress (
+          id TEXT PRIMARY KEY,
+          goal_id TEXT NOT NULL,
+          period_start TEXT NOT NULL,
+          period_end TEXT NOT NULL,
+          achieved INTEGER NOT NULL DEFAULT 0,
+          FOREIGN KEY (goal_id) REFERENCES goals (id)
+        )
+      ''');
+      await db.execute(
+        'CREATE INDEX idx_goal_progress_goal_id ON goal_progress (goal_id)',
       );
     }
   }

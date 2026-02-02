@@ -17,6 +17,8 @@ import '../screens/onboarding/onboarding_analytics_screen.dart';
 import '../screens/onboarding/onboarding_mode_screen.dart';
 import '../screens/onboarding/onboarding_welcome_screen.dart';
 import '../screens/analytics/analytics_screen.dart';
+import '../screens/goals/goals_screen.dart';
+import '../screens/goals/create_goal_screen.dart';
 import '../screens/settings/export_screen.dart';
 import '../screens/settings/reminder_settings_screen.dart';
 import '../screens/settings/settings_screen.dart';
@@ -128,6 +130,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/analytics',
         builder: (context, state) => const AnalyticsScreen(),
+      ),
+      GoRoute(
+        path: '/goals',
+        builder: (context, state) => const GoalsScreen(),
+      ),
+      GoRoute(
+        path: '/goals/create',
+        builder: (context, state) => const CreateGoalScreen(),
       ),
       GoRoute(
         path: '/settings/reminders',

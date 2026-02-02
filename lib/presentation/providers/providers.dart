@@ -8,6 +8,7 @@ import '../../data/datasources/local/secure_storage_datasource.dart';
 import '../../data/datasources/local/settings_local_datasource.dart';
 import '../../data/datasources/local/stem_local_datasource.dart';
 import '../../data/datasources/local/stem_rating_datasource.dart';
+import '../../data/datasources/local/goal_datasource.dart';
 import '../../data/datasources/remote/stems_remote_datasource.dart';
 import '../../data/models/category.dart';
 import '../../data/models/entry.dart';
@@ -19,7 +20,9 @@ import '../../data/repositories/saved_stem_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/stem_rating_repository.dart';
 import '../../data/repositories/stem_repository.dart';
+import '../../data/repositories/goal_repository.dart';
 import '../../data/models/stem_rating.dart';
+import '../../data/models/goal.dart';
 import '../../data/models/analytics_data.dart';
 import '../../domain/services/analytics_service.dart';
 import '../../domain/services/anthropic_service.dart';
@@ -30,6 +33,7 @@ import '../../domain/services/notification_service.dart';
 import '../../domain/services/resurfacing_service.dart';
 import '../../domain/services/streak_service.dart';
 import '../../domain/services/suggestion_service.dart';
+import '../../domain/services/goal_service.dart';
 import '../../data/models/streak_data.dart';
 
 // SharedPreferences provider - must be overridden at app startup
@@ -71,6 +75,10 @@ final stemRatingDatasourceProvider = Provider<StemRatingDatasource>((ref) {
   return StemRatingDatasource();
 });
 
+final goalDatasourceProvider = Provider<GoalDatasource>((ref) {
+  return GoalDatasource();
+});
+
 // Repository providers
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(
@@ -101,6 +109,12 @@ final savedStemRepositoryProvider = Provider<SavedStemRepository>((ref) {
 final stemRatingRepositoryProvider = Provider<StemRatingRepository>((ref) {
   return StemRatingRepository(
     datasource: ref.watch(stemRatingDatasourceProvider),
+  );
+});
+
+final goalRepositoryProvider = Provider<GoalRepository>((ref) {
+  return GoalRepository(
+    datasource: ref.watch(goalDatasourceProvider),
   );
 });
 
@@ -367,4 +381,21 @@ final stemRatingForEntryProvider =
     FutureProvider.family<StemRating?, String>((ref, entryId) async {
   final repository = ref.watch(stemRatingRepositoryProvider);
   return repository.getRatingForEntry(entryId);
+});
+
+// Goal providers
+final goalServiceProvider = Provider<GoalService>((ref) {
+  return GoalService(
+    goalRepository: ref.watch(goalRepositoryProvider),
+    entryRepository: ref.watch(entryRepositoryProvider),
+    streakService: ref.watch(streakServiceProvider),
+  );
+});
+
+final activeGoalsWithProgressProvider =
+    FutureProvider<List<GoalWithProgress>>((ref) async {
+  // Watch entries to auto-refresh when entries change
+  ref.watch(entriesProvider);
+  final service = ref.watch(goalServiceProvider);
+  return service.getActiveGoalsWithProgress();
 });
