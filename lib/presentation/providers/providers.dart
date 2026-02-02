@@ -17,6 +17,8 @@ import '../../data/repositories/entry_repository.dart';
 import '../../data/repositories/saved_stem_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/stem_repository.dart';
+import '../../data/models/analytics_data.dart';
+import '../../domain/services/analytics_service.dart';
 import '../../domain/services/anthropic_service.dart';
 import '../../domain/services/completion_service.dart';
 import '../../domain/services/export_service.dart';
@@ -126,6 +128,19 @@ final exportServiceProvider = Provider<ExportService>((ref) {
   return ExportService(
     entryRepository: ref.watch(entryRepositoryProvider),
   );
+});
+
+final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+  return AnalyticsService(
+    entryRepository: ref.watch(entryRepositoryProvider),
+    stemRepository: ref.watch(stemRepositoryProvider),
+  );
+});
+
+final analyticsDataProvider = FutureProvider<AnalyticsData>((ref) async {
+  ref.watch(entriesProvider);
+  final service = ref.watch(analyticsServiceProvider);
+  return service.getAnalytics();
 });
 
 // API key status provider

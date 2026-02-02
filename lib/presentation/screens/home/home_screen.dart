@@ -83,6 +83,10 @@ class HomeScreen extends ConsumerWidget {
         title: const Text(AppConstants.appName),
         actions: [
           IconButton(
+            icon: const Icon(Icons.analytics_outlined),
+            onPressed: () => context.go('/analytics'),
+          ),
+          IconButton(
             icon: const Icon(Icons.history),
             onPressed: () => context.go('/history'),
           ),
