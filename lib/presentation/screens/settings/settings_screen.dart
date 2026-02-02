@@ -146,6 +146,20 @@ class SettingsScreen extends ConsumerWidget {
               _DeletedEntriesTile(),
             ],
           ),
+          // Desktop-only shortcuts section
+          if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS))
+            _SettingsSection(
+              title: 'Desktop',
+              children: [
+                _SettingsTile(
+                  icon: Icons.keyboard,
+                  title: 'Keyboard Shortcuts',
+                  subtitle: 'View available shortcuts',
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.go('/settings/shortcuts'),
+                ),
+              ],
+            ),
           _SettingsSection(
             title: 'About',
             children: [

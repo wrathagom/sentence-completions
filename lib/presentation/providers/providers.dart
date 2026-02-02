@@ -39,6 +39,7 @@ import '../../domain/services/streak_service.dart';
 import '../../domain/services/suggestion_service.dart';
 import '../../domain/services/goal_service.dart';
 import '../../domain/services/share_card_service.dart';
+import '../../domain/services/shortcut_service.dart';
 import '../../data/models/streak_data.dart';
 
 // SharedPreferences provider - must be overridden at app startup
@@ -438,4 +439,9 @@ final deletedEntryCountProvider = FutureProvider<int>((ref) async {
   ref.watch(deletedEntriesProvider);
   final repository = ref.watch(entryRepositoryProvider);
   return repository.getDeletedEntryCount();
+});
+
+// Shortcut service provider
+final shortcutServiceProvider = Provider<ShortcutService>((ref) {
+  return ShortcutService();
 });
