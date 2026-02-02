@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/constants.dart';
 import 'core/theme.dart';
+import 'data/models/reminder_settings.dart';
 import 'data/models/user_settings.dart';
 import 'domain/services/shortcut_service.dart';
 import 'presentation/providers/providers.dart';
@@ -14,11 +15,51 @@ import 'presentation/widgets/custom_title_bar.dart';
 import 'presentation/widgets/keyboard_shortcuts_overlay.dart';
 import 'presentation/widgets/patterned_background.dart';
 
-class App extends ConsumerWidget {
+class App extends ConsumerStatefulWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<App> createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _rescheduleRemindersIfNeeded();
+    }
+  }
+
+  Future<void> _rescheduleRemindersIfNeeded() async {
+    final settings = ref.read(settingsProvider);
+    final json = settings.reminderSettingsJson;
+    if (json == null) return;
+
+    try {
+      final reminderSettings = ReminderSettings.fromJson(json);
+      if (!reminderSettings.enabled) return;
+
+      final notificationService = ref.read(notificationServiceProvider);
+      await notificationService.scheduleReminders(reminderSettings);
+    } catch (_) {
+      // Ignore invalid reminder settings payload.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final settings = ref.watch(settingsProvider);
 

@@ -7,6 +7,24 @@ import 'database_helper.dart';
 class StemLocalDatasource {
   Future<Database> get _db => DatabaseHelper.database;
 
+  Future<void> insertStem(Stem stem) async {
+    final db = await _db;
+    await db.insert(
+      'stems',
+      stem.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> insertCategory(Category category) async {
+    final db = await _db;
+    await db.insert(
+      'categories',
+      category.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   Future<void> insertStems(List<Stem> stems) async {
     final db = await _db;
     final batch = db.batch();

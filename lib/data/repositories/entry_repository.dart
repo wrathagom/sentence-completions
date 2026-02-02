@@ -31,13 +31,15 @@ class EntryRepository {
     int? resurfaceMonth,
     int? preMoodValue,
     int? postMoodValue,
+    DateTime? createdAt,
+    bool scheduleResurfacing = true,
   }) async {
     final entry = Entry(
       id: _uuid.v4(),
       stemId: stemId,
       stemText: stemText,
       completion: completion,
-      createdAt: DateTime.now(),
+      createdAt: createdAt ?? DateTime.now(),
       categoryId: categoryId,
       parentEntryId: parentEntryId,
       resurfaceMonth: resurfaceMonth,
@@ -48,7 +50,8 @@ class EntryRepository {
     await _entryDatasource.insertEntry(entry);
 
     // Schedule resurfacing for new entries (not resurfaced entries)
-    if (parentEntryId == null) {
+    // Skip scheduling if explicitly disabled (e.g., for imports)
+    if (scheduleResurfacing && parentEntryId == null) {
       await _scheduleResurfacing(entry);
     }
 

@@ -19,6 +19,14 @@ class StemRepository {
     await _localDatasource.insertStems(data.stems);
   }
 
+  Future<void> upsertCategory(Category category) {
+    return _localDatasource.insertCategory(category);
+  }
+
+  Future<void> upsertStem(Stem stem) {
+    return _localDatasource.insertStem(stem);
+  }
+
   Future<bool> hasStems() async {
     final count = await _localDatasource.getStemCount();
     return count > 0;

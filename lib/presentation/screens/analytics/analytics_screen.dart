@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../data/models/analytics_data.dart';
+import '../../../data/models/user_settings.dart';
 import '../../providers/providers.dart';
 import '../../widgets/word_cloud_widget.dart';
 
@@ -13,6 +14,7 @@ class AnalyticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analyticsAsync = ref.watch(analyticsDataProvider);
+    final settings = ref.watch(settingsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +25,13 @@ class AnalyticsScreen extends ConsumerWidget {
         ),
       ),
       body: analyticsAsync.when(
-        data: (data) => _AnalyticsContent(data: data),
+        data: (data) => _AnalyticsContent(
+          data: data,
+          settings: settings,
+          onWidgetsChanged: (widgets) {
+            ref.read(settingsProvider.notifier).setHomeAnalyticsWidgets(widgets);
+          },
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(
           child: Text('Error loading analytics: $e'),
@@ -33,10 +41,126 @@ class AnalyticsScreen extends ConsumerWidget {
   }
 }
 
+class _HomeWidgetSettings extends StatelessWidget {
+  final Set<HomeAnalyticsWidget> enabledWidgets;
+  final void Function(Set<HomeAnalyticsWidget>) onChanged;
+
+  const _HomeWidgetSettings({
+    required this.enabledWidgets,
+    required this.onChanged,
+  });
+
+  void _toggleWidget(HomeAnalyticsWidget widget) {
+    final newWidgets = Set<HomeAnalyticsWidget>.from(enabledWidgets);
+    if (newWidgets.contains(widget)) {
+      newWidgets.remove(widget);
+    } else {
+      newWidgets.add(widget);
+    }
+    onChanged(newWidgets);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.dashboard_customize_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Home Screen Widgets',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Choose which analytics to show on your home screen',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            _WidgetToggle(
+              title: 'Word Cloud',
+              icon: Icons.cloud_outlined,
+              value: enabledWidgets.contains(HomeAnalyticsWidget.wordCloud),
+              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.wordCloud),
+            ),
+            _WidgetToggle(
+              title: 'Category Pie Chart',
+              icon: Icons.pie_chart_outline,
+              value: enabledWidgets.contains(HomeAnalyticsWidget.categoryPieChart),
+              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.categoryPieChart),
+            ),
+            _WidgetToggle(
+              title: 'Stats Row',
+              icon: Icons.bar_chart,
+              value: enabledWidgets.contains(HomeAnalyticsWidget.statsRow),
+              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.statsRow),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _WidgetToggle extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final bool value;
+  final void Function(bool) onChanged;
+
+  const _WidgetToggle({
+    required this.title,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      title: Row(
+        children: [
+          Icon(
+            icon,
+            size: 20,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 12),
+          Text(title),
+        ],
+      ),
+      value: value,
+      onChanged: onChanged,
+      contentPadding: EdgeInsets.zero,
+      dense: true,
+    );
+  }
+}
+
 class _AnalyticsContent extends StatelessWidget {
   final AnalyticsData data;
+  final UserSettings settings;
+  final void Function(Set<HomeAnalyticsWidget>) onWidgetsChanged;
 
-  const _AnalyticsContent({required this.data});
+  const _AnalyticsContent({
+    required this.data,
+    required this.settings,
+    required this.onWidgetsChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +218,12 @@ class _AnalyticsContent extends StatelessWidget {
           _SectionHeader(title: 'Activity Over Time'),
           const SizedBox(height: 8),
           _ActivityChart(entriesByMonth: data.entriesByMonth),
+          const SizedBox(height: 24),
         ],
+        _HomeWidgetSettings(
+          enabledWidgets: settings.homeAnalyticsWidgets,
+          onChanged: onWidgetsChanged,
+        ),
       ],
     );
   }
@@ -201,6 +330,23 @@ class _CategoryChart extends StatelessWidget {
 
   const _CategoryChart({required this.distribution});
 
+  String _getEmojiDisplay(String? emoji) {
+    if (emoji == null) return '';
+    const emojiMap = {
+      'heart': '\u2764\ufe0f',
+      'briefcase': '\u{1F4BC}',
+      'brain': '\u{1F9E0}',
+      'star': '\u2b50',
+      'seedling': '\u{1F331}',
+      'target': '\u{1F3AF}',
+      'lightbulb': '\u{1F4A1}',
+      'fire': '\u{1F525}',
+      'rainbow': '\u{1F308}',
+      'book': '\u{1F4D6}',
+    };
+    return emojiMap[emoji] ?? emoji;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -260,7 +406,7 @@ class _CategoryChart extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     if (cat.emoji != null) ...[
-                      Text(cat.emoji!),
+                      Text(_getEmojiDisplay(cat.emoji)),
                       const SizedBox(width: 4),
                     ],
                     Expanded(child: Text(cat.categoryName)),

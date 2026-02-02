@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../data/models/mood.dart';
 import '../../../data/models/stem.dart';
+import '../../../data/models/stem_rating.dart';
 import '../../providers/providers.dart';
 import '../../widgets/mood_selector.dart';
+import '../../widgets/prompt_reaction_picker.dart';
 import '../../widgets/responsive_scaffold.dart';
 
 class CompletionScreen extends ConsumerStatefulWidget {
@@ -33,6 +35,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
   bool _isRefreshing = false;
   final Set<String> _skippedStemIds = {};
   Mood? _preMood;
+  StemRatingValue? _promptReaction;
 
   // Show refresh button only for "surprise me" mode (no specific stem/text)
   bool get _canRefresh => widget.stemId == null && widget.stemText == null;
@@ -119,6 +122,16 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
         preMoodValue: _preMood?.value,
       );
 
+      // Save prompt reaction if selected
+      if (_promptReaction != null) {
+        final stemRatingRepository = ref.read(stemRatingRepositoryProvider);
+        await stemRatingRepository.rateStem(
+          stemId: _stem!.id,
+          rating: _promptReaction!,
+          entryId: entry.id,
+        );
+      }
+
       // If this stem was saved for later, remove it from saved stems
       final savedStemRepository = ref.read(savedStemRepositoryProvider);
       await savedStemRepository.deleteSavedStemByStemId(_stem!.id);
@@ -190,35 +203,6 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'How are you feeling right now?',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                ),
-                                const SizedBox(height: 12),
-                                MoodSelector(
-                                  selectedMood: _preMood,
-                                  onMoodSelected: (mood) {
-                                    setState(() => _preMood = mood);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
                                   'Complete this sentence:',
                                   style: Theme.of(context)
                                       .textTheme
@@ -256,6 +240,19 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
                                     ),
                                   ),
                                 ],
+                                const Divider(height: 32),
+                                Builder(
+                                  builder: (context) {
+                                    final settings = ref.watch(settingsProvider);
+                                    return PromptReactionPicker(
+                                      selectedReaction: _promptReaction,
+                                      onReactionChanged: (reaction) {
+                                        setState(() => _promptReaction = reaction);
+                                      },
+                                      analyticsEnabled: settings.analyticsEnabled,
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -277,6 +274,15 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
                             ),
                             onChanged: (_) => setState(() {}),
                           ),
+                        ),
+                        const SizedBox(height: 16),
+                        MoodSelector(
+                          selectedMood: _preMood,
+                          onMoodSelected: (mood) {
+                            setState(() => _preMood = mood);
+                          },
+                          label: 'Mood (optional):',
+                          compact: true,
                         ),
                         const SizedBox(height: 16),
                         ResponsiveButton(

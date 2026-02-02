@@ -6,16 +6,70 @@ class MoodSelector extends StatelessWidget {
   final Mood? selectedMood;
   final ValueChanged<Mood> onMoodSelected;
   final String? label;
+  final bool compact;
 
   const MoodSelector({
     super.key,
     required this.selectedMood,
     required this.onMoodSelected,
     this.label,
+    this.compact = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (compact) {
+      return Row(
+        children: [
+          if (label != null) ...[
+            Text(
+              label!,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(width: 12),
+          ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: Mood.values.map((mood) {
+                final isSelected = selectedMood == mood;
+                return GestureDetector(
+                  onTap: () => onMoodSelected(mood),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primaryContainer
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                      border: isSelected
+                          ? Border.all(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 2,
+                            )
+                          : null,
+                    ),
+                    child: Tooltip(
+                      message: mood.label,
+                      child: Text(
+                        mood.emoji,
+                        style: TextStyle(
+                          fontSize: isSelected ? 24 : 22,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

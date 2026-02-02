@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/export_options.dart';
+import '../../../domain/services/import_service.dart';
 import '../../providers/providers.dart';
 
 class ExportScreen extends ConsumerStatefulWidget {
@@ -14,11 +15,12 @@ class ExportScreen extends ConsumerStatefulWidget {
 }
 
 class _ExportScreenState extends ConsumerState<ExportScreen> {
-  ExportFormat _selectedFormat = ExportFormat.markdown;
+  ExportFormat _selectedFormat = ExportFormat.json;
   DateTime? _startDate;
   DateTime? _endDate;
   bool _includeMetadata = true;
   bool _isExporting = false;
+  bool _isImporting = false;
 
   Future<void> _selectDateRange() async {
     final now = DateTime.now();
@@ -62,7 +64,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       includeMetadata: _includeMetadata,
     );
 
-    final result = await exportService.export(options);
+    // Use file picker for export
+    final result = await exportService.exportToChosenLocation(options);
 
     if (!mounted) return;
 
@@ -71,30 +74,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     });
 
     if (result.success) {
-      final action = await showDialog<String>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Export Complete'),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           content: Text(
-            'Successfully exported ${result.entryCount} ${result.entryCount == 1 ? 'entry' : 'entries'} to ${_selectedFormat.displayName}.',
+            'Exported ${result.entryCount} ${result.entryCount == 1 ? 'entry' : 'entries'} to ${result.filePath}',
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop('close'),
-              child: const Text('Close'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop('share'),
-              child: const Text('Share'),
-            ),
-          ],
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
-
-      if (action == 'share' && result.filePath != null) {
-        await exportService.shareExportedFile(result.filePath!);
-      }
-    } else {
+    } else if (result.errorMessage != 'Export cancelled') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result.errorMessage ?? 'Export failed'),
@@ -104,13 +92,120 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     }
   }
 
+  Future<void> _import() async {
+    setState(() {
+      _isImporting = true;
+    });
+
+    final importService = ref.read(importServiceProvider);
+    final result = await importService.importFromFile();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isImporting = false;
+    });
+
+    if (result.success) {
+      // Refresh providers
+      ref.invalidate(entriesProvider);
+      ref.invalidate(favoriteEntriesProvider);
+      if (result.settingsImported) {
+        ref.invalidate(settingsProvider);
+      }
+      if (result.goalsImported > 0) {
+        ref.invalidate(activeGoalsWithProgressProvider);
+      }
+      if (result.savedStemsImported > 0) {
+        ref.invalidate(savedStemsProvider);
+        ref.invalidate(savedStemCountProvider);
+      }
+
+      _showImportResultDialog(result);
+    } else if (result.errorMessage != 'Import cancelled') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result.errorMessage ?? 'Import failed'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
+
+  void _showImportResultDialog(ImportResult result) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Import Complete'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Successfully imported ${result.entriesImported} '
+              '${result.entriesImported == 1 ? 'entry' : 'entries'}.',
+            ),
+            if (result.goalsImported > 0) ...[
+              const SizedBox(height: 8),
+              Text('${result.goalsImported} ${result.goalsImported == 1 ? 'goal' : 'goals'} restored.'),
+            ],
+            if (result.savedStemsImported > 0) ...[
+              const SizedBox(height: 8),
+              Text('${result.savedStemsImported} saved ${result.savedStemsImported == 1 ? 'stem' : 'stems'} restored.'),
+            ],
+            if (result.settingsImported) ...[
+              const SizedBox(height: 8),
+              const Text('Your settings have been restored.'),
+            ],
+            if (result.errors.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Text(
+                '${result.errors.length} entries could not be imported:',
+                style: TextStyle(
+                  color: Theme.of(dialogContext).colorScheme.error,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 100),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: result.errors
+                        .take(5)
+                        .map((e) => Text(
+                              '- $e',
+                              style: Theme.of(dialogContext).textTheme.bodySmall,
+                            ))
+                        .toList(),
+                  ),
+                ),
+              ),
+              if (result.errors.length > 5)
+                Text(
+                  '... and ${result.errors.length - 5} more',
+                  style: Theme.of(dialogContext).textTheme.bodySmall,
+                ),
+            ],
+          ],
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('MMM d, yyyy');
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Export Data'),
+        title: const Text('Export & Import'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/settings'),
@@ -119,6 +214,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Export Section
+          Text(
+            'Export',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 16),
           Text(
             'Format',
             style: Theme.of(context).textTheme.titleMedium,
@@ -190,7 +291,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               });
             },
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
           FilledButton.icon(
             onPressed: _isExporting ? null : _export,
             icon: _isExporting
@@ -200,7 +301,35 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(Icons.download),
-            label: Text(_isExporting ? 'Exporting...' : 'Export'),
+            label: Text(_isExporting ? 'Exporting...' : 'Export to File'),
+          ),
+          const SizedBox(height: 32),
+          const Divider(),
+          const SizedBox(height: 16),
+
+          // Import Section
+          Text(
+            'Import',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Restore entries from a previous JSON export. Imported entries will be added to your existing data.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: _isImporting ? null : _import,
+            icon: _isImporting
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.upload),
+            label: Text(_isImporting ? 'Importing...' : 'Import from File'),
           ),
         ],
       ),
@@ -223,7 +352,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       case ExportFormat.markdown:
         return 'Human-readable format, great for notes apps and archiving.';
       case ExportFormat.json:
-        return 'Structured data format, useful for backups and importing elsewhere.';
+        return 'Structured data format, useful for backups and importing back.';
       case ExportFormat.pdf:
         return 'Print-ready document format for sharing or keeping offline.';
     }

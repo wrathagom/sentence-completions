@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -10,12 +11,25 @@ import 'package:share_plus/share_plus.dart';
 import '../../data/models/entry.dart';
 import '../../data/models/export_options.dart';
 import '../../data/repositories/entry_repository.dart';
+import '../../data/repositories/goal_repository.dart';
+import '../../data/repositories/saved_stem_repository.dart';
+import '../../data/repositories/settings_repository.dart';
 
 class ExportService {
   final EntryRepository _entryRepository;
+  final SettingsRepository _settingsRepository;
+  final GoalRepository _goalRepository;
+  final SavedStemRepository _savedStemRepository;
 
-  ExportService({required EntryRepository entryRepository})
-      : _entryRepository = entryRepository;
+  ExportService({
+    required EntryRepository entryRepository,
+    required SettingsRepository settingsRepository,
+    required GoalRepository goalRepository,
+    required SavedStemRepository savedStemRepository,
+  })  : _entryRepository = entryRepository,
+        _settingsRepository = settingsRepository,
+        _goalRepository = goalRepository,
+        _savedStemRepository = savedStemRepository;
 
   Future<List<Entry>> _getEntriesToExport(ExportOptions options) async {
     List<Entry> entries;
@@ -52,7 +66,7 @@ class ExportService {
           fileName = 'journal_export_$dateStr.md';
           break;
         case ExportFormat.json:
-          content = _generateJson(entries, options);
+          content = await _generateJson(entries, options);
           fileName = 'journal_export_$dateStr.json';
           break;
         case ExportFormat.pdf:
@@ -113,7 +127,11 @@ class ExportService {
     return buffer.toString();
   }
 
-  String _generateJson(List<Entry> entries, ExportOptions options) {
+  Future<String> _generateJson(List<Entry> entries, ExportOptions options) async {
+    final settings = _settingsRepository.getSettings();
+    final goals = await _goalRepository.getAllGoals();
+    final savedStems = await _savedStemRepository.getAllSavedStems();
+
     final data = {
       'exportedAt': DateTime.now().toIso8601String(),
       'entryCount': entries.length,
@@ -121,21 +139,52 @@ class ExportService {
         'startDate': options.startDate!.toIso8601String(),
       if (options.endDate != null)
         'endDate': options.endDate!.toIso8601String(),
+      // Include relevant settings for restoration
+      'settings': {
+        'privacyMode': settings.privacyMode,
+        'guidedModeType': settings.guidedModeType.index,
+        'themeMode': settings.themeMode.index,
+        'colorTheme': settings.colorTheme.index,
+        'cardGlowIntensity': settings.cardGlowIntensity.index,
+        'backgroundPattern': settings.backgroundPattern.index,
+      },
       'entries': entries.map((e) {
-        final map = {
+        final map = <String, dynamic>{
           'stemText': e.stemText,
           'completion': e.completion,
           'createdAt': e.createdAt.toIso8601String(),
+          'isFavorite': e.isFavorite,
         };
+        if (e.preMoodValue != null) {
+          map['preMoodValue'] = e.preMoodValue;
+        }
+        if (e.postMoodValue != null) {
+          map['postMoodValue'] = e.postMoodValue;
+        }
+        if (e.suggestedStems != null && e.suggestedStems!.isNotEmpty) {
+          map['suggestedStems'] = e.suggestedStems;
+        }
         if (options.includeMetadata) {
           map['id'] = e.id;
           map['stemId'] = e.stemId;
           map['categoryId'] = e.categoryId;
           if (e.parentEntryId != null) {
-            map['parentEntryId'] = e.parentEntryId!;
+            map['parentEntryId'] = e.parentEntryId;
           }
         }
         return map;
+      }).toList(),
+      'goals': goals.map((g) => {
+        'type': g.type.value,
+        'target': g.target,
+        'period': g.period.value,
+        'isActive': g.isActive,
+      }).toList(),
+      'savedStems': savedStems.map((s) => {
+        'stemText': s.stemText,
+        'categoryId': s.categoryId,
+        'savedAt': s.savedAt.toIso8601String(),
+        'sourceEntryId': s.sourceEntryId,
       }).toList(),
     };
 
@@ -277,5 +326,171 @@ class ExportService {
   Future<void> shareExportedFile(String filePath) async {
     final file = XFile(filePath);
     await Share.shareXFiles([file], text: 'My journal entries');
+  }
+
+  /// Export to a user-chosen location using file picker
+  Future<ExportResult> exportToChosenLocation(ExportOptions options) async {
+    try {
+      final entries = await _getEntriesToExport(options);
+
+      if (entries.isEmpty) {
+        return ExportResult.failure('No entries to export');
+      }
+
+      final dateStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final defaultFileName = 'journal_export_$dateStr.${options.format.extension}';
+
+      // Open save dialog
+      final outputPath = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Export',
+        fileName: defaultFileName,
+        type: FileType.custom,
+        allowedExtensions: [options.format.extension],
+      );
+
+      if (outputPath == null) {
+        return ExportResult.failure('Export cancelled');
+      }
+
+      // Generate content and save
+      if (options.format == ExportFormat.pdf) {
+        final pdfBytes = await _generatePdfBytes(entries, options);
+        final file = File(outputPath);
+        await file.writeAsBytes(pdfBytes);
+      } else {
+        String content;
+        switch (options.format) {
+          case ExportFormat.markdown:
+            content = _generateMarkdown(entries, options);
+            break;
+          case ExportFormat.json:
+            content = await _generateJson(entries, options);
+            break;
+          case ExportFormat.pdf:
+            // Handled above
+            content = '';
+            break;
+        }
+        final file = File(outputPath);
+        await file.writeAsString(content);
+      }
+
+      return ExportResult.success(
+        filePath: outputPath,
+        entryCount: entries.length,
+      );
+    } catch (e) {
+      return ExportResult.failure('Export failed: $e');
+    }
+  }
+
+  Future<List<int>> _generatePdfBytes(
+    List<Entry> entries,
+    ExportOptions options,
+  ) async {
+    final pdf = pw.Document();
+    final dateFormat = DateFormat('MMMM d, yyyy');
+    final timeFormat = DateFormat('h:mm a');
+
+    // Group entries by date
+    final entriesByDate = <String, List<Entry>>{};
+    for (final entry in entries) {
+      final date = dateFormat.format(entry.createdAt);
+      entriesByDate.putIfAbsent(date, () => []).add(entry);
+    }
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(40),
+        build: (context) {
+          final widgets = <pw.Widget>[];
+
+          // Title
+          widgets.add(
+            pw.Header(
+              level: 0,
+              child: pw.Text(
+                'Journal Entries',
+                style: pw.TextStyle(
+                  fontSize: 24,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+          );
+
+          widgets.add(
+            pw.Paragraph(
+              text: 'Total entries: ${entries.length}',
+              style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey700),
+            ),
+          );
+
+          widgets.add(pw.SizedBox(height: 20));
+
+          // Entries grouped by date
+          for (final dateEntry in entriesByDate.entries) {
+            widgets.add(
+              pw.Header(
+                level: 1,
+                child: pw.Text(
+                  dateEntry.key,
+                  style: pw.TextStyle(
+                    fontSize: 16,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+
+            for (final entry in dateEntry.value) {
+              widgets.add(
+                pw.Container(
+                  margin: const pw.EdgeInsets.only(bottom: 16),
+                  padding: const pw.EdgeInsets.all(12),
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(color: PdfColors.grey300),
+                    borderRadius: pw.BorderRadius.circular(4),
+                  ),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        entry.stemText,
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          fontWeight: pw.FontWeight.bold,
+                          fontStyle: pw.FontStyle.italic,
+                        ),
+                      ),
+                      pw.SizedBox(height: 8),
+                      pw.Text(
+                        entry.completion,
+                        style: const pw.TextStyle(fontSize: 11),
+                      ),
+                      if (options.includeMetadata) ...[
+                        pw.SizedBox(height: 8),
+                        pw.Text(
+                          timeFormat.format(entry.createdAt),
+                          style: const pw.TextStyle(
+                            fontSize: 9,
+                            color: PdfColors.grey600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            }
+          }
+
+          return widgets;
+        },
+      ),
+    );
+
+    return pdf.save();
   }
 }

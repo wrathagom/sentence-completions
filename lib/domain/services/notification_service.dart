@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -25,6 +26,7 @@ class NotificationService {
     if (_initialized) return;
 
     tz.initializeTimeZones();
+    await _configureLocalTimeZone();
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
@@ -76,6 +78,7 @@ class NotificationService {
 
     if (!settings.enabled) return;
 
+    await _configureLocalTimeZone();
     final now = tz.TZDateTime.now(tz.local);
 
     for (final dayOfWeek in settings.daysOfWeek) {
@@ -160,5 +163,17 @@ class NotificationService {
 
   Future<List<PendingNotificationRequest>> getPendingReminders() async {
     return _notifications.pendingNotificationRequests();
+  }
+
+  Future<void> _configureLocalTimeZone() async {
+    if (kIsWeb) return;
+
+    try {
+      final timezoneName = await FlutterTimezone.getLocalTimezone();
+      final location = tz.getLocation(timezoneName);
+      tz.setLocalLocation(location);
+    } catch (_) {
+      // Fallback to default timezone if lookup fails.
+    }
   }
 }

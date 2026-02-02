@@ -151,15 +151,25 @@ CRITICAL RULES:
 - NEVER write complete sentences
 - Start with phrases like: "I feel...", "When I...", "The thing I...", "What I really want is...", "If I could...", "The part of me that..."
 
-GOOD examples:
-- "When I think about that choice, I notice..."
-- "The fear underneath this is..."
-- "What I haven't admitted to myself yet is..."
+SPECIFICITY RULES (VERY IMPORTANT):
+- Each stem must be SELF-CONTAINED and meaningful on its own
+- NEVER use vague references like "this belief", "this feeling", "that situation", "this person" - these are meaningless without context
+- Instead, INCLUDE the specific topic/theme from the user's completion in the stem itself
+- Replace names with relationship terms: "Gabe" → "my son", "Sarah" → "my partner", etc.
+- The user will see these stems days or weeks later - they must make sense without remembering the original entry
+
+GOOD examples (specific and self-contained):
+- "When I think about wanting more independence, I notice..."
+- "The fear underneath my worry about finances is..."
+- "What I haven't admitted about my relationship with my mother is..."
 
 BAD examples (DO NOT DO):
+- "The truth I'm avoiding about this belief is..." (vague - what belief?)
+- "When I think about that situation, I feel..." (vague - what situation?)
+- "This feeling comes from..." (vague - what feeling?)
 - "What would you say to yourself?" (question - wrong)
 - "I feel happy." (complete sentence - wrong)
-- "Think about your feelings" (instruction - wrong)
+- "When I think about Gabe, I..." (uses specific name - wrong)
 
 Format as a numbered list with just the stem text:
 1. [incomplete sentence ending with ...]
