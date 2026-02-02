@@ -1,0 +1,2443 @@
+{
+  "version": "2.0.0",
+  "categories": [
+    {
+      "id": "relationships",
+      "name": "Relationships",
+      "emoji": "heart",
+      "sortOrder": 1
+    },
+    {
+      "id": "self-awareness",
+      "name": "Self-Awareness",
+      "emoji": "brain",
+      "sortOrder": 2
+    },
+    {
+      "id": "work",
+      "name": "Work & Career",
+      "emoji": "briefcase",
+      "sortOrder": 3
+    },
+    {
+      "id": "growth",
+      "name": "Personal Growth",
+      "emoji": "seedling",
+      "sortOrder": 4
+    },
+    {
+      "id": "emotions",
+      "name": "Emotions",
+      "emoji": "rainbow",
+      "sortOrder": 5
+    },
+    {
+      "id": "goals",
+      "name": "Goals & Dreams",
+      "emoji": "target",
+      "sortOrder": 6
+    }
+  ],
+  "stems": [
+    {
+      "id": "stem-001",
+      "text": "If I brought 5% more awareness to my most important relationship...",
+      "categoryId": "relationships",
+      "keywords": ["relationship", "awareness", "connection", "attention", "mindful", "present", "partner", "family", "loved one", "intentional"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-002",
+      "text": "One thing I appreciate about someone close to me is...",
+      "categoryId": "relationships",
+      "keywords": ["appreciation", "gratitude", "connection", "thankful", "value", "cherish", "admire", "respect", "partner", "family"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-003",
+      "text": "A conversation I've been avoiding is...",
+      "categoryId": "relationships",
+      "keywords": ["communication", "avoidance", "courage", "difficult", "confrontation", "honesty", "fear", "postpone", "uncomfortable", "talk"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-004",
+      "text": "If I were more honest in my relationships...",
+      "categoryId": "relationships",
+      "keywords": ["honesty", "authenticity", "trust", "vulnerable", "open", "truthful", "transparent", "genuine", "real", "sincere"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-005",
+      "text": "Something I'm currently feeling but haven't expressed is...",
+      "categoryId": "emotions",
+      "keywords": ["feelings", "expression", "awareness", "hidden", "suppressed", "unspoken", "emotions", "internal", "holding back", "silent"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-006",
+      "text": "When I feel overwhelmed, I usually...",
+      "categoryId": "emotions",
+      "keywords": ["overwhelm", "coping", "patterns", "stress", "anxiety", "reaction", "habit", "behavior", "response", "manage"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-007",
+      "text": "A fear that sometimes holds me back is...",
+      "categoryId": "emotions",
+      "keywords": ["fear", "limitation", "growth", "anxiety", "worry", "hesitation", "block", "barrier", "obstacle", "scared"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-008",
+      "text": "Something that brings me unexpected joy is...",
+      "categoryId": "emotions",
+      "keywords": ["joy", "happiness", "surprise", "delight", "pleasure", "contentment", "simple", "small things", "grateful", "bright"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-009",
+      "text": "One thing I'm proud of accomplishing recently is...",
+      "categoryId": "self-awareness",
+      "keywords": ["pride", "accomplishment", "self-esteem", "achievement", "success", "milestone", "progress", "effort", "recognition", "earned"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-010",
+      "text": "A belief about myself that might not be true is...",
+      "categoryId": "self-awareness",
+      "keywords": ["beliefs", "self-image", "truth", "assumption", "narrative", "story", "perception", "limiting", "identity", "question"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-011",
+      "text": "Something I know I should do but keep putting off is...",
+      "categoryId": "self-awareness",
+      "keywords": ["procrastination", "avoidance", "action", "delay", "postpone", "resist", "task", "responsibility", "difficult", "uncomfortable"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-012",
+      "text": "My biggest strength that I sometimes underuse is...",
+      "categoryId": "self-awareness",
+      "keywords": ["strengths", "potential", "self-awareness", "talent", "ability", "capability", "gift", "underutilized", "skill", "asset"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-013",
+      "text": "If I took my work more seriously...",
+      "categoryId": "work",
+      "keywords": ["work", "commitment", "focus", "dedication", "professional", "effort", "career", "discipline", "serious", "intentional"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-014",
+      "text": "One thing that would make my work more meaningful is...",
+      "categoryId": "work",
+      "keywords": ["meaning", "purpose", "fulfillment", "work", "significance", "value", "contribution", "impact", "satisfaction", "mission"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-015",
+      "text": "A skill I'd like to develop further is...",
+      "categoryId": "work",
+      "keywords": ["skills", "development", "growth", "learning", "improvement", "competence", "ability", "expertise", "professional", "training"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-016",
+      "text": "If I weren't afraid of failure, I would...",
+      "categoryId": "work",
+      "keywords": ["fear", "failure", "courage", "risk", "bold", "attempt", "try", "ambition", "dream", "possibility"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-017",
+      "text": "One small step I could take today toward my biggest goal is...",
+      "categoryId": "goals",
+      "keywords": ["goals", "action", "progress", "step", "small", "today", "momentum", "start", "begin", "move"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-018",
+      "text": "Something I want to achieve in the next year is...",
+      "categoryId": "goals",
+      "keywords": ["goals", "future", "planning", "year", "achieve", "aspiration", "target", "objective", "vision", "timeline"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-019",
+      "text": "A dream I've given up on that might still be possible is...",
+      "categoryId": "goals",
+      "keywords": ["dreams", "hope", "possibility", "abandoned", "revive", "reconsider", "second chance", "forgotten", "dormant", "rekindle"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-020",
+      "text": "What's stopping me from pursuing what I really want is...",
+      "categoryId": "goals",
+      "keywords": ["obstacles", "barriers", "clarity", "blocks", "resistance", "hesitation", "fear", "doubt", "limitation", "excuse"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-021",
+      "text": "One habit I'd like to change is...",
+      "categoryId": "growth",
+      "keywords": ["habits", "change", "improvement", "routine", "pattern", "behavior", "break", "replace", "new", "old"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-022",
+      "text": "Something I learned about myself recently is...",
+      "categoryId": "growth",
+      "keywords": ["learning", "self-discovery", "insight", "realization", "awareness", "understanding", "revelation", "growth", "reflection", "new"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-023",
+      "text": "If I were to be kinder to myself...",
+      "categoryId": "growth",
+      "keywords": ["self-compassion", "kindness", "acceptance", "gentle", "forgiveness", "caring", "nurture", "patience", "love", "understanding"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-024",
+      "text": "A challenge I'm currently facing that could help me grow is...",
+      "categoryId": "growth",
+      "keywords": ["challenges", "growth", "opportunity", "difficulty", "struggle", "learning", "strength", "resilience", "adversity", "test"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-025",
+      "text": "Today I am grateful for...",
+      "categoryId": "self-awareness",
+      "keywords": ["gratitude", "appreciation", "mindfulness", "thankful", "blessed", "acknowledge", "present", "positive", "counting", "blessings"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-026",
+      "text": "Something I need to let go of is...",
+      "categoryId": "emotions",
+      "keywords": ["release", "letting go", "freedom", "burden", "attachment", "holding", "past", "grief", "resentment", "forgiveness"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-027",
+      "text": "If I fully accepted myself...",
+      "categoryId": "self-awareness",
+      "keywords": ["acceptance", "self-love", "wholeness", "embrace", "complete", "unconditional", "flaws", "imperfection", "worthy", "enough"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-028",
+      "text": "One thing I've been avoiding thinking about is...",
+      "categoryId": "self-awareness",
+      "keywords": ["avoidance", "awareness", "courage", "denial", "uncomfortable", "suppress", "ignore", "face", "confront", "acknowledge"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-029",
+      "text": "The person I want to become is someone who...",
+      "categoryId": "growth",
+      "keywords": ["identity", "aspiration", "vision", "future self", "becoming", "character", "values", "transformation", "ideal", "qualities"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-030",
+      "text": "What gives my life meaning right now is...",
+      "categoryId": "self-awareness",
+      "keywords": ["meaning", "purpose", "fulfillment", "significance", "value", "direction", "reason", "motivation", "driving", "center"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-031",
+      "text": "The way I show love to others is...",
+      "categoryId": "relationships",
+      "keywords": ["love", "expression", "care", "giving", "showing", "affection", "support", "actions", "words", "presence"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-032",
+      "text": "A boundary I need to set in a relationship is...",
+      "categoryId": "relationships",
+      "keywords": ["boundaries", "limits", "self-respect", "protection", "healthy", "communication", "needs", "assertive", "clear", "firm"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-033",
+      "text": "Someone who has positively influenced my life is...",
+      "categoryId": "relationships",
+      "keywords": ["influence", "mentor", "gratitude", "impact", "positive", "role model", "teacher", "guide", "inspiration", "support"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-034",
+      "text": "If I listened more carefully to my partner/friend...",
+      "categoryId": "relationships",
+      "keywords": ["listening", "attention", "understanding", "partner", "friend", "communication", "presence", "empathy", "hear", "focus"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-035",
+      "text": "A relationship I want to strengthen is...",
+      "categoryId": "relationships",
+      "keywords": ["strengthen", "improve", "invest", "connection", "deepen", "nurture", "prioritize", "grow", "bond", "effort"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-036",
+      "text": "Something I wish I could tell my younger self about relationships is...",
+      "categoryId": "relationships",
+      "keywords": ["younger self", "wisdom", "advice", "lessons", "past", "relationships", "hindsight", "learn", "experience", "regret"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-037",
+      "text": "When conflict arises in my relationships, I tend to...",
+      "categoryId": "relationships",
+      "keywords": ["conflict", "patterns", "reaction", "response", "disagreement", "fight", "argument", "behavior", "default", "tendency"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-038",
+      "text": "A way I could be more present with my loved ones is...",
+      "categoryId": "relationships",
+      "keywords": ["presence", "attention", "loved ones", "mindful", "engaged", "quality time", "focus", "distraction", "together", "here"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-039",
+      "text": "The quality I most value in a friend is...",
+      "categoryId": "relationships",
+      "keywords": ["friendship", "qualities", "values", "trust", "loyalty", "support", "honest", "reliable", "fun", "genuine"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-040",
+      "text": "If I asked for help more often...",
+      "categoryId": "relationships",
+      "keywords": ["help", "asking", "vulnerability", "support", "connection", "independence", "trust", "others", "need", "reach out"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-041",
+      "text": "A relationship that has taught me a lot is...",
+      "categoryId": "relationships",
+      "keywords": ["lessons", "learning", "relationship", "growth", "experience", "wisdom", "taught", "past", "understand", "changed"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-042",
+      "text": "The way I want to be remembered by my loved ones is...",
+      "categoryId": "relationships",
+      "keywords": ["legacy", "remembered", "loved ones", "impact", "memory", "impression", "lasting", "character", "reputation", "heart"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-043",
+      "text": "Something I've never told anyone is...",
+      "categoryId": "relationships",
+      "keywords": ["secret", "hidden", "vulnerable", "trust", "share", "private", "unspoken", "personal", "confession", "intimate"],
+      "difficultyLevel": 3,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-044",
+      "text": "If I forgave someone who hurt me...",
+      "categoryId": "relationships",
+      "keywords": ["forgiveness", "hurt", "healing", "release", "peace", "letting go", "grudge", "resentment", "freedom", "closure"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-045",
+      "text": "A person I'd like to reconnect with is...",
+      "categoryId": "relationships",
+      "keywords": ["reconnect", "reach out", "lost touch", "friend", "relationship", "past", "contact", "bridge", "repair", "return"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-046",
+      "text": "The most supportive thing someone could do for me right now is...",
+      "categoryId": "relationships",
+      "keywords": ["support", "help", "need", "comfort", "assistance", "understanding", "encouragement", "present", "listen", "care"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-047",
+      "text": "If I expressed my needs more clearly...",
+      "categoryId": "relationships",
+      "keywords": ["needs", "expression", "communication", "clarity", "asking", "voice", "speak up", "assert", "direct", "honest"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-048",
+      "text": "A family tradition that means a lot to me is...",
+      "categoryId": "relationships",
+      "keywords": ["family", "tradition", "meaning", "heritage", "connection", "memories", "customs", "belonging", "roots", "celebration"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-049",
+      "text": "Something I admire about my parents/guardians is...",
+      "categoryId": "relationships",
+      "keywords": ["parents", "admire", "respect", "guardian", "family", "appreciation", "qualities", "role model", "gratitude", "influence"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-050",
+      "text": "The hardest part of maintaining close relationships is...",
+      "categoryId": "relationships",
+      "keywords": ["difficult", "challenge", "relationships", "maintain", "effort", "struggle", "time", "distance", "commitment", "work"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-051",
+      "text": "When I feel anxious, my body tells me by...",
+      "categoryId": "emotions",
+      "keywords": ["anxiety", "body", "physical", "sensation", "stress", "symptoms", "tension", "signal", "awareness", "response"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-052",
+      "text": "A feeling I've been suppressing lately is...",
+      "categoryId": "emotions",
+      "keywords": ["suppression", "feelings", "hidden", "buried", "avoid", "ignore", "push down", "emotions", "denial", "underneath"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-053",
+      "text": "The emotion I find hardest to express is...",
+      "categoryId": "emotions",
+      "keywords": ["expression", "difficult", "emotion", "struggle", "communicate", "show", "vulnerable", "uncomfortable", "block", "resist"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-054",
+      "text": "Something that always makes me feel peaceful is...",
+      "categoryId": "emotions",
+      "keywords": ["peace", "calm", "tranquility", "relaxation", "serenity", "quiet", "rest", "soothing", "comfort", "safe"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-055",
+      "text": "When I'm angry, what I really need is...",
+      "categoryId": "emotions",
+      "keywords": ["anger", "needs", "underneath", "frustration", "upset", "mad", "triggered", "hurt", "understand", "behind"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-056",
+      "text": "A moment of pure happiness I remember is...",
+      "categoryId": "emotions",
+      "keywords": ["happiness", "memory", "joy", "moment", "pure", "bliss", "perfect", "cherish", "remember", "experience"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-057",
+      "text": "The way I typically handle sadness is...",
+      "categoryId": "emotions",
+      "keywords": ["sadness", "coping", "handling", "grief", "sorrow", "process", "deal", "response", "pattern", "mechanism"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-058",
+      "text": "If I allowed myself to fully feel my emotions...",
+      "categoryId": "emotions",
+      "keywords": ["allowing", "feeling", "full", "emotions", "experience", "permission", "embrace", "accept", "process", "flow"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-059",
+      "text": "Something that triggers my insecurity is...",
+      "categoryId": "emotions",
+      "keywords": ["insecurity", "trigger", "doubt", "self-esteem", "confidence", "vulnerable", "sensitive", "wound", "pattern", "reaction"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-060",
+      "text": "A healthy way I've learned to cope with stress is...",
+      "categoryId": "emotions",
+      "keywords": ["coping", "healthy", "stress", "strategy", "manage", "technique", "learned", "effective", "positive", "tool"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-061",
+      "text": "The last time I cried was...",
+      "categoryId": "emotions",
+      "keywords": ["crying", "tears", "emotion", "release", "vulnerable", "sad", "moved", "touched", "overwhelmed", "feeling"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-062",
+      "text": "When I feel lonely, I...",
+      "categoryId": "emotions",
+      "keywords": ["lonely", "loneliness", "alone", "isolated", "disconnected", "solitude", "coping", "response", "behavior", "feeling"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-063",
+      "text": "A recurring negative thought I have is...",
+      "categoryId": "emotions",
+      "keywords": ["negative", "thought", "recurring", "pattern", "mind", "belief", "repetitive", "intrusive", "automatic", "default"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-064",
+      "text": "Something that fills me with hope is...",
+      "categoryId": "emotions",
+      "keywords": ["hope", "optimism", "future", "positive", "faith", "believe", "possibility", "light", "encouragement", "trust"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-065",
+      "text": "The emotion I experience most frequently is...",
+      "categoryId": "emotions",
+      "keywords": ["frequent", "emotion", "common", "default", "typical", "usual", "daily", "baseline", "state", "mood"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-066",
+      "text": "When I feel jealous or envious, it usually means...",
+      "categoryId": "emotions",
+      "keywords": ["jealousy", "envy", "comparison", "desire", "want", "lacking", "insight", "meaning", "underneath", "reveal"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-067",
+      "text": "A time I felt truly proud of myself was...",
+      "categoryId": "emotions",
+      "keywords": ["proud", "pride", "accomplishment", "self-esteem", "achievement", "moment", "feeling", "deserved", "earned", "confident"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-068",
+      "text": "The physical sensation I feel when I'm stressed is...",
+      "categoryId": "emotions",
+      "keywords": ["physical", "stress", "body", "sensation", "tension", "symptom", "somatic", "feeling", "awareness", "manifestation"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-069",
+      "text": "If I stopped judging my emotions...",
+      "categoryId": "emotions",
+      "keywords": ["judgment", "acceptance", "emotions", "allow", "criticism", "shame", "valid", "okay", "natural", "human"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-070",
+      "text": "Something that makes me feel alive is...",
+      "categoryId": "emotions",
+      "keywords": ["alive", "vitality", "energy", "passion", "excitement", "engaged", "thrilling", "awake", "present", "vibrant"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-071",
+      "text": "A worry that keeps coming back to me is...",
+      "categoryId": "emotions",
+      "keywords": ["worry", "anxiety", "recurring", "concern", "persistent", "nagging", "fear", "preoccupation", "mind", "return"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-072",
+      "text": "When I feel shame, it's usually about...",
+      "categoryId": "emotions",
+      "keywords": ["shame", "embarrassment", "guilt", "unworthy", "hidden", "secret", "inadequate", "failure", "exposed", "vulnerable"],
+      "difficultyLevel": 3,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-073",
+      "text": "A simple pleasure that brightens my day is...",
+      "categoryId": "emotions",
+      "keywords": ["pleasure", "simple", "joy", "small", "everyday", "delight", "happiness", "appreciate", "notice", "grateful"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-074",
+      "text": "The emotional pattern I'd most like to change is...",
+      "categoryId": "emotions",
+      "keywords": ["pattern", "change", "emotional", "habit", "reaction", "default", "response", "cycle", "break", "transform"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-075",
+      "text": "Something I'm excited about right now is...",
+      "categoryId": "emotions",
+      "keywords": ["excitement", "anticipation", "enthusiasm", "eager", "looking forward", "positive", "energy", "upcoming", "thrill", "happy"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-076",
+      "text": "My core values that guide my decisions are...",
+      "categoryId": "self-awareness",
+      "keywords": ["values", "principles", "guide", "decisions", "beliefs", "important", "foundation", "compass", "integrity", "priority"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-077",
+      "text": "Something I pretend to understand but don't is...",
+      "categoryId": "self-awareness",
+      "keywords": ["pretend", "understand", "admit", "honest", "confusion", "knowledge", "facade", "truth", "learning", "gap"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-078",
+      "text": "The way I talk to myself when I make a mistake is...",
+      "categoryId": "self-awareness",
+      "keywords": ["self-talk", "mistakes", "inner critic", "compassion", "harsh", "kind", "narrative", "voice", "response", "default"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-079",
+      "text": "A part of myself I try to hide from others is...",
+      "categoryId": "self-awareness",
+      "keywords": ["hide", "concealing", "secret", "shame", "vulnerable", "authentic", "mask", "protect", "true self", "exposed"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-080",
+      "text": "What I need more of in my life right now is...",
+      "categoryId": "self-awareness",
+      "keywords": ["needs", "lacking", "want", "desire", "balance", "fulfillment", "missing", "require", "craving", "seeking"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-081",
+      "text": "The story I tell myself about my past is...",
+      "categoryId": "self-awareness",
+      "keywords": ["story", "narrative", "past", "history", "interpretation", "meaning", "identity", "framing", "perspective", "belief"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-082",
+      "text": "Something that energizes me is...",
+      "categoryId": "self-awareness",
+      "keywords": ["energy", "motivation", "vitality", "inspire", "recharge", "fuel", "passion", "excitement", "drive", "enthusiasm"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-083",
+      "text": "An assumption I make about others that might be wrong is...",
+      "categoryId": "self-awareness",
+      "keywords": ["assumptions", "judgment", "bias", "others", "perception", "belief", "wrong", "question", "projection", "stereotype"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-084",
+      "text": "The thing I'm most curious about in life is...",
+      "categoryId": "self-awareness",
+      "keywords": ["curiosity", "wonder", "interest", "explore", "questions", "learning", "discover", "fascination", "inquiry", "mystery"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-085",
+      "text": "If I trusted myself more...",
+      "categoryId": "self-awareness",
+      "keywords": ["trust", "self-confidence", "belief", "faith", "doubt", "instinct", "intuition", "capability", "decision", "self-reliance"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-086",
+      "text": "Something I do well that I often take for granted is...",
+      "categoryId": "self-awareness",
+      "keywords": ["strength", "ability", "overlooked", "natural", "easy", "talent", "gift", "undervalue", "skill", "appreciate"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-087",
+      "text": "The environment where I feel most like myself is...",
+      "categoryId": "self-awareness",
+      "keywords": ["environment", "authentic", "comfortable", "setting", "place", "space", "belong", "natural", "true", "home"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-088",
+      "text": "A question I've been asking myself lately is...",
+      "categoryId": "self-awareness",
+      "keywords": ["question", "wondering", "reflection", "inquiry", "thought", "pondering", "consideration", "lately", "mind", "seeking"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-089",
+      "text": "The role I most often play in social situations is...",
+      "categoryId": "self-awareness",
+      "keywords": ["role", "social", "pattern", "default", "behavior", "persona", "identity", "group", "dynamic", "position"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-090",
+      "text": "Something I've been neglecting about my well-being is...",
+      "categoryId": "self-awareness",
+      "keywords": ["neglect", "well-being", "self-care", "health", "ignore", "priority", "attention", "balance", "overlooked", "important"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-091",
+      "text": "If I lived more authentically...",
+      "categoryId": "self-awareness",
+      "keywords": ["authentic", "genuine", "true self", "honest", "real", "mask", "pretend", "integrity", "aligned", "congruent"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-092",
+      "text": "The person who knows me best would say I am...",
+      "categoryId": "self-awareness",
+      "keywords": ["perception", "others", "known", "close", "description", "character", "qualities", "see", "understand", "perspective"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-093",
+      "text": "A contradiction within myself that I notice is...",
+      "categoryId": "self-awareness",
+      "keywords": ["contradiction", "conflict", "internal", "opposing", "tension", "complexity", "paradox", "inconsistent", "dual", "both"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-094",
+      "text": "Something I'm holding onto that no longer serves me is...",
+      "categoryId": "self-awareness",
+      "keywords": ["holding", "release", "outgrown", "past", "attachment", "serve", "burden", "let go", "moving on", "clinging"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-095",
+      "text": "The way I typically start my day affects me by...",
+      "categoryId": "self-awareness",
+      "keywords": ["morning", "routine", "start", "day", "habit", "impact", "affect", "tone", "pattern", "energy"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-096",
+      "text": "Something I believe in that others might disagree with is...",
+      "categoryId": "self-awareness",
+      "keywords": ["belief", "conviction", "unpopular", "different", "opinion", "stand", "principle", "value", "perspective", "disagree"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-097",
+      "text": "The biggest lesson life has taught me so far is...",
+      "categoryId": "self-awareness",
+      "keywords": ["lesson", "wisdom", "life", "learning", "experience", "insight", "understanding", "growth", "knowledge", "taught"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-098",
+      "text": "When I'm at my best, I feel...",
+      "categoryId": "self-awareness",
+      "keywords": ["best self", "peak", "optimal", "flourishing", "thriving", "state", "feeling", "performance", "energy", "aligned"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-099",
+      "text": "A mistake I keep making is...",
+      "categoryId": "self-awareness",
+      "keywords": ["mistake", "repeat", "pattern", "error", "habit", "learn", "cycle", "behavior", "tendency", "recurring"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-100",
+      "text": "The way I define success for myself is...",
+      "categoryId": "self-awareness",
+      "keywords": ["success", "definition", "personal", "meaning", "achievement", "measure", "criteria", "fulfillment", "goals", "values"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-101",
+      "text": "When I think about my career, what excites me most is...",
+      "categoryId": "work",
+      "keywords": ["career", "excitement", "passion", "future", "goals", "ambition", "professional", "growth", "purpose", "motivation"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-102",
+      "text": "A professional challenge I'm currently facing is...",
+      "categoryId": "work",
+      "keywords": ["challenge", "professional", "problem", "difficulty", "obstacle", "work", "issue", "struggle", "facing", "current"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-103",
+      "text": "If I brought more creativity to my work...",
+      "categoryId": "work",
+      "keywords": ["creativity", "innovation", "ideas", "thinking", "fresh", "approach", "original", "imagination", "problem-solving", "new"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-104",
+      "text": "Something I've learned from a difficult coworker is...",
+      "categoryId": "work",
+      "keywords": ["coworker", "difficult", "lesson", "relationship", "workplace", "learn", "challenge", "colleague", "team", "professional"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-105",
+      "text": "The aspect of my job I find most fulfilling is...",
+      "categoryId": "work",
+      "keywords": ["fulfilling", "satisfaction", "meaningful", "enjoy", "reward", "purpose", "work", "contribution", "value", "positive"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-106",
+      "text": "If I asked for a raise or promotion, I would...",
+      "categoryId": "work",
+      "keywords": ["raise", "promotion", "negotiation", "ask", "worth", "value", "career", "advancement", "courage", "deserve"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-107",
+      "text": "A boundary I need to set at work is...",
+      "categoryId": "work",
+      "keywords": ["boundary", "work", "limits", "healthy", "balance", "professional", "self-care", "protect", "clear", "respect"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-108",
+      "text": "The work environment that brings out my best is...",
+      "categoryId": "work",
+      "keywords": ["environment", "optimal", "thrive", "conditions", "culture", "setting", "perform", "productive", "comfortable", "ideal"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-109",
+      "text": "Something I'd change about my current work situation is...",
+      "categoryId": "work",
+      "keywords": ["change", "improve", "situation", "work", "different", "wish", "better", "frustration", "ideal", "modify"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-110",
+      "text": "If I pursued my dream career...",
+      "categoryId": "work",
+      "keywords": ["dream", "career", "ideal", "passion", "calling", "pursuit", "imagine", "vision", "aspiration", "purpose"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-111",
+      "text": "A professional relationship I want to improve is...",
+      "categoryId": "work",
+      "keywords": ["professional", "relationship", "improve", "colleague", "networking", "connection", "work", "collaboration", "communication", "rapport"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-112",
+      "text": "The way I handle workplace stress is...",
+      "categoryId": "work",
+      "keywords": ["stress", "workplace", "coping", "manage", "handle", "pressure", "overwhelm", "response", "strategy", "balance"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-113",
+      "text": "Something I've been procrastinating on at work is...",
+      "categoryId": "work",
+      "keywords": ["procrastination", "delay", "avoiding", "task", "work", "putting off", "deadline", "resistance", "uncomfortable", "difficult"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-114",
+      "text": "If I spoke up more in meetings...",
+      "categoryId": "work",
+      "keywords": ["speaking", "meetings", "voice", "contribution", "ideas", "confidence", "participate", "share", "presence", "visibility"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-115",
+      "text": "The type of recognition that matters most to me at work is...",
+      "categoryId": "work",
+      "keywords": ["recognition", "appreciation", "acknowledgment", "valued", "reward", "motivation", "work", "praise", "respect", "seen"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-116",
+      "text": "A mentor or role model who has influenced my career is...",
+      "categoryId": "work",
+      "keywords": ["mentor", "role model", "influence", "career", "guidance", "wisdom", "learning", "inspiration", "support", "example"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-117",
+      "text": "If I focused on my top priority at work today...",
+      "categoryId": "work",
+      "keywords": ["focus", "priority", "important", "attention", "concentrate", "productivity", "impact", "effective", "task", "today"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-118",
+      "text": "Something that drains my energy at work is...",
+      "categoryId": "work",
+      "keywords": ["drain", "energy", "exhausting", "depleting", "work", "fatigue", "negative", "burden", "frustrating", "overwhelming"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-119",
+      "text": "The professional skill I'm most proud of is...",
+      "categoryId": "work",
+      "keywords": ["skill", "proud", "strength", "professional", "expertise", "ability", "competence", "talent", "developed", "accomplishment"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-120",
+      "text": "If I took more initiative at work...",
+      "categoryId": "work",
+      "keywords": ["initiative", "proactive", "leadership", "action", "responsibility", "opportunity", "ownership", "drive", "self-starter", "bold"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-121",
+      "text": "A way I could better support my team is...",
+      "categoryId": "work",
+      "keywords": ["support", "team", "collaboration", "help", "contribute", "colleague", "together", "cooperation", "assist", "better"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-122",
+      "text": "Something I wish my boss understood about me is...",
+      "categoryId": "work",
+      "keywords": ["boss", "manager", "understanding", "communication", "relationship", "needs", "perspective", "wish", "workplace", "recognition"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-123",
+      "text": "The impact I want my work to have is...",
+      "categoryId": "work",
+      "keywords": ["impact", "contribution", "purpose", "legacy", "difference", "meaning", "value", "influence", "significance", "matter"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-124",
+      "text": "If work-life balance were easier...",
+      "categoryId": "work",
+      "keywords": ["balance", "work-life", "harmony", "boundaries", "time", "priorities", "integration", "struggle", "challenge", "ideal"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-125",
+      "text": "A project I'm excited to work on is...",
+      "categoryId": "work",
+      "keywords": ["project", "excited", "enthusiasm", "work", "engagement", "passion", "interesting", "challenge", "motivation", "opportunity"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-126",
+      "text": "One new habit I want to develop is...",
+      "categoryId": "growth",
+      "keywords": ["habit", "new", "develop", "routine", "change", "improvement", "behavior", "start", "build", "establish"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-127",
+      "text": "If I stepped outside my comfort zone today...",
+      "categoryId": "growth",
+      "keywords": ["comfort zone", "challenge", "growth", "risk", "courage", "new", "stretch", "expand", "brave", "uncomfortable"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-128",
+      "text": "A book, podcast, or idea that changed my perspective is...",
+      "categoryId": "growth",
+      "keywords": ["learning", "perspective", "influence", "wisdom", "insight", "growth", "changed", "book", "idea", "understanding"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-129",
+      "text": "Something I'd like to learn more about is...",
+      "categoryId": "growth",
+      "keywords": ["learning", "curiosity", "knowledge", "interest", "explore", "study", "understand", "discover", "new", "education"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-130",
+      "text": "If I prioritized my health more...",
+      "categoryId": "growth",
+      "keywords": ["health", "priority", "wellness", "self-care", "body", "fitness", "mental health", "energy", "vitality", "well-being"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-131",
+      "text": "A skill I've always wanted to develop is...",
+      "categoryId": "growth",
+      "keywords": ["skill", "develop", "learn", "ability", "aspiration", "talent", "competence", "improvement", "goal", "dream"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-132",
+      "text": "The part of my routine that serves me best is...",
+      "categoryId": "growth",
+      "keywords": ["routine", "habit", "effective", "helpful", "positive", "consistent", "practice", "beneficial", "serve", "daily"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-133",
+      "text": "If I forgave myself for a past mistake...",
+      "categoryId": "growth",
+      "keywords": ["forgiveness", "self-compassion", "mistake", "past", "guilt", "release", "healing", "acceptance", "move on", "peace"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-134",
+      "text": "A way I've grown in the past year is...",
+      "categoryId": "growth",
+      "keywords": ["growth", "progress", "change", "development", "improvement", "year", "evolution", "transformation", "reflection", "journey"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-135",
+      "text": "Something holding me back from growing is...",
+      "categoryId": "growth",
+      "keywords": ["obstacle", "barrier", "block", "limitation", "growth", "stuck", "resistance", "fear", "challenge", "holding back"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-136",
+      "text": "If I spent less time on distractions...",
+      "categoryId": "growth",
+      "keywords": ["distraction", "focus", "time", "attention", "productivity", "procrastination", "mindless", "intentional", "awareness", "control"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-137",
+      "text": "A positive change I've made recently is...",
+      "categoryId": "growth",
+      "keywords": ["change", "positive", "improvement", "progress", "recent", "development", "better", "growth", "accomplishment", "proud"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-138",
+      "text": "If I believed in myself more fully...",
+      "categoryId": "growth",
+      "keywords": ["belief", "self-confidence", "trust", "doubt", "potential", "capable", "self-esteem", "faith", "support", "inner"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-139",
+      "text": "Something I want to start doing for myself is...",
+      "categoryId": "growth",
+      "keywords": ["self-care", "start", "new", "commitment", "personal", "intention", "action", "priority", "wellness", "nurture"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-140",
+      "text": "A difficult experience that made me stronger is...",
+      "categoryId": "growth",
+      "keywords": ["resilience", "strength", "difficulty", "challenge", "growth", "overcome", "adversity", "lesson", "experience", "stronger"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-141",
+      "text": "If I practiced more patience...",
+      "categoryId": "growth",
+      "keywords": ["patience", "calm", "practice", "waiting", "tolerance", "peace", "acceptance", "slow", "frustration", "growth"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-142",
+      "text": "The area of my life that needs the most attention is...",
+      "categoryId": "growth",
+      "keywords": ["attention", "focus", "priority", "neglect", "improvement", "balance", "need", "area", "important", "address"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-143",
+      "text": "Something I've overcome that I'm proud of is...",
+      "categoryId": "growth",
+      "keywords": ["overcome", "proud", "achievement", "challenge", "obstacle", "growth", "success", "perseverance", "strength", "victory"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-144",
+      "text": "If I embraced uncertainty more...",
+      "categoryId": "growth",
+      "keywords": ["uncertainty", "unknown", "acceptance", "trust", "fear", "control", "flexibility", "adaptability", "openness", "risk"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-145",
+      "text": "A mindset shift that would help me is...",
+      "categoryId": "growth",
+      "keywords": ["mindset", "perspective", "shift", "thinking", "attitude", "belief", "change", "reframe", "growth", "approach"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-146",
+      "text": "Something I'm doing well that I should continue is...",
+      "categoryId": "growth",
+      "keywords": ["continue", "positive", "strength", "maintain", "consistent", "good", "keep", "working", "effective", "habit"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-147",
+      "text": "If I invested more in my personal development...",
+      "categoryId": "growth",
+      "keywords": ["investment", "development", "growth", "learning", "time", "effort", "priority", "commitment", "education", "improvement"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-148",
+      "text": "A fear I've conquered in my life is...",
+      "categoryId": "growth",
+      "keywords": ["fear", "conquered", "overcome", "courage", "growth", "victory", "brave", "faced", "past", "proud"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-149",
+      "text": "The version of myself I'm working toward is...",
+      "categoryId": "growth",
+      "keywords": ["vision", "future self", "aspiration", "becoming", "goal", "identity", "growth", "transformation", "ideal", "working"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-150",
+      "text": "If I said 'yes' to more opportunities...",
+      "categoryId": "growth",
+      "keywords": ["opportunity", "yes", "open", "possibilities", "growth", "courage", "adventure", "experience", "risk", "expansion"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-151",
+      "text": "My most important goal for this month is...",
+      "categoryId": "goals",
+      "keywords": ["goal", "month", "priority", "focus", "target", "intention", "achievement", "short-term", "plan", "accomplish"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-152",
+      "text": "If I could accomplish one thing this week, it would be...",
+      "categoryId": "goals",
+      "keywords": ["accomplish", "week", "priority", "goal", "focus", "one thing", "important", "achieve", "progress", "target"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-153",
+      "text": "A long-term vision I have for my life is...",
+      "categoryId": "goals",
+      "keywords": ["vision", "long-term", "future", "life", "dream", "aspiration", "direction", "purpose", "plan", "imagine"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-154",
+      "text": "The progress I've made toward a goal recently is...",
+      "categoryId": "goals",
+      "keywords": ["progress", "goal", "achievement", "movement", "steps", "forward", "momentum", "recent", "success", "advancing"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-155",
+      "text": "If money weren't a concern, I would...",
+      "categoryId": "goals",
+      "keywords": ["money", "freedom", "dream", "desire", "possibility", "unlimited", "ideal", "wish", "pursue", "fantasy"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-156",
+      "text": "Something I keep meaning to start is...",
+      "categoryId": "goals",
+      "keywords": ["start", "begin", "intention", "procrastination", "someday", "planning", "goal", "action", "desire", "waiting"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-157",
+      "text": "The next milestone I want to reach is...",
+      "categoryId": "goals",
+      "keywords": ["milestone", "goal", "achievement", "target", "progress", "next", "objective", "marker", "accomplish", "reach"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-158",
+      "text": "If I committed fully to my biggest dream...",
+      "categoryId": "goals",
+      "keywords": ["commitment", "dream", "dedication", "all-in", "focus", "pursue", "determination", "belief", "possibility", "action"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-159",
+      "text": "A resource that would help me achieve my goals is...",
+      "categoryId": "goals",
+      "keywords": ["resource", "help", "support", "tool", "assistance", "need", "goal", "achieve", "access", "useful"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-160",
+      "text": "Something I've accomplished that once seemed impossible is...",
+      "categoryId": "goals",
+      "keywords": ["accomplished", "impossible", "achievement", "success", "overcome", "believed", "growth", "proud", "milestone", "journey"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-161",
+      "text": "If I broke my goal into smaller steps...",
+      "categoryId": "goals",
+      "keywords": ["steps", "break down", "manageable", "small", "progress", "overwhelming", "action", "achievable", "strategy", "approach"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-162",
+      "text": "The life I want to be living in five years is...",
+      "categoryId": "goals",
+      "keywords": ["five years", "future", "vision", "life", "dream", "aspiration", "imagine", "direction", "planning", "ideal"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-163",
+      "text": "A goal I've been too afraid to voice is...",
+      "categoryId": "goals",
+      "keywords": ["fear", "unspoken", "secret", "dream", "ashamed", "desire", "hidden", "bold", "vulnerable", "admit"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-164",
+      "text": "If I asked for help with my goals...",
+      "categoryId": "goals",
+      "keywords": ["help", "support", "asking", "assistance", "collaboration", "vulnerable", "resources", "team", "network", "achieve"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-165",
+      "text": "Something that motivates me to keep going is...",
+      "categoryId": "goals",
+      "keywords": ["motivation", "drive", "persistence", "fuel", "why", "purpose", "inspiration", "keep going", "determination", "energy"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-166",
+      "text": "A habit that would help me reach my goals faster is...",
+      "categoryId": "goals",
+      "keywords": ["habit", "accelerate", "progress", "routine", "consistency", "effective", "strategy", "goal", "improvement", "action"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-167",
+      "text": "If I wasn't worried about what others think...",
+      "categoryId": "goals",
+      "keywords": ["judgment", "opinion", "others", "freedom", "authentic", "bold", "pursue", "fear", "approval", "self"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-168",
+      "text": "The reason my goals matter to me is...",
+      "categoryId": "goals",
+      "keywords": ["why", "purpose", "meaning", "motivation", "values", "important", "significance", "driving", "reason", "deeper"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-169",
+      "text": "A setback that taught me something valuable about my goals is...",
+      "categoryId": "goals",
+      "keywords": ["setback", "lesson", "failure", "learning", "growth", "obstacle", "valuable", "experience", "resilience", "adjust"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-170",
+      "text": "If I celebrated my small wins more...",
+      "categoryId": "goals",
+      "keywords": ["celebrate", "wins", "small", "progress", "acknowledge", "appreciate", "momentum", "motivation", "joy", "recognize"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-171",
+      "text": "The legacy I want to leave behind is...",
+      "categoryId": "goals",
+      "keywords": ["legacy", "impact", "future", "remember", "contribution", "meaning", "lasting", "purpose", "difference", "matter"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-172",
+      "text": "A dream I had as a child that still resonates is...",
+      "categoryId": "goals",
+      "keywords": ["childhood", "dream", "resonates", "remember", "aspiration", "connection", "past", "desire", "calling", "heart"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-173",
+      "text": "If I gave myself permission to succeed...",
+      "categoryId": "goals",
+      "keywords": ["permission", "success", "allow", "self-sabotage", "deserve", "worthy", "belief", "block", "achieve", "internal"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-174",
+      "text": "The first step I need to take toward my dream is...",
+      "categoryId": "goals",
+      "keywords": ["first step", "action", "begin", "start", "dream", "momentum", "courage", "initiate", "move", "forward"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-175",
+      "text": "Something I need to let go of to achieve my goals is...",
+      "categoryId": "goals",
+      "keywords": ["let go", "release", "obstacle", "holding back", "attachment", "block", "goal", "achieve", "move on", "clear"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-201",
+      "text": "The way I express love has evolved to...",
+      "categoryId": "relationships",
+      "keywords": ["love", "expression", "evolution", "growth", "change", "maturity", "learned", "understanding", "deeper", "better"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-202",
+      "text": "A moment of genuine connection I experienced recently was...",
+      "categoryId": "relationships",
+      "keywords": ["connection", "genuine", "moment", "meaningful", "authentic", "present", "bond", "experience", "special", "heart"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-203",
+      "text": "If I showed more gratitude to those around me...",
+      "categoryId": "relationships",
+      "keywords": ["gratitude", "appreciation", "expression", "others", "thankful", "acknowledge", "kindness", "voice", "action", "recognize"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-204",
+      "text": "The relationship I need to nurture more is...",
+      "categoryId": "relationships",
+      "keywords": ["nurture", "relationship", "attention", "invest", "neglect", "important", "care", "priority", "time", "effort"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-205",
+      "text": "A misunderstanding I need to clear up is...",
+      "categoryId": "relationships",
+      "keywords": ["misunderstanding", "clear", "communication", "resolve", "clarify", "honest", "conversation", "conflict", "repair", "address"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-206",
+      "text": "What I love most about my closest friendship is...",
+      "categoryId": "relationships",
+      "keywords": ["friendship", "love", "closest", "appreciate", "value", "special", "connection", "bond", "support", "joy"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-207",
+      "text": "If I were more vulnerable with the people I love...",
+      "categoryId": "relationships",
+      "keywords": ["vulnerable", "love", "open", "authentic", "risk", "trust", "deeper", "connection", "honest", "intimacy"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-208",
+      "text": "A way I could better support my partner/friend is...",
+      "categoryId": "relationships",
+      "keywords": ["support", "partner", "friend", "help", "better", "care", "there for", "needs", "attention", "presence"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-209",
+      "text": "Something I appreciate about solitude is...",
+      "categoryId": "relationships",
+      "keywords": ["solitude", "alone", "appreciate", "peace", "quiet", "reflection", "self", "recharge", "space", "independence"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-210",
+      "text": "The communication pattern I'd like to change is...",
+      "categoryId": "relationships",
+      "keywords": ["communication", "pattern", "change", "improve", "habit", "style", "behavior", "default", "better", "aware"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-251",
+      "text": "When I feel content, I notice...",
+      "categoryId": "emotions",
+      "keywords": ["content", "peace", "satisfaction", "calm", "present", "awareness", "notice", "feeling", "state", "body"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-252",
+      "text": "A feeling that surprised me recently was...",
+      "categoryId": "emotions",
+      "keywords": ["surprise", "feeling", "unexpected", "emotion", "awareness", "notice", "reaction", "discover", "unfamiliar", "new"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-253",
+      "text": "If I gave myself permission to rest...",
+      "categoryId": "emotions",
+      "keywords": ["rest", "permission", "pause", "recovery", "self-care", "allow", "relax", "deserve", "tired", "recharge"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-254",
+      "text": "Something that helps me process difficult emotions is...",
+      "categoryId": "emotions",
+      "keywords": ["process", "difficult", "emotions", "coping", "help", "strategy", "healing", "work through", "support", "tool"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-255",
+      "text": "A moment that moved me deeply was...",
+      "categoryId": "emotions",
+      "keywords": ["moved", "deeply", "touched", "emotion", "moment", "meaningful", "profound", "heart", "feeling", "impact"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-256",
+      "text": "The emotion I need to honor more is...",
+      "categoryId": "emotions",
+      "keywords": ["honor", "emotion", "acknowledge", "valid", "allow", "respect", "feel", "accept", "recognize", "ignore"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-257",
+      "text": "When I feel frustrated, what helps me most is...",
+      "categoryId": "emotions",
+      "keywords": ["frustration", "help", "coping", "manage", "response", "strategy", "calm", "handle", "relief", "tool"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-258",
+      "text": "Something beautiful I noticed today was...",
+      "categoryId": "emotions",
+      "keywords": ["beauty", "notice", "present", "awareness", "appreciate", "moment", "today", "small", "attention", "grateful"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-259",
+      "text": "If I trusted my intuition more...",
+      "categoryId": "emotions",
+      "keywords": ["intuition", "trust", "gut", "instinct", "feeling", "inner wisdom", "knowing", "listen", "guide", "sense"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-260",
+      "text": "A memory that always brings me comfort is...",
+      "categoryId": "emotions",
+      "keywords": ["memory", "comfort", "warm", "safe", "peace", "happy", "past", "remember", "soothing", "calm"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-301",
+      "text": "Something I'm noticing about my thought patterns is...",
+      "categoryId": "self-awareness",
+      "keywords": ["thoughts", "patterns", "notice", "awareness", "mind", "habits", "recurring", "observation", "mental", "cognitive"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-302",
+      "text": "A belief I've outgrown is...",
+      "categoryId": "self-awareness",
+      "keywords": ["belief", "outgrown", "past", "change", "evolved", "old", "update", "identity", "growth", "revision"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-303",
+      "text": "If I were to describe my inner critic...",
+      "categoryId": "self-awareness",
+      "keywords": ["inner critic", "voice", "harsh", "judgment", "self-talk", "negative", "character", "describe", "awareness", "understand"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-304",
+      "text": "Something I've been in denial about is...",
+      "categoryId": "self-awareness",
+      "keywords": ["denial", "truth", "avoid", "admit", "reality", "face", "acknowledge", "honest", "difficult", "accept"],
+      "difficultyLevel": 3,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-305",
+      "text": "What I need to hear right now is...",
+      "categoryId": "self-awareness",
+      "keywords": ["need", "hear", "comfort", "reassurance", "support", "words", "encouragement", "validation", "truth", "message"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-306",
+      "text": "A part of my identity I'm exploring is...",
+      "categoryId": "self-awareness",
+      "keywords": ["identity", "exploring", "self", "discovery", "who am I", "questioning", "growth", "change", "understand", "aspect"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-307",
+      "text": "If I honored my needs more...",
+      "categoryId": "self-awareness",
+      "keywords": ["needs", "honor", "priority", "self-care", "respect", "boundaries", "value", "acknowledge", "meet", "important"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-308",
+      "text": "Something my body is telling me is...",
+      "categoryId": "self-awareness",
+      "keywords": ["body", "signal", "awareness", "physical", "listen", "message", "sensation", "health", "intuition", "wisdom"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-309",
+      "text": "A way I've surprised myself recently is...",
+      "categoryId": "self-awareness",
+      "keywords": ["surprise", "self", "unexpected", "growth", "capability", "discover", "new", "proud", "ability", "realize"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-310",
+      "text": "If I stopped comparing myself to others...",
+      "categoryId": "self-awareness",
+      "keywords": ["comparison", "others", "stop", "self-worth", "enough", "unique", "journey", "freedom", "peace", "focus"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-351",
+      "text": "The professional boundary I struggle with most is...",
+      "categoryId": "work",
+      "keywords": ["boundary", "struggle", "professional", "work", "limit", "challenge", "maintain", "difficulty", "balance", "issue"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-352",
+      "text": "If I approached my work with more curiosity...",
+      "categoryId": "work",
+      "keywords": ["curiosity", "work", "approach", "interest", "learning", "explore", "open", "mindset", "engage", "discover"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-353",
+      "text": "Something I've been avoiding at work is...",
+      "categoryId": "work",
+      "keywords": ["avoiding", "work", "procrastination", "difficult", "uncomfortable", "task", "conversation", "resistance", "putting off", "delay"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-354",
+      "text": "A work accomplishment I haven't celebrated is...",
+      "categoryId": "work",
+      "keywords": ["accomplishment", "celebrate", "achievement", "overlooked", "proud", "success", "acknowledge", "recognize", "work", "deserve"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-355",
+      "text": "If I brought more of my authentic self to work...",
+      "categoryId": "work",
+      "keywords": ["authentic", "self", "work", "genuine", "true", "professional", "identity", "bring", "show up", "real"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-356",
+      "text": "The feedback I've been hesitant to give is...",
+      "categoryId": "work",
+      "keywords": ["feedback", "hesitant", "give", "communication", "honest", "difficult", "conversation", "avoid", "courage", "share"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-357",
+      "text": "Something that would make tomorrow at work better is...",
+      "categoryId": "work",
+      "keywords": ["tomorrow", "better", "work", "improve", "change", "small", "action", "intention", "different", "positive"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-358",
+      "text": "If I trusted my professional judgment more...",
+      "categoryId": "work",
+      "keywords": ["trust", "judgment", "professional", "confidence", "expertise", "doubt", "decision", "capability", "self-trust", "believe"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-359",
+      "text": "A way my work aligns with my values is...",
+      "categoryId": "work",
+      "keywords": ["alignment", "values", "work", "meaning", "purpose", "integrity", "match", "congruent", "fulfillment", "connection"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-360",
+      "text": "The professional risk I'd like to take is...",
+      "categoryId": "work",
+      "keywords": ["risk", "professional", "courage", "bold", "try", "fear", "growth", "opportunity", "stretch", "venture"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-401",
+      "text": "A limiting belief about growth I'm ready to release is...",
+      "categoryId": "growth",
+      "keywords": ["limiting belief", "release", "growth", "block", "mindset", "let go", "barrier", "change", "freedom", "transform"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-402",
+      "text": "If I were more disciplined about...",
+      "categoryId": "growth",
+      "keywords": ["discipline", "consistent", "habit", "routine", "commitment", "follow through", "structure", "improve", "build", "practice"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-403",
+      "text": "Something I'm learning to accept about myself is...",
+      "categoryId": "growth",
+      "keywords": ["accept", "self", "learning", "embrace", "growth", "truth", "acknowledge", "peace", "imperfection", "process"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-404",
+      "text": "A boundary that has helped me grow is...",
+      "categoryId": "growth",
+      "keywords": ["boundary", "growth", "healthy", "protection", "self-care", "learn", "respect", "limit", "positive", "change"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-405",
+      "text": "If I approached challenges with more curiosity...",
+      "categoryId": "growth",
+      "keywords": ["challenge", "curiosity", "approach", "mindset", "learning", "opportunity", "explore", "open", "growth", "reframe"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-406",
+      "text": "Something I need to unlearn is...",
+      "categoryId": "growth",
+      "keywords": ["unlearn", "release", "old", "pattern", "belief", "habit", "let go", "change", "update", "outgrown"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-407",
+      "text": "The area where I've grown the most this year is...",
+      "categoryId": "growth",
+      "keywords": ["growth", "area", "year", "progress", "development", "change", "improvement", "proud", "reflection", "evolution"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-408",
+      "text": "If I took better care of my mental health...",
+      "categoryId": "growth",
+      "keywords": ["mental health", "care", "self-care", "wellness", "priority", "attention", "support", "help", "nurture", "wellbeing"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-409",
+      "text": "A new perspective I'm developing is...",
+      "categoryId": "growth",
+      "keywords": ["perspective", "new", "developing", "growth", "mindset", "shift", "view", "understanding", "change", "expand"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-410",
+      "text": "If I gave myself more grace during difficult times...",
+      "categoryId": "growth",
+      "keywords": ["grace", "compassion", "difficult", "self-kindness", "forgiveness", "gentle", "understanding", "patience", "struggle", "allow"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-451",
+      "text": "A goal that scares and excites me is...",
+      "categoryId": "goals",
+      "keywords": ["scary", "exciting", "goal", "bold", "dream", "stretch", "challenge", "ambition", "thrill", "fear"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-452",
+      "text": "If I focused on progress rather than perfection...",
+      "categoryId": "goals",
+      "keywords": ["progress", "perfection", "focus", "mindset", "growth", "movement", "forward", "enough", "action", "comparison"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-453",
+      "text": "Something I've been putting off that I could start today is...",
+      "categoryId": "goals",
+      "keywords": ["start", "today", "procrastination", "action", "begin", "now", "delay", "small", "momentum", "doing"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-454",
+      "text": "The support I need to reach my goals is...",
+      "categoryId": "goals",
+      "keywords": ["support", "need", "help", "resources", "goal", "achieve", "assistance", "community", "guidance", "ask"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-455",
+      "text": "If I removed one obstacle from my path...",
+      "categoryId": "goals",
+      "keywords": ["obstacle", "remove", "path", "block", "barrier", "clear", "goal", "achieve", "way", "progress"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-456",
+      "text": "A dream I've never told anyone about is...",
+      "categoryId": "goals",
+      "keywords": ["dream", "secret", "unspoken", "desire", "hidden", "personal", "private", "deep", "want", "wish"],
+      "difficultyLevel": 3,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-457",
+      "text": "If I made my goals visible every day...",
+      "categoryId": "goals",
+      "keywords": ["visible", "reminder", "daily", "focus", "goal", "attention", "awareness", "priority", "see", "track"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-458",
+      "text": "Something I'm willing to sacrifice to reach my goals is...",
+      "categoryId": "goals",
+      "keywords": ["sacrifice", "trade-off", "willing", "commitment", "priority", "goal", "give up", "cost", "dedication", "choice"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-459",
+      "text": "The version of success that feels most authentic to me is...",
+      "categoryId": "goals",
+      "keywords": ["success", "authentic", "personal", "definition", "true", "own", "meaning", "fulfillment", "values", "vision"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-460",
+      "text": "If I believed my dreams were achievable...",
+      "categoryId": "goals",
+      "keywords": ["believe", "achievable", "dreams", "possible", "confidence", "faith", "trust", "capable", "doubt", "mindset"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-501",
+      "text": "The way I've changed as a friend over the years is...",
+      "categoryId": "relationships",
+      "keywords": ["change", "friend", "years", "evolution", "growth", "different", "better", "learned", "matured", "understand"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-502",
+      "text": "If I let go of grudges I'm holding...",
+      "categoryId": "relationships",
+      "keywords": ["grudge", "let go", "forgiveness", "holding", "resentment", "release", "peace", "free", "past", "move on"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-503",
+      "text": "A new connection I'd like to make is...",
+      "categoryId": "relationships",
+      "keywords": ["new", "connection", "relationship", "meet", "friend", "networking", "expand", "reach out", "build", "social"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-504",
+      "text": "Something I wish I understood better about someone I love is...",
+      "categoryId": "relationships",
+      "keywords": ["understand", "love", "wish", "know", "perspective", "curiosity", "empathy", "learn", "depth", "connection"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-505",
+      "text": "If I accepted people as they are more fully...",
+      "categoryId": "relationships",
+      "keywords": ["acceptance", "people", "fully", "judgment", "expectations", "change", "as they are", "love", "tolerance", "let be"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-551",
+      "text": "The emotion I'm most afraid of feeling is...",
+      "categoryId": "emotions",
+      "keywords": ["fear", "emotion", "avoid", "uncomfortable", "painful", "scary", "vulnerability", "protect", "resist", "face"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-552",
+      "text": "If I let myself grieve what I've lost...",
+      "categoryId": "emotions",
+      "keywords": ["grief", "loss", "allow", "process", "mourning", "heal", "pain", "release", "feel", "honor"],
+      "difficultyLevel": 3,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-553",
+      "text": "Something that makes me feel safe is...",
+      "categoryId": "emotions",
+      "keywords": ["safe", "security", "comfort", "protection", "calm", "peace", "trust", "secure", "grounded", "stable"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-554",
+      "text": "A joy I've been postponing is...",
+      "categoryId": "emotions",
+      "keywords": ["joy", "postpone", "delay", "pleasure", "fun", "waiting", "deserve", "allow", "happiness", "enjoy"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-555",
+      "text": "If I named my feelings more accurately...",
+      "categoryId": "emotions",
+      "keywords": ["name", "feelings", "accurate", "identify", "emotional vocabulary", "awareness", "specific", "understand", "articulate", "clarity"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-601",
+      "text": "My relationship with time is...",
+      "categoryId": "self-awareness",
+      "keywords": ["time", "relationship", "use", "perception", "management", "scarcity", "abundance", "pace", "rush", "slow"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-602",
+      "text": "If I listened to my intuition more often...",
+      "categoryId": "self-awareness",
+      "keywords": ["intuition", "listen", "gut", "inner wisdom", "trust", "guidance", "instinct", "knowing", "sense", "feeling"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-603",
+      "text": "Something I'm curious about in myself is...",
+      "categoryId": "self-awareness",
+      "keywords": ["curious", "self", "explore", "discover", "understand", "learn", "mystery", "wonder", "inquiry", "depth"],
+      "difficultyLevel": 1,
+      "isFoundational": true
+    },
+    {
+      "id": "stem-604",
+      "text": "The story I tell myself about money is...",
+      "categoryId": "self-awareness",
+      "keywords": ["money", "story", "belief", "narrative", "scarcity", "abundance", "worth", "relationship", "mindset", "financial"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-605",
+      "text": "If I acknowledged my own wisdom...",
+      "categoryId": "self-awareness",
+      "keywords": ["wisdom", "acknowledge", "trust", "knowing", "experience", "learning", "value", "self", "internal", "guidance"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-251",
+      "text": "If I brought 5% more consciousness to my career...",
+      "categoryId": "work",
+      "keywords": ["consciousness", "career", "work", "awareness", "intentional", "professional", "job", "mindful", "focus", "growth"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-252",
+      "text": "If I brought 5% more consciousness to my health...",
+      "categoryId": "growth",
+      "keywords": ["consciousness", "health", "body", "wellness", "awareness", "physical", "self-care", "mindful", "habits", "vitality"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-253",
+      "text": "If I brought 5% more consciousness to my finances...",
+      "categoryId": "goals",
+      "keywords": ["consciousness", "finances", "money", "awareness", "spending", "saving", "intentional", "budget", "wealth", "mindful"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-254",
+      "text": "If I brought 5% more consciousness to my friendships...",
+      "categoryId": "relationships",
+      "keywords": ["consciousness", "friendships", "friends", "connection", "awareness", "social", "support", "mindful", "intentional", "bonding"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-255",
+      "text": "If I brought 5% more consciousness to my family...",
+      "categoryId": "relationships",
+      "keywords": ["consciousness", "family", "relatives", "connection", "awareness", "home", "loved ones", "mindful", "intentional", "belonging"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-256",
+      "text": "If I brought 5% more consciousness to my hobbies...",
+      "categoryId": "growth",
+      "keywords": ["consciousness", "hobbies", "interests", "play", "leisure", "passion", "creativity", "enjoyment", "mindful", "fulfillment"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-257",
+      "text": "If I brought 5% more consciousness to my inner life...",
+      "categoryId": "self-awareness",
+      "keywords": ["consciousness", "inner life", "spirituality", "soul", "reflection", "meditation", "mindful", "awareness", "meaning", "depth"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-258",
+      "text": "If I brought 5% more consciousness to my creativity...",
+      "categoryId": "growth",
+      "keywords": ["consciousness", "creativity", "expression", "art", "innovation", "imagination", "mindful", "ideas", "flow", "inspiration"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-259",
+      "text": "If I brought 5% more consciousness to my communication...",
+      "categoryId": "relationships",
+      "keywords": ["consciousness", "communication", "speaking", "listening", "expression", "clarity", "mindful", "words", "dialogue", "understanding"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-260",
+      "text": "If I brought 5% more consciousness to my self-care...",
+      "categoryId": "self-awareness",
+      "keywords": ["consciousness", "self-care", "nurturing", "rest", "boundaries", "wellness", "mindful", "compassion", "needs", "renewal"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-261",
+      "text": "If I brought 5% more consciousness to my environment...",
+      "categoryId": "goals",
+      "keywords": ["consciousness", "environment", "home", "space", "surroundings", "organization", "mindful", "comfort", "sanctuary", "intentional"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-262",
+      "text": "If I brought 5% more consciousness to my learning...",
+      "categoryId": "growth",
+      "keywords": ["consciousness", "learning", "education", "growth", "knowledge", "curiosity", "mindful", "skills", "development", "understanding"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-263",
+      "text": "If I brought 5% more consciousness to my boundaries...",
+      "categoryId": "self-awareness",
+      "keywords": ["consciousness", "boundaries", "limits", "self-respect", "protection", "saying no", "mindful", "assertive", "healthy", "space"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-264",
+      "text": "If I brought 5% more honesty to my career...",
+      "categoryId": "work",
+      "keywords": ["honesty", "career", "work", "authenticity", "truth", "integrity", "genuine", "transparent", "professional", "real"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-265",
+      "text": "If I brought 5% more honesty to my friendships...",
+      "categoryId": "relationships",
+      "keywords": ["honesty", "friendships", "friends", "authenticity", "truth", "trust", "genuine", "transparent", "vulnerable", "real"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-266",
+      "text": "If I brought 5% more honesty to my self-image...",
+      "categoryId": "self-awareness",
+      "keywords": ["honesty", "self-image", "identity", "authenticity", "truth", "perception", "genuine", "acceptance", "real", "seeing clearly"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-267",
+      "text": "If I brought 5% more acceptance to my body...",
+      "categoryId": "self-awareness",
+      "keywords": ["acceptance", "body", "physical", "self-love", "compassion", "peace", "embracing", "kindness", "appreciation", "self-image"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-268",
+      "text": "If I brought 5% more acceptance to my past...",
+      "categoryId": "emotions",
+      "keywords": ["acceptance", "past", "history", "healing", "forgiveness", "peace", "letting go", "release", "closure", "moving on"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-269",
+      "text": "If I brought 5% more acceptance to my emotions...",
+      "categoryId": "emotions",
+      "keywords": ["acceptance", "emotions", "feelings", "allowing", "compassion", "peace", "embracing", "non-judgment", "presence", "experience"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-270",
+      "text": "If I brought 5% more intention to my mornings...",
+      "categoryId": "growth",
+      "keywords": ["intention", "mornings", "routine", "start", "purposeful", "deliberate", "mindful", "ritual", "habits", "beginning"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-271",
+      "text": "If I brought 5% more intention to my conversations...",
+      "categoryId": "relationships",
+      "keywords": ["intention", "conversations", "communication", "purposeful", "deliberate", "mindful", "present", "listening", "connection", "dialogue"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-272",
+      "text": "If I brought 5% more intention to my decisions...",
+      "categoryId": "goals",
+      "keywords": ["intention", "decisions", "choices", "purposeful", "deliberate", "mindful", "clarity", "direction", "agency", "thoughtful"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-273",
+      "text": "If I brought 5% more courage to my work...",
+      "categoryId": "work",
+      "keywords": ["courage", "work", "career", "brave", "bold", "risk", "fearless", "daring", "confidence", "stepping up"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-274",
+      "text": "If I brought 5% more courage to my relationships...",
+      "categoryId": "relationships",
+      "keywords": ["courage", "relationships", "connection", "brave", "vulnerable", "risk", "fearless", "openness", "honest", "authentic"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-275",
+      "text": "If I brought 5% more courage to my dreams...",
+      "categoryId": "goals",
+      "keywords": ["courage", "dreams", "aspirations", "brave", "bold", "risk", "fearless", "ambition", "pursuing", "believing"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-276",
+      "text": "If I brought 5% more presence to my meals...",
+      "categoryId": "self-awareness",
+      "keywords": ["presence", "meals", "eating", "mindful", "savoring", "nourishment", "awareness", "gratitude", "slow", "appreciation"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-277",
+      "text": "If I brought 5% more presence to my rest...",
+      "categoryId": "self-awareness",
+      "keywords": ["presence", "rest", "relaxation", "mindful", "recovery", "renewal", "awareness", "peace", "stillness", "recharge"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-278",
+      "text": "If I brought 5% more presence to my listening...",
+      "categoryId": "relationships",
+      "keywords": ["presence", "listening", "attention", "mindful", "hearing", "understanding", "awareness", "connection", "focus", "empathy"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-279",
+      "text": "If I brought 5% more compassion to my self-talk...",
+      "categoryId": "self-awareness",
+      "keywords": ["compassion", "self-talk", "inner voice", "kindness", "gentle", "self-love", "nurturing", "supportive", "understanding", "forgiving"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-280",
+      "text": "If I brought 5% more compassion to my mistakes...",
+      "categoryId": "emotions",
+      "keywords": ["compassion", "mistakes", "errors", "forgiveness", "kindness", "learning", "grace", "understanding", "growth", "acceptance"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-281",
+      "text": "If I brought 5% more playfulness to my day...",
+      "categoryId": "growth",
+      "keywords": ["playfulness", "day", "fun", "joy", "lightness", "humor", "spontaneity", "enjoyment", "laughter", "delight"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-282",
+      "text": "If I brought 5% more gratitude to my challenges...",
+      "categoryId": "growth",
+      "keywords": ["gratitude", "challenges", "difficulties", "thankful", "appreciation", "perspective", "growth", "learning", "reframe", "opportunity"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-283",
+      "text": "If I brought 5% more curiosity to my problems...",
+      "categoryId": "growth",
+      "keywords": ["curiosity", "problems", "challenges", "wonder", "exploration", "openness", "learning", "questions", "inquiry", "discovery"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-284",
+      "text": "If I brought 5% more patience to my goals...",
+      "categoryId": "goals",
+      "keywords": ["patience", "goals", "progress", "steady", "persistence", "trust", "process", "timing", "endurance", "long-term"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-285",
+      "text": "If I brought 5% more focus to my priorities...",
+      "categoryId": "goals",
+      "keywords": ["focus", "priorities", "concentration", "clarity", "attention", "intentional", "direction", "discipline", "important", "essential"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-286",
+      "text": "One area where I lack clarity is...",
+      "categoryId": "self-awareness",
+      "keywords": ["clarity", "lack", "confusion", "uncertain", "foggy", "unclear", "direction", "understanding", "insight", "lost"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-287",
+      "text": "Something I'm not being honest with myself about is...",
+      "categoryId": "self-awareness",
+      "keywords": ["honesty", "denial", "avoidance", "truth", "self-deception", "blind spot", "facing", "admitting", "reality", "confronting"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-288",
+      "text": "One thing I'm not paying enough attention to is...",
+      "categoryId": "self-awareness",
+      "keywords": ["attention", "neglect", "overlooking", "ignoring", "awareness", "blind spot", "missing", "focus", "priority", "unconscious"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-289",
+      "text": "An area of my life I've been unconscious about is...",
+      "categoryId": "self-awareness",
+      "keywords": ["unconscious", "unaware", "autopilot", "blind spot", "neglect", "ignored", "asleep", "automatic", "oblivious", "disconnected"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-290",
+      "text": "A need I've been ignoring is...",
+      "categoryId": "emotions",
+      "keywords": ["need", "ignoring", "neglect", "suppressed", "denied", "unmet", "overlooked", "pushed aside", "dismissed", "deprived"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-291",
+      "text": "Something I'm not giving enough energy to is...",
+      "categoryId": "goals",
+      "keywords": ["energy", "neglect", "underinvesting", "depleted", "attention", "effort", "focus", "priority", "drained", "starving"],
+      "difficultyLevel": 1,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-292",
+      "text": "A part of myself I've been neglecting is...",
+      "categoryId": "self-awareness",
+      "keywords": ["neglect", "self", "ignored", "abandoned", "forgotten", "suppressed", "denied", "aspect", "side", "dimension"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-293",
+      "text": "One thing I'm not accepting about myself is...",
+      "categoryId": "self-awareness",
+      "keywords": ["acceptance", "resistance", "denial", "rejection", "self", "fighting", "refusing", "struggling", "judging", "disowning"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-294",
+      "text": "A conversation I'm not having that I should is...",
+      "categoryId": "relationships",
+      "keywords": ["conversation", "avoiding", "should", "necessary", "difficult", "postponing", "overdue", "important", "needed", "delaying"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-295",
+      "text": "Something I'm not allowing myself to feel is...",
+      "categoryId": "emotions",
+      "keywords": ["allowing", "feeling", "suppressed", "blocked", "denied", "emotions", "resisting", "avoiding", "numbing", "shutting out"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-296",
+      "text": "One way I'm not showing up fully is...",
+      "categoryId": "growth",
+      "keywords": ["showing up", "holding back", "partial", "uncommitted", "half-hearted", "withholding", "reserved", "playing small", "hiding", "diminished"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-297",
+      "text": "A boundary I'm not enforcing is...",
+      "categoryId": "self-awareness",
+      "keywords": ["boundary", "enforcing", "weak", "violated", "allowing", "permitting", "crossed", "compromised", "slack", "ignored"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-298",
+      "text": "Something I'm not saying that needs to be said is...",
+      "categoryId": "relationships",
+      "keywords": ["saying", "unsaid", "withheld", "truth", "silence", "unexpressed", "holding back", "needed", "important", "overdue"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-299",
+      "text": "One area where I'm not being responsible is...",
+      "categoryId": "growth",
+      "keywords": ["responsible", "avoiding", "shirking", "accountability", "ownership", "neglect", "duty", "obligation", "evading", "denying"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    },
+    {
+      "id": "stem-300",
+      "text": "A fear I'm not facing is...",
+      "categoryId": "emotions",
+      "keywords": ["fear", "avoiding", "facing", "running", "hiding", "denial", "courage", "confronting", "evading", "suppressing"],
+      "difficultyLevel": 2,
+      "isFoundational": false
+    }
+  ]
+}

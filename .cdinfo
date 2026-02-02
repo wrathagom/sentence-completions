@@ -1,0 +1,28 @@
+# ============================================================
+# This file is used by cd-info to display directory information
+# Learn more: https://github.com/wrathagom/cd-info
+# ============================================================
+# --- END CD-INFO HEADER ---
+
+# Sentence Completion App
+  Daily journaling app for self-reflection using sentence stems
+
+# Quick Commands
+  - `flutter run`              Run on connected device
+  - `flutter run -d linux`     Run on Linux desktop
+  - `flutter run -d chrome`    Run in browser (web)
+  - `flutter test`             Run tests
+
+# Development
+  - `flutter pub get`          Install dependencies
+  - `dart run build_runner build`  Generate Riverpod code
+  - `flutter analyze`          Run static analysis
+
+# Build
+  - `flutter build apk`        Build Android APK
+  - `flutter build ios`        Build for iOS
+  - `flutter build linux`      Build Linux desktop app
+
+# Links
+  - Flutter docs: https://docs.flutter.dev/
+  - Riverpod docs: https://riverpod.dev/
