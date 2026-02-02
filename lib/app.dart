@@ -12,6 +12,7 @@ import 'presentation/providers/providers.dart';
 import 'presentation/routing/app_router.dart';
 import 'presentation/widgets/custom_title_bar.dart';
 import 'presentation/widgets/keyboard_shortcuts_overlay.dart';
+import 'presentation/widgets/patterned_background.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -33,23 +34,54 @@ class App extends ConsumerWidget {
     }
 
     final isDesktop = !kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS);
+    final hasPattern = settings.backgroundPattern != BackgroundPattern.none;
+
+    // Get base themes and make scaffolds transparent if pattern is active
+    // This must be done at the theme level (not in builder) to avoid flicker during transitions
+    var lightTheme = AppTheme.getTheme(settings.colorTheme, Brightness.light);
+    var darkTheme = AppTheme.getTheme(settings.colorTheme, Brightness.dark);
+    if (hasPattern) {
+      // Use crossfade transitions when pattern is active to avoid seeing both pages layered
+      const crossfadeTransitions = PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: _CrossfadePageTransitionsBuilder(),
+          TargetPlatform.iOS: _CrossfadePageTransitionsBuilder(),
+          TargetPlatform.linux: _CrossfadePageTransitionsBuilder(),
+          TargetPlatform.macOS: _CrossfadePageTransitionsBuilder(),
+          TargetPlatform.windows: _CrossfadePageTransitionsBuilder(),
+        },
+      );
+      lightTheme = lightTheme.copyWith(
+        scaffoldBackgroundColor: Colors.transparent,
+        pageTransitionsTheme: crossfadeTransitions,
+      );
+      darkTheme = darkTheme.copyWith(
+        scaffoldBackgroundColor: Colors.transparent,
+        pageTransitionsTheme: crossfadeTransitions,
+      );
+    }
 
     Widget app = MaterialApp.router(
       title: AppConstants.appName,
-      theme: AppTheme.getTheme(settings.colorTheme, Brightness.light),
-      darkTheme: AppTheme.getTheme(settings.colorTheme, Brightness.dark),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: themeMode,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
+        // Wrap with patterned background
+        Widget content = PatternedBackground(
+          child: child ?? const SizedBox.shrink(),
+        );
+
         // Only show custom title bar on desktop with minimal style
         if (!CustomTitleBar.isDesktop || settings.titleBarStyle != TitleBarStyle.minimal) {
-          return child ?? const SizedBox.shrink();
+          return content;
         }
         return Column(
           children: [
             const CustomTitleBar(),
-            Expanded(child: child ?? const SizedBox.shrink()),
+            Expanded(child: content),
           ],
         );
       },
@@ -107,6 +139,29 @@ class App extends ConsumerWidget {
     return PlatformMenuBar(
       menus: const <PlatformMenuItem>[],
       child: app,
+    );
+  }
+}
+
+/// A page transition that crossfades between pages (old fades out, new fades in).
+class _CrossfadePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _CrossfadePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: animation,
+      child: FadeTransition(
+        // Fade out when this page is being covered by another
+        opacity: Tween<double>(begin: 1.0, end: 0.0).animate(secondaryAnimation),
+        child: child,
+      ),
     );
   }
 }

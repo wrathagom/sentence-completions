@@ -4,11 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../data/models/ai_suggestion.dart';
 import '../../../data/models/stem.dart';
-import '../../../data/models/stem_rating.dart';
 import '../../../domain/services/intelligent_suggestion_service.dart';
 import '../../providers/providers.dart';
+import '../../widgets/glowing_card.dart';
 import '../../widgets/responsive_scaffold.dart';
-import '../../widgets/stem_rating_widget.dart';
 
 class PostCompletionScreen extends ConsumerStatefulWidget {
   final String entryId;
@@ -27,8 +26,6 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
   SuggestionResult? _suggestionResult;
   bool _isLoading = true;
   final Set<String> _savedIds = {}; // Can be stem IDs or AI suggestion tempIds
-  StemRatingValue? _selectedRating;
-  String? _stemId;
 
   @override
   void initState() {
@@ -45,17 +42,6 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
         context.go('/home');
       }
       return;
-    }
-
-    _stemId = entry.stemId;
-
-    // Load existing rating if any
-    final ratingRepository = ref.read(stemRatingRepositoryProvider);
-    final existingRating = await ratingRepository.getRatingForEntry(widget.entryId);
-    if (mounted && existingRating != null) {
-      setState(() {
-        _selectedRating = existingRating.rating;
-      });
     }
 
     final settings = ref.read(settingsProvider);
@@ -142,24 +128,6 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
     context.go('/completion', extra: {'stemText': suggestion.text});
   }
 
-  Future<void> _rateStem(StemRatingValue rating) async {
-    if (_stemId == null) return;
-
-    final repository = ref.read(stemRatingRepositoryProvider);
-    await repository.rateStem(
-      stemId: _stemId!,
-      rating: rating,
-      entryId: widget.entryId,
-    );
-
-    setState(() {
-      _selectedRating = rating;
-    });
-
-    ref.invalidate(stemRatingForStemProvider(_stemId!));
-    ref.invalidate(stemRatingForEntryProvider(widget.entryId));
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -207,90 +175,74 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Success message
-              Card(
+              GlowingCard(
                 color: Theme.of(context).colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 32,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 32,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Entry saved!',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                          ),
+                          Text(
+                            'Your reflection has been recorded.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer
+                                      .withValues(alpha: 0.8),
+                                ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Entry saved!',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
-                            ),
-                            Text(
-                              'Your reflection has been recorded.',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer
-                                        .withValues(alpha: 0.8),
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Stem rating
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: StemRatingWidget(
-                    selectedRating: _selectedRating,
-                    onRatingSelected: _rateStem,
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
 
               // Error/fallback notice
               if (result?.errorMessage != null) ...[
-                Card(
+                GlowingCard(
                   color: Theme.of(context).colorScheme.errorContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.onErrorContainer,
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.onErrorContainer,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          result!.errorMessage!,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onErrorContainer,
+                              ),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            result!.errorMessage!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onErrorContainer,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -444,46 +396,44 @@ class _SuggestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              stemText,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontStyle: FontStyle.italic,
-                  ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: onAnswerNow,
-                    icon: const Icon(Icons.edit, size: 18),
-                    label: const Text('Answer Now'),
-                  ),
+    return GlowingCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            stemText,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontStyle: FontStyle.italic,
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: isSaved
-                      ? TextButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.check, size: 18),
-                          label: const Text('Saved'),
-                        )
-                      : TextButton.icon(
-                          onPressed: onSaveForLater,
-                          icon: const Icon(Icons.bookmark_border, size: 18),
-                          label: const Text('Save Later'),
-                        ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onAnswerNow,
+                  icon: const Icon(Icons.edit, size: 18),
+                  label: const Text('Answer Now'),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: isSaved
+                    ? TextButton.icon(
+                        onPressed: null,
+                        icon: const Icon(Icons.check, size: 18),
+                        label: const Text('Saved'),
+                      )
+                    : TextButton.icon(
+                        onPressed: onSaveForLater,
+                        icon: const Icon(Icons.bookmark_border, size: 18),
+                        label: const Text('Save Later'),
+                      ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

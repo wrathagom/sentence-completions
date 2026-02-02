@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../providers/providers.dart';
+import '../../../widgets/glowing_card.dart';
 
 class CalendarWidget extends ConsumerStatefulWidget {
   final void Function(DateTime date, Set<DateTime> completionDates) onDaySelected;
@@ -34,10 +35,9 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
   }
 
   Widget _buildCalendar(ColorScheme colorScheme, Set<DateTime> completionDates) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: TableCalendar(
+    return GlowingCard(
+      padding: const EdgeInsets.all(8),
+      child: TableCalendar(
           firstDay: DateTime(2020, 1, 1),
           lastDay: DateTime.now(),
           focusedDay: _focusedDay,
@@ -74,7 +74,7 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
             todayDecoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: colorScheme.primary,
+                color: colorScheme.tertiary,
                 width: 2,
               ),
             ),
@@ -127,7 +127,6 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
             });
           },
         ),
-      ),
     );
   }
 
@@ -164,13 +163,14 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
   Widget _buildTodayDay(BuildContext context, DateTime day,
       ColorScheme colorScheme, bool hasEntry) {
     if (hasEntry) {
+      // Today with an entry: filled primary circle with tertiary border
       return Container(
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: colorScheme.primary.withValues(alpha: 0.2),
           shape: BoxShape.circle,
           border: Border.all(
-            color: colorScheme.primary,
+            color: colorScheme.tertiary,
             width: 2,
           ),
         ),
@@ -195,12 +195,13 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
         ),
       );
     }
+    // Today without an entry: tertiary border only
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: colorScheme.primary,
+          color: colorScheme.tertiary,
           width: 2,
         ),
       ),

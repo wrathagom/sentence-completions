@@ -45,6 +45,95 @@ enum ColorTheme {
   kanagawa,
 }
 
+enum HomeAnalyticsWidget {
+  wordCloud,
+  categoryPieChart,
+  statsRow,
+}
+
+enum CardGlowIntensity {
+  none,
+  subtle,
+  medium,
+  strong,
+}
+
+extension CardGlowIntensityExtension on CardGlowIntensity {
+  String get displayName {
+    switch (this) {
+      case CardGlowIntensity.none:
+        return 'None';
+      case CardGlowIntensity.subtle:
+        return 'Subtle';
+      case CardGlowIntensity.medium:
+        return 'Medium';
+      case CardGlowIntensity.strong:
+        return 'Strong';
+    }
+  }
+
+  double get blurRadius {
+    switch (this) {
+      case CardGlowIntensity.none:
+        return 0;
+      case CardGlowIntensity.subtle:
+        return 6;
+      case CardGlowIntensity.medium:
+        return 10;
+      case CardGlowIntensity.strong:
+        return 16;
+    }
+  }
+
+  double get opacity {
+    switch (this) {
+      case CardGlowIntensity.none:
+        return 0;
+      case CardGlowIntensity.subtle:
+        return 0.10;
+      case CardGlowIntensity.medium:
+        return 0.18;
+      case CardGlowIntensity.strong:
+        return 0.25;
+    }
+  }
+}
+
+enum BackgroundPattern {
+  none,
+  noise,
+  dots,
+  diagonalLines,
+}
+
+extension BackgroundPatternExtension on BackgroundPattern {
+  String get displayName {
+    switch (this) {
+      case BackgroundPattern.none:
+        return 'None';
+      case BackgroundPattern.noise:
+        return 'Noise';
+      case BackgroundPattern.dots:
+        return 'Dot Grid';
+      case BackgroundPattern.diagonalLines:
+        return 'Diagonal Lines';
+    }
+  }
+}
+
+extension HomeAnalyticsWidgetExtension on HomeAnalyticsWidget {
+  String get displayName {
+    switch (this) {
+      case HomeAnalyticsWidget.wordCloud:
+        return 'Word Cloud';
+      case HomeAnalyticsWidget.categoryPieChart:
+        return 'Category Pie Chart';
+      case HomeAnalyticsWidget.statsRow:
+        return 'Stats Row';
+    }
+  }
+}
+
 extension ColorThemeExtension on ColorTheme {
   String get displayName {
     switch (this) {
@@ -101,6 +190,9 @@ class UserSettings {
   final bool aiConsentEnabled;
   final TitleBarStyle titleBarStyle;
   final String? reminderSettingsJson;
+  final Set<HomeAnalyticsWidget> homeAnalyticsWidgets;
+  final CardGlowIntensity cardGlowIntensity;
+  final BackgroundPattern backgroundPattern;
 
   const UserSettings({
     this.privacyMode = false,
@@ -116,6 +208,9 @@ class UserSettings {
     this.aiConsentEnabled = false,
     this.titleBarStyle = TitleBarStyle.minimal,
     this.reminderSettingsJson,
+    this.homeAnalyticsWidgets = const {HomeAnalyticsWidget.wordCloud},
+    this.cardGlowIntensity = CardGlowIntensity.none,
+    this.backgroundPattern = BackgroundPattern.none,
   });
 
   // Helper getters for backwards compatibility and convenience
@@ -135,6 +230,9 @@ class UserSettings {
     bool? aiConsentEnabled,
     TitleBarStyle? titleBarStyle,
     String? reminderSettingsJson,
+    Set<HomeAnalyticsWidget>? homeAnalyticsWidgets,
+    CardGlowIntensity? cardGlowIntensity,
+    BackgroundPattern? backgroundPattern,
   }) {
     return UserSettings(
       privacyMode: privacyMode ?? this.privacyMode,
@@ -150,6 +248,9 @@ class UserSettings {
       aiConsentEnabled: aiConsentEnabled ?? this.aiConsentEnabled,
       titleBarStyle: titleBarStyle ?? this.titleBarStyle,
       reminderSettingsJson: reminderSettingsJson ?? this.reminderSettingsJson,
+      homeAnalyticsWidgets: homeAnalyticsWidgets ?? this.homeAnalyticsWidgets,
+      cardGlowIntensity: cardGlowIntensity ?? this.cardGlowIntensity,
+      backgroundPattern: backgroundPattern ?? this.backgroundPattern,
     );
   }
 
@@ -168,6 +269,9 @@ class UserSettings {
       'aiConsentEnabled': aiConsentEnabled,
       'titleBarStyle': titleBarStyle.index,
       'reminderSettingsJson': reminderSettingsJson,
+      'homeAnalyticsWidgets': homeAnalyticsWidgets.map((w) => w.index).toList(),
+      'cardGlowIntensity': cardGlowIntensity.index,
+      'backgroundPattern': backgroundPattern.index,
     };
   }
 
@@ -182,6 +286,21 @@ class UserSettings {
       guidedModeType = enabled ? GuidedModeType.keyword : GuidedModeType.off;
     } else {
       guidedModeType = GuidedModeType.keyword;
+    }
+
+    // Parse homeAnalyticsWidgets with default to word cloud only
+    Set<HomeAnalyticsWidget> homeAnalyticsWidgets;
+    if (json.containsKey('homeAnalyticsWidgets')) {
+      final widgetsList = json['homeAnalyticsWidgets'] as List<dynamic>?;
+      if (widgetsList != null && widgetsList.isNotEmpty) {
+        homeAnalyticsWidgets = widgetsList
+            .map((i) => HomeAnalyticsWidget.values[i as int])
+            .toSet();
+      } else {
+        homeAnalyticsWidgets = {HomeAnalyticsWidget.wordCloud};
+      }
+    } else {
+      homeAnalyticsWidgets = {HomeAnalyticsWidget.wordCloud};
     }
 
     return UserSettings(
@@ -200,6 +319,9 @@ class UserSettings {
       aiConsentEnabled: json['aiConsentEnabled'] as bool? ?? false,
       titleBarStyle: TitleBarStyle.values[json['titleBarStyle'] as int? ?? 1],
       reminderSettingsJson: json['reminderSettingsJson'] as String?,
+      homeAnalyticsWidgets: homeAnalyticsWidgets,
+      cardGlowIntensity: CardGlowIntensity.values[json['cardGlowIntensity'] as int? ?? 0],
+      backgroundPattern: BackgroundPattern.values[json['backgroundPattern'] as int? ?? 0],
     );
   }
 }

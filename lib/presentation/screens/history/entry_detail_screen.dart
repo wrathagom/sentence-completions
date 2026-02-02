@@ -6,11 +6,10 @@ import 'package:intl/intl.dart';
 import '../../../data/models/entry.dart';
 import '../../../data/models/stem_rating.dart';
 import '../../providers/providers.dart';
+import '../../widgets/glowing_card.dart';
 import '../../widgets/mood_selector.dart';
-import '../../widgets/reaction_button.dart';
 import '../../widgets/responsive_scaffold.dart';
 import '../../widgets/stem_rating_widget.dart';
-import 'add_reaction_sheet.dart';
 
 class EntryDetailScreen extends ConsumerWidget {
   final String entryId;
@@ -206,78 +205,6 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
     ref.invalidate(stemRatingForEntryProvider(widget.entry.id));
   }
 
-  Widget _buildReactionsSection(BuildContext context) {
-    final reactionsAsync = ref.watch(entryReactionsProvider(widget.entry.id));
-
-    return reactionsAsync.when(
-      data: (reactions) {
-        return Column(
-          children: [
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Reactions',
-                            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            AddReactionSheet.show(
-                              context,
-                              widget.entry.id,
-                              reactions,
-                            );
-                          },
-                          icon: const Icon(Icons.add, size: 18),
-                          label: Text(reactions.isEmpty ? 'Add' : 'Edit'),
-                        ),
-                      ],
-                    ),
-                    if (reactions.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: reactions.map((reaction) {
-                          return ReactionChip(
-                            reaction: reaction,
-                            onRemove: () async {
-                              final repository = ref.read(reactionRepositoryProvider);
-                              await repository.deleteReaction(reaction.id);
-                              ref.invalidate(entryReactionsProvider(widget.entry.id));
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ] else
-                      Text(
-                        'How does this reflection make you feel now?',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final entry = widget.entry;
@@ -331,131 +258,121 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
                 ),
           ),
           const SizedBox(height: 24),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sentence Stem',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    entry.stemText,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontStyle: FontStyle.italic,
-                        ),
-                  ),
-                ],
-              ),
+          GlowingCard(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sentence Stem',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  entry.stemText,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Your Completion',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    entry.completion,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
+          GlowingCard(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Your Completion',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  entry.completion,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 16),
-          Card(
-            child: Padding(
+          GlowingCard(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stem Rating',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                if (!_ratingLoaded)
+                  const Center(
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                else
+                  StemRatingWidget(
+                    selectedRating: _selectedRating,
+                    onRatingSelected: _rateStem,
+                    compact: true,
+                  ),
+              ],
+            ),
+          ),
+          if (entry.preMood != null || entry.postMood != null) ...[
+            const SizedBox(height: 16),
+            GlowingCard(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Stem Rating',
+                    'Mood',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
                   const SizedBox(height: 12),
-                  if (!_ratingLoaded)
-                    const Center(
-                      child: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    )
-                  else
-                    StemRatingWidget(
-                      selectedRating: _selectedRating,
-                      onRatingSelected: _rateStem,
-                      compact: true,
-                    ),
+                  Row(
+                    children: [
+                      if (entry.preMood != null)
+                        Expanded(
+                          child: MoodDisplay(
+                            mood: entry.preMood,
+                            label: 'Before',
+                          ),
+                        ),
+                      if (entry.preMood != null && entry.postMood != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      if (entry.postMood != null)
+                        Expanded(
+                          child: MoodDisplay(
+                            mood: entry.postMood,
+                            label: 'After',
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-          if (entry.preMood != null || entry.postMood != null) ...[
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Mood',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        if (entry.preMood != null)
-                          Expanded(
-                            child: MoodDisplay(
-                              mood: entry.preMood,
-                              label: 'Before',
-                            ),
-                          ),
-                        if (entry.preMood != null && entry.postMood != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        if (entry.postMood != null)
-                          Expanded(
-                            child: MoodDisplay(
-                              mood: entry.postMood,
-                              label: 'After',
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
-          // Reactions section
-          _buildReactionsSection(context),
           if (entry.suggestedStems != null && entry.suggestedStems!.isNotEmpty) ...[
             const SizedBox(height: 24),
             Row(
@@ -482,7 +399,7 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
             const SizedBox(height: 12),
             ...entry.suggestedStems!.map((stem) => Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: Card(
+              child: GlowingCard(
                 child: InkWell(
                   onTap: () => context.go('/completion', extra: {'stemText': stem}),
                   borderRadius: BorderRadius.circular(12),
@@ -539,54 +456,50 @@ class _ComparisonView extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
+              GlowingCard(
                 color: Theme.of(context).colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.compare_arrows,
-                        color: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.compare_arrows,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'See how your answer has changed over ${entry.resurfaceMonth} months',
+                        style:
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'See how your answer has changed over ${entry.resurfaceMonth} months',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sentence Stem',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        entry.stemText,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontStyle: FontStyle.italic,
-                            ),
-                      ),
-                    ],
-                  ),
+              GlowingCard(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sentence Stem',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      entry.stemText,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontStyle: FontStyle.italic,
+                          ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
@@ -639,49 +552,47 @@ class _ComparisonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('MMM d, y');
 
-    return Card(
+    return GlowingCard(
       color: isOriginal
           ? Theme.of(context).colorScheme.surfaceContainerHighest
           : Theme.of(context).colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  isOriginal ? Icons.history : Icons.today,
-                  size: 18,
-                  color: isOriginal
-                      ? Theme.of(context).colorScheme.onSurfaceVariant
-                      : Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: isOriginal
-                            ? Theme.of(context).colorScheme.onSurfaceVariant
-                            : Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-                const Spacer(),
-                Text(
-                  dateFormat.format(date),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              completion,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                isOriginal ? Icons.history : Icons.today,
+                size: 18,
+                color: isOriginal
+                    ? Theme.of(context).colorScheme.onSurfaceVariant
+                    : Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: isOriginal
+                          ? Theme.of(context).colorScheme.onSurfaceVariant
+                          : Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              const Spacer(),
+              Text(
+                dateFormat.format(date),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            completion,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ],
       ),
     );
   }

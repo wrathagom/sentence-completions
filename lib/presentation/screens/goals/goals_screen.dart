@@ -139,27 +139,28 @@ class GoalsScreen extends ConsumerWidget {
                   width: 60,
                   height: 60,
                   child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      CircularProgressIndicator(
-                        value: progress,
-                        strokeWidth: 6,
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.2),
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      Center(
-                        child: Text(
-                          '${(progress * 100).round()}%',
-                          style:
-                              Theme.of(context).textTheme.labelLarge?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                      SizedBox.expand(
+                        child: CircularProgressIndicator(
+                          value: progress,
+                          strokeWidth: 6,
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.2),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
+                      ),
+                      Text(
+                        '${(progress * 100).round()}%',
+                        style:
+                            Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ],
                   ),
