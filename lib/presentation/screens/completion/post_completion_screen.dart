@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../data/models/ai_suggestion.dart';
 import '../../../data/models/stem.dart';
+import '../../../data/models/stem_rating.dart';
 import '../../../domain/services/intelligent_suggestion_service.dart';
 import '../../providers/providers.dart';
 import '../../widgets/responsive_scaffold.dart';
+import '../../widgets/stem_rating_widget.dart';
 
 class PostCompletionScreen extends ConsumerStatefulWidget {
   final String entryId;
@@ -25,6 +27,8 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
   SuggestionResult? _suggestionResult;
   bool _isLoading = true;
   final Set<String> _savedIds = {}; // Can be stem IDs or AI suggestion tempIds
+  StemRatingValue? _selectedRating;
+  String? _stemId;
 
   @override
   void initState() {
@@ -41,6 +45,17 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
         context.go('/home');
       }
       return;
+    }
+
+    _stemId = entry.stemId;
+
+    // Load existing rating if any
+    final ratingRepository = ref.read(stemRatingRepositoryProvider);
+    final existingRating = await ratingRepository.getRatingForEntry(widget.entryId);
+    if (mounted && existingRating != null) {
+      setState(() {
+        _selectedRating = existingRating.rating;
+      });
     }
 
     final settings = ref.read(settingsProvider);
@@ -125,6 +140,24 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
 
   void _answerAiSuggestionNow(AISuggestion suggestion) {
     context.go('/completion', extra: {'stemText': suggestion.text});
+  }
+
+  Future<void> _rateStem(StemRatingValue rating) async {
+    if (_stemId == null) return;
+
+    final repository = ref.read(stemRatingRepositoryProvider);
+    await repository.rateStem(
+      stemId: _stemId!,
+      rating: rating,
+      entryId: widget.entryId,
+    );
+
+    setState(() {
+      _selectedRating = rating;
+    });
+
+    ref.invalidate(stemRatingForStemProvider(_stemId!));
+    ref.invalidate(stemRatingForEntryProvider(widget.entryId));
   }
 
   @override
@@ -217,6 +250,18 @@ class _PostCompletionScreenState extends ConsumerState<PostCompletionScreen> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Stem rating
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: StemRatingWidget(
+                    selectedRating: _selectedRating,
+                    onRatingSelected: _rateStem,
                   ),
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'sentence_completion.db';
-  static const int _databaseVersion = 5;
+  static const int _databaseVersion = 6;
 
   static Database? _database;
 
@@ -103,6 +103,22 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_saved_stems_saved_at ON saved_stems (saved_at)
     ''');
+
+    await db.execute('''
+      CREATE TABLE stem_ratings (
+        id TEXT PRIMARY KEY,
+        stem_id TEXT NOT NULL,
+        rating INTEGER NOT NULL,
+        entry_id TEXT,
+        rated_at TEXT NOT NULL,
+        FOREIGN KEY (stem_id) REFERENCES stems (id),
+        FOREIGN KEY (entry_id) REFERENCES entries (id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_stem_ratings_stem_id ON stem_ratings (stem_id)
+    ''');
   }
 
   static Future<void> _onUpgrade(
@@ -144,6 +160,23 @@ class DatabaseHelper {
       );
       await db.execute(
         'CREATE INDEX idx_entries_favorite ON entries (is_favorite)',
+      );
+    }
+
+    if (oldVersion < 6) {
+      await db.execute('''
+        CREATE TABLE stem_ratings (
+          id TEXT PRIMARY KEY,
+          stem_id TEXT NOT NULL,
+          rating INTEGER NOT NULL,
+          entry_id TEXT,
+          rated_at TEXT NOT NULL,
+          FOREIGN KEY (stem_id) REFERENCES stems (id),
+          FOREIGN KEY (entry_id) REFERENCES entries (id)
+        )
+      ''');
+      await db.execute(
+        'CREATE INDEX idx_stem_ratings_stem_id ON stem_ratings (stem_id)',
       );
     }
   }

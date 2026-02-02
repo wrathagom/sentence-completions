@@ -7,6 +7,7 @@ import '../../data/datasources/local/saved_stem_datasource.dart';
 import '../../data/datasources/local/secure_storage_datasource.dart';
 import '../../data/datasources/local/settings_local_datasource.dart';
 import '../../data/datasources/local/stem_local_datasource.dart';
+import '../../data/datasources/local/stem_rating_datasource.dart';
 import '../../data/datasources/remote/stems_remote_datasource.dart';
 import '../../data/models/category.dart';
 import '../../data/models/entry.dart';
@@ -16,7 +17,9 @@ import '../../data/models/user_settings.dart';
 import '../../data/repositories/entry_repository.dart';
 import '../../data/repositories/saved_stem_repository.dart';
 import '../../data/repositories/settings_repository.dart';
+import '../../data/repositories/stem_rating_repository.dart';
 import '../../data/repositories/stem_repository.dart';
+import '../../data/models/stem_rating.dart';
 import '../../data/models/analytics_data.dart';
 import '../../domain/services/analytics_service.dart';
 import '../../domain/services/anthropic_service.dart';
@@ -64,6 +67,10 @@ final secureStorageDatasourceProvider = Provider<SecureStorageDatasource>((ref) 
   return SecureStorageDatasource();
 });
 
+final stemRatingDatasourceProvider = Provider<StemRatingDatasource>((ref) {
+  return StemRatingDatasource();
+});
+
 // Repository providers
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(
@@ -88,6 +95,12 @@ final stemRepositoryProvider = Provider<StemRepository>((ref) {
 final savedStemRepositoryProvider = Provider<SavedStemRepository>((ref) {
   return SavedStemRepository(
     datasource: ref.watch(savedStemDatasourceProvider),
+  );
+});
+
+final stemRatingRepositoryProvider = Provider<StemRatingRepository>((ref) {
+  return StemRatingRepository(
+    datasource: ref.watch(stemRatingDatasourceProvider),
   );
 });
 
@@ -341,4 +354,17 @@ final favoriteEntriesProvider = FutureProvider<List<Entry>>((ref) async {
   ref.watch(entriesProvider);
   final repository = ref.watch(entryRepositoryProvider);
   return repository.getFavoriteEntries();
+});
+
+// Stem rating providers
+final stemRatingForStemProvider =
+    FutureProvider.family<StemRating?, String>((ref, stemId) async {
+  final repository = ref.watch(stemRatingRepositoryProvider);
+  return repository.getRatingForStem(stemId);
+});
+
+final stemRatingForEntryProvider =
+    FutureProvider.family<StemRating?, String>((ref, entryId) async {
+  final repository = ref.watch(stemRatingRepositoryProvider);
+  return repository.getRatingForEntry(entryId);
 });

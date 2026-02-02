@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/entry.dart';
+import '../../../data/models/stem_rating.dart';
 import '../../providers/providers.dart';
 import '../../widgets/mood_selector.dart';
 import '../../widgets/responsive_scaffold.dart';
+import '../../widgets/stem_rating_widget.dart';
 
 class EntryDetailScreen extends ConsumerWidget {
   final String entryId;
@@ -126,13 +128,55 @@ class EntryDetailScreen extends ConsumerWidget {
   }
 }
 
-class _EntryDetailView extends StatelessWidget {
+class _EntryDetailView extends ConsumerStatefulWidget {
   final Entry entry;
 
   const _EntryDetailView({required this.entry});
 
   @override
+  ConsumerState<_EntryDetailView> createState() => _EntryDetailViewState();
+}
+
+class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
+  StemRatingValue? _selectedRating;
+  bool _ratingLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRating();
+  }
+
+  Future<void> _loadRating() async {
+    final repository = ref.read(stemRatingRepositoryProvider);
+    final rating = await repository.getRatingForEntry(widget.entry.id);
+    if (mounted) {
+      setState(() {
+        _selectedRating = rating?.rating;
+        _ratingLoaded = true;
+      });
+    }
+  }
+
+  Future<void> _rateStem(StemRatingValue rating) async {
+    final repository = ref.read(stemRatingRepositoryProvider);
+    await repository.rateStem(
+      stemId: widget.entry.stemId,
+      rating: rating,
+      entryId: widget.entry.id,
+    );
+
+    setState(() {
+      _selectedRating = rating;
+    });
+
+    ref.invalidate(stemRatingForStemProvider(widget.entry.stemId));
+    ref.invalidate(stemRatingForEntryProvider(widget.entry.id));
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final entry = widget.entry;
     final dateFormat = DateFormat('EEEE, MMMM d, y');
     final timeFormat = DateFormat('h:mm a');
 
@@ -224,6 +268,38 @@ class _EntryDetailView extends StatelessWidget {
                     entry.completion,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Stem Rating',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (!_ratingLoaded)
+                    const Center(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  else
+                    StemRatingWidget(
+                      selectedRating: _selectedRating,
+                      onRatingSelected: _rateStem,
+                      compact: true,
+                    ),
                 ],
               ),
             ),
