@@ -9,6 +9,7 @@ import '../../data/datasources/local/settings_local_datasource.dart';
 import '../../data/datasources/local/stem_local_datasource.dart';
 import '../../data/datasources/local/stem_rating_datasource.dart';
 import '../../data/datasources/local/goal_datasource.dart';
+import '../../data/datasources/local/reaction_datasource.dart';
 import '../../data/datasources/remote/stems_remote_datasource.dart';
 import '../../data/models/category.dart';
 import '../../data/models/entry.dart';
@@ -21,8 +22,10 @@ import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/stem_rating_repository.dart';
 import '../../data/repositories/stem_repository.dart';
 import '../../data/repositories/goal_repository.dart';
+import '../../data/repositories/reaction_repository.dart';
 import '../../data/models/stem_rating.dart';
 import '../../data/models/goal.dart';
+import '../../data/models/entry_reaction.dart';
 import '../../data/models/analytics_data.dart';
 import '../../domain/services/analytics_service.dart';
 import '../../domain/services/anthropic_service.dart';
@@ -79,6 +82,10 @@ final goalDatasourceProvider = Provider<GoalDatasource>((ref) {
   return GoalDatasource();
 });
 
+final reactionDatasourceProvider = Provider<ReactionDatasource>((ref) {
+  return ReactionDatasource();
+});
+
 // Repository providers
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(
@@ -115,6 +122,12 @@ final stemRatingRepositoryProvider = Provider<StemRatingRepository>((ref) {
 final goalRepositoryProvider = Provider<GoalRepository>((ref) {
   return GoalRepository(
     datasource: ref.watch(goalDatasourceProvider),
+  );
+});
+
+final reactionRepositoryProvider = Provider<ReactionRepository>((ref) {
+  return ReactionRepository(
+    datasource: ref.watch(reactionDatasourceProvider),
   );
 });
 
@@ -398,4 +411,11 @@ final activeGoalsWithProgressProvider =
   ref.watch(entriesProvider);
   final service = ref.watch(goalServiceProvider);
   return service.getActiveGoalsWithProgress();
+});
+
+// Entry reactions provider
+final entryReactionsProvider =
+    FutureProvider.family<List<EntryReaction>, String>((ref, entryId) async {
+  final repository = ref.watch(reactionRepositoryProvider);
+  return repository.getReactionsForEntry(entryId);
 });

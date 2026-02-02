@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _databaseName = 'sentence_completion.db';
-  static const int _databaseVersion = 7;
+  static const int _databaseVersion = 8;
 
   static Database? _database;
 
@@ -145,6 +145,21 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_goal_progress_goal_id ON goal_progress (goal_id)
     ''');
+
+    await db.execute('''
+      CREATE TABLE entry_reactions (
+        id TEXT PRIMARY KEY,
+        entry_id TEXT NOT NULL,
+        reaction_type TEXT NOT NULL,
+        note TEXT,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (entry_id) REFERENCES entries (id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_reactions_entry_id ON entry_reactions (entry_id)
+    ''');
   }
 
   static Future<void> _onUpgrade(
@@ -229,6 +244,22 @@ class DatabaseHelper {
       ''');
       await db.execute(
         'CREATE INDEX idx_goal_progress_goal_id ON goal_progress (goal_id)',
+      );
+    }
+
+    if (oldVersion < 8) {
+      await db.execute('''
+        CREATE TABLE entry_reactions (
+          id TEXT PRIMARY KEY,
+          entry_id TEXT NOT NULL,
+          reaction_type TEXT NOT NULL,
+          note TEXT,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY (entry_id) REFERENCES entries (id)
+        )
+      ''');
+      await db.execute(
+        'CREATE INDEX idx_reactions_entry_id ON entry_reactions (entry_id)',
       );
     }
   }

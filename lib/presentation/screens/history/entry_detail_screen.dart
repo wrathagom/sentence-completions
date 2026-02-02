@@ -7,8 +7,10 @@ import '../../../data/models/entry.dart';
 import '../../../data/models/stem_rating.dart';
 import '../../providers/providers.dart';
 import '../../widgets/mood_selector.dart';
+import '../../widgets/reaction_button.dart';
 import '../../widgets/responsive_scaffold.dart';
 import '../../widgets/stem_rating_widget.dart';
+import 'add_reaction_sheet.dart';
 
 class EntryDetailScreen extends ConsumerWidget {
   final String entryId;
@@ -172,6 +174,78 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
 
     ref.invalidate(stemRatingForStemProvider(widget.entry.stemId));
     ref.invalidate(stemRatingForEntryProvider(widget.entry.id));
+  }
+
+  Widget _buildReactionsSection(BuildContext context) {
+    final reactionsAsync = ref.watch(entryReactionsProvider(widget.entry.id));
+
+    return reactionsAsync.when(
+      data: (reactions) {
+        return Column(
+          children: [
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Reactions',
+                            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            AddReactionSheet.show(
+                              context,
+                              widget.entry.id,
+                              reactions,
+                            );
+                          },
+                          icon: const Icon(Icons.add, size: 18),
+                          label: Text(reactions.isEmpty ? 'Add' : 'Edit'),
+                        ),
+                      ],
+                    ),
+                    if (reactions.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: reactions.map((reaction) {
+                          return ReactionChip(
+                            reaction: reaction,
+                            onRemove: () async {
+                              final repository = ref.read(reactionRepositoryProvider);
+                              await repository.deleteReaction(reaction.id);
+                              ref.invalidate(entryReactionsProvider(widget.entry.id));
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ] else
+                      Text(
+                        'How does this reflection make you feel now?',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
+    );
   }
 
   @override
@@ -350,6 +424,8 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
               ),
             ),
           ],
+          // Reactions section
+          _buildReactionsSection(context),
           if (entry.suggestedStems != null && entry.suggestedStems!.isNotEmpty) ...[
             const SizedBox(height: 24),
             Row(
