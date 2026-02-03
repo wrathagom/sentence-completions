@@ -120,7 +120,7 @@ class _EntryCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context).pop();
-          context.go('/entry/${entry.id}');
+          context.push('/entry/${entry.id}');
         },
         borderRadius: BorderRadius.circular(16),
         child: Padding(

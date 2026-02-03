@@ -21,7 +21,7 @@ class HistoryScreen extends ConsumerWidget {
         title: const Text('History'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: Column(
@@ -168,7 +168,7 @@ class _EntryCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () {
-          context.go('/entry/${entry.id}');
+          context.push('/entry/${entry.id}');
         },
         borderRadius: BorderRadius.circular(16),
         child: Padding(

@@ -68,7 +68,7 @@ class SavedStemsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/settings'),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Saved Prompts'),
       ),
@@ -159,9 +159,15 @@ class SavedStemsScreen extends ConsumerWidget {
                   onTap: () {
                     // Use stemText for AI-generated stems, stemId for regular stems
                     if (savedStem.stemId.startsWith('ai_')) {
-                      context.go('/completion', extra: {'stemText': savedStem.stemText});
+                      context.push(
+                        '/completion',
+                        extra: {'stemText': savedStem.stemText},
+                      );
                     } else {
-                      context.go('/completion', extra: {'stemId': savedStem.stemId});
+                      context.push(
+                        '/completion',
+                        extra: {'stemId': savedStem.stemId},
+                      );
                     }
                   },
                 ),
@@ -177,4 +183,3 @@ class SavedStemsScreen extends ConsumerWidget {
     );
   }
 }
-

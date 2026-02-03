@@ -18,13 +18,13 @@ class GoalsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Goals'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context.go('/goals/create'),
+            onPressed: () => context.push('/goals/create'),
           ),
         ],
       ),
@@ -56,7 +56,7 @@ class GoalsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 24),
                     FilledButton.icon(
-                      onPressed: () => context.go('/goals/create'),
+                      onPressed: () => context.push('/goals/create'),
                       icon: const Icon(Icons.add),
                       label: const Text('Create Goal'),
                     ),

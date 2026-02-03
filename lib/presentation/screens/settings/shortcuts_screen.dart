@@ -17,7 +17,7 @@ class ShortcutsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/settings'),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Keyboard Shortcuts'),
       ),

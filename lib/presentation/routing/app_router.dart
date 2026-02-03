@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/models/user_settings.dart';
 import '../providers/providers.dart';
 import '../screens/completion/completion_screen.dart';
 import '../screens/completion/mood_check_screen.dart';
@@ -28,6 +29,167 @@ import '../screens/splash_screen.dart';
 import '../screens/history/share_card_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
+  final settings = ref.watch(settingsProvider);
+  final hasPattern = settings.backgroundPattern != BackgroundPattern.none;
+  final transitionStyle = settings.pageTransitionStyle;
+  final transitionDuration = transitionStyle == PageTransitionStyle.none
+      ? Duration.zero
+      : const Duration(milliseconds: 420);
+
+  CustomTransitionPage<void> buildPage({
+    required GoRouterState state,
+    required Widget child,
+  }) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: transitionDuration,
+      reverseTransitionDuration: transitionDuration,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (transitionStyle == PageTransitionStyle.none) {
+          return child;
+        }
+
+        final pushIn = Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        ));
+
+        final pushOut = Tween<Offset>(
+          begin: Offset.zero,
+          end: const Offset(-1.0, 0.0),
+        ).animate(CurvedAnimation(
+          parent: secondaryAnimation,
+          curve: Curves.easeOutCubic,
+        ));
+
+        final popOut = Tween<Offset>(
+          begin: Offset.zero,
+          end: const Offset(1.0, 0.0),
+        ).animate(CurvedAnimation(
+          parent: ReverseAnimation(animation),
+          curve: Curves.easeOutCubic,
+        ));
+
+        final popIn = Tween<Offset>(
+          begin: const Offset(-1.0, 0.0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(
+          parent: ReverseAnimation(secondaryAnimation),
+          curve: Curves.easeOutCubic,
+        ));
+
+        final fadeOut = Tween<double>(begin: 1.0, end: 0.0).animate(
+          CurvedAnimation(
+            parent: secondaryAnimation,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+          ),
+        );
+
+        final fadeIn = CurvedAnimation(
+          parent: animation,
+          curve: const Interval(0.5, 1.0, curve: Curves.easeOutCubic),
+        );
+
+        if (hasPattern) {
+          if (transitionStyle == PageTransitionStyle.slide) {
+            final isExiting = animation.status == AnimationStatus.reverse;
+            final isCovering = secondaryAnimation.status == AnimationStatus.forward;
+            final isRevealing =
+                secondaryAnimation.status == AnimationStatus.reverse;
+
+            if (isExiting) {
+              return SlideTransition(
+                position: popOut,
+                child: child,
+              );
+            }
+
+            if (isCovering) {
+              return SlideTransition(
+                position: pushOut,
+                child: child,
+              );
+            }
+
+            if (isRevealing) {
+              return SlideTransition(
+                position: popIn,
+                child: child,
+              );
+            }
+
+            if (animation.status == AnimationStatus.forward) {
+              return SlideTransition(
+                position: pushIn,
+                child: child,
+              );
+            }
+
+            return child;
+          }
+
+          final isOutgoing =
+              secondaryAnimation.status != AnimationStatus.dismissed;
+          if (isOutgoing) {
+            return FadeTransition(
+              opacity: fadeOut,
+              child: child,
+            );
+          }
+          return FadeTransition(
+            opacity: fadeIn,
+            child: child,
+          );
+        }
+
+        if (transitionStyle == PageTransitionStyle.slide) {
+          final isExiting = animation.status == AnimationStatus.reverse;
+          final isCovering = secondaryAnimation.status == AnimationStatus.forward;
+          final isRevealing = secondaryAnimation.status == AnimationStatus.reverse;
+
+          if (isExiting) {
+            return SlideTransition(
+              position: popOut,
+              child: child,
+            );
+          }
+
+          if (isCovering) {
+            return SlideTransition(
+              position: pushOut,
+              child: child,
+            );
+          }
+
+          if (isRevealing) {
+            return SlideTransition(
+              position: popIn,
+              child: child,
+            );
+          }
+
+          if (animation.status == AnimationStatus.forward) {
+            return SlideTransition(
+              position: pushIn,
+              child: child,
+            );
+          }
+
+          return child;
+        }
+
+        return FadeTransition(
+          opacity: fadeIn,
+          child: child,
+        );
+      },
+    );
+  }
+
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
@@ -56,95 +218,122 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SplashScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const SplashScreen()),
       ),
       GoRoute(
         path: '/onboarding/welcome',
-        builder: (context, state) => const OnboardingWelcomeScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const OnboardingWelcomeScreen()),
       ),
       GoRoute(
         path: '/onboarding/mode',
-        builder: (context, state) => const OnboardingModeScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const OnboardingModeScreen()),
       ),
       GoRoute(
         path: '/onboarding/analytics',
-        builder: (context, state) => const OnboardingAnalyticsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const OnboardingAnalyticsScreen()),
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const HomeScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const HomeScreen()),
       ),
       GoRoute(
         path: '/category-selection',
-        builder: (context, state) => const CategorySelectionScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const CategorySelectionScreen()),
       ),
       GoRoute(
         path: '/completion',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          return CompletionScreen(
-            stemId: extra?['stemId'] as String?,
-            categoryId: extra?['categoryId'] as String?,
-            stemText: extra?['stemText'] as String?,
+          return buildPage(
+            state: state,
+            child: CompletionScreen(
+              stemId: extra?['stemId'] as String?,
+              categoryId: extra?['categoryId'] as String?,
+              stemText: extra?['stemText'] as String?,
+            ),
           );
         },
       ),
       GoRoute(
         path: '/history',
-        builder: (context, state) => const HistoryScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const HistoryScreen()),
       ),
       GoRoute(
         path: '/entry/:id',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return EntryDetailScreen(entryId: id);
+          return buildPage(
+            state: state,
+            child: EntryDetailScreen(entryId: id),
+          );
         },
       ),
       GoRoute(
         path: '/post-completion/:entryId',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final entryId = state.pathParameters['entryId']!;
-          return PostCompletionScreen(entryId: entryId);
+          return buildPage(
+            state: state,
+            child: PostCompletionScreen(entryId: entryId),
+          );
         },
       ),
       GoRoute(
         path: '/mood-check/:entryId',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final entryId = state.pathParameters['entryId']!;
-          return MoodCheckScreen(entryId: entryId);
+          return buildPage(
+            state: state,
+            child: MoodCheckScreen(entryId: entryId),
+          );
         },
       ),
       GoRoute(
         path: '/favorites',
-        builder: (context, state) => const FavoritesScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const FavoritesScreen()),
       ),
       GoRoute(
         path: '/saved-stems',
-        builder: (context, state) => const SavedStemsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const SavedStemsScreen()),
       ),
       GoRoute(
         path: '/settings',
-        builder: (context, state) => const SettingsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const SettingsScreen()),
       ),
       GoRoute(
         path: '/export',
-        builder: (context, state) => const ExportScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const ExportScreen()),
       ),
       GoRoute(
         path: '/analytics',
-        builder: (context, state) => const AnalyticsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const AnalyticsScreen()),
       ),
       GoRoute(
         path: '/goals',
-        builder: (context, state) => const GoalsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const GoalsScreen()),
       ),
       GoRoute(
         path: '/goals/create',
-        builder: (context, state) => const CreateGoalScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const CreateGoalScreen()),
       ),
       GoRoute(
         path: '/settings/reminders',
-        builder: (context, state) => const ReminderSettingsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const ReminderSettingsScreen()),
       ),
       GoRoute(
         path: '/stats',
@@ -152,37 +341,48 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/resurfacing',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
-          return ResurfacingScreen(
-            resurfacingEntry: extra['resurfacingEntry'],
+          return buildPage(
+            state: state,
+            child: ResurfacingScreen(
+              resurfacingEntry: extra['resurfacingEntry'],
+            ),
           );
         },
       ),
       GoRoute(
         path: '/comparison/:id',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return EntryDetailScreen(
-            entryId: id,
-            showComparison: true,
+          return buildPage(
+            state: state,
+            child: EntryDetailScreen(
+              entryId: id,
+              showComparison: true,
+            ),
           );
         },
       ),
       GoRoute(
         path: '/share/:entryId',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final entryId = state.pathParameters['entryId']!;
-          return ShareCardScreen(entryId: entryId);
+          return buildPage(
+            state: state,
+            child: ShareCardScreen(entryId: entryId),
+          );
         },
       ),
       GoRoute(
         path: '/deleted',
-        builder: (context, state) => const DeletedEntriesScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const DeletedEntriesScreen()),
       ),
       GoRoute(
         path: '/settings/shortcuts',
-        builder: (context, state) => const ShortcutsScreen(),
+        pageBuilder: (context, state) =>
+            buildPage(state: state, child: const ShortcutsScreen()),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

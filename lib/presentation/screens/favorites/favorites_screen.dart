@@ -18,7 +18,7 @@ class FavoritesScreen extends ConsumerWidget {
         title: const Text('Favorites'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: favoritesAsync.when(
@@ -98,7 +98,7 @@ class FavoritesScreen extends ConsumerWidget {
                       Icons.star,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () => context.go('/entry/${entry.id}'),
+                    onTap: () => context.push('/entry/${entry.id}'),
                   ),
                 );
               },

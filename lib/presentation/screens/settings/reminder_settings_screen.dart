@@ -132,7 +132,7 @@ class _ReminderSettingsScreenState
         title: const Text('Reminders'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/settings'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: ListView(

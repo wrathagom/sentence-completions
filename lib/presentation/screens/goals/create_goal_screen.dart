@@ -33,7 +33,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => context.go('/goals'),
+          onPressed: () => context.pop(),
         ),
         title: const Text('Create Goal'),
       ),
@@ -230,7 +230,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
       ref.invalidate(activeGoalsWithProgressProvider);
 
       if (mounted) {
-        context.go('/goals');
+        context.pop();
       }
     } finally {
       if (mounted) {

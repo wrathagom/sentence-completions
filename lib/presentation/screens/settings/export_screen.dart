@@ -208,7 +208,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         title: const Text('Export & Import'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/settings'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: ListView(

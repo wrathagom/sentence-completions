@@ -30,11 +30,7 @@ class EntryDetailScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            if (showComparison) {
-              context.go('/home');
-            } else {
-              context.go('/history');
-            }
+            context.pop();
           },
         ),
         title: Text(showComparison ? 'Comparison' : 'Entry Details'),
@@ -401,7 +397,7 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
               padding: const EdgeInsets.only(bottom: 8),
               child: GlowingCard(
                 child: InkWell(
-                  onTap: () => context.go('/completion', extra: {'stemText': stem}),
+                  onTap: () => context.push('/completion', extra: {'stemText': stem}),
                   borderRadius: BorderRadius.circular(12),
                   child: Padding(
                     padding: const EdgeInsets.all(16),

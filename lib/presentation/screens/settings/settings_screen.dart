@@ -28,7 +28,7 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Settings'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: Center(
@@ -115,7 +115,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: 'Saved Prompts',
                   subtitle: 'View and manage saved prompts',
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.go('/saved-stems'),
+                  onTap: () => context.push('/saved-stems'),
                 ),
             ],
           ),
@@ -127,7 +127,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'Reminders',
                 subtitle: 'Set daily journal reminders',
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.go('/settings/reminders'),
+                onTap: () => context.push('/settings/reminders'),
               ),
             ],
           ),
@@ -162,7 +162,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'Export & Import',
                 subtitle: 'Export entries or restore from backup',
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.go('/export'),
+                onTap: () => context.push('/export'),
               ),
               _DeletedEntriesTile(),
               _SettingsTile(
@@ -184,7 +184,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: 'Keyboard Shortcuts',
                   subtitle: 'View available shortcuts',
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.go('/settings/shortcuts'),
+                  onTap: () => context.push('/settings/shortcuts'),
                 ),
               ],
             ),
@@ -1153,7 +1153,7 @@ class _DeletedEntriesTile extends ConsumerWidget {
         error: (_, _) => const Text('Error'),
       ),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () => context.go('/deleted'),
+      onTap: () => context.push('/deleted'),
     );
   }
 }

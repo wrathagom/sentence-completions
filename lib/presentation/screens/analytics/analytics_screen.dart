@@ -21,7 +21,7 @@ class AnalyticsScreen extends ConsumerWidget {
         title: const Text('Analytics'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: analyticsAsync.when(

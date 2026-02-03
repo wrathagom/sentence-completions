@@ -53,7 +53,7 @@ class HomeScreen extends ConsumerWidget {
                 OutlinedButton.icon(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.go('/saved-stems');
+                  context.push('/saved-stems');
                   },
                   icon: const Icon(Icons.bookmark),
                   label: Text('Continue ($savedStemCount saved)'),
@@ -63,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  context.go('/category-selection');
+                  context.push('/category-selection');
                 },
                 icon: const Icon(Icons.category),
                 label: const Text('Choose Category'),
@@ -109,7 +109,7 @@ class HomeScreen extends ConsumerWidget {
                 OutlinedButton.icon(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.go('/saved-stems');
+                    context.push('/saved-stems');
                   },
                   icon: const Icon(Icons.bookmark),
                   label: Text('Continue ($savedStemCount saved)'),
@@ -119,7 +119,7 @@ class HomeScreen extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  context.go('/category-selection');
+                  context.push('/category-selection');
                 },
                 icon: const Icon(Icons.category),
                 label: const Text('Choose Category'),
@@ -152,7 +152,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.go('/settings'),
+            onPressed: () => context.push('/settings'),
           ),
         ],
       ),
@@ -259,8 +259,8 @@ class HomeScreen extends ConsumerWidget {
                           stemText: entry.stemText,
                           completion: entry.completion,
                           entryCount: count,
-                          onTap: () => context.go('/entry/${entry.id}'),
-                          onShowAllEntries: () => context.go('/history'),
+                          onTap: () => context.push('/entry/${entry.id}'),
+                          onShowAllEntries: () => context.push('/history'),
                         ),
                       );
                     },
@@ -276,22 +276,22 @@ class HomeScreen extends ConsumerWidget {
               // Goals Feed Section
               _GoalsFeedSection(
                 goalsAsync: goalsWithProgress,
-                onViewAll: () => context.go('/goals'),
-                onCreateGoal: () => context.go('/goals'),
+                onViewAll: () => context.push('/goals'),
+                onCreateGoal: () => context.push('/goals'),
               ),
 
               // Favorites Feed Section
               _FavoritesFeedSection(
                 favoritesAsync: favoriteEntries,
-                onViewAll: () => context.go('/favorites'),
-                onEntryTap: (entry) => context.go('/entry/${entry.id}'),
+                onViewAll: () => context.push('/favorites'),
+                onEntryTap: (entry) => context.push('/entry/${entry.id}'),
               ),
 
               // Analytics Feed Section
               _AnalyticsFeedSection(
                 analyticsAsync: analyticsData,
                 settings: settings,
-                onViewAll: () => context.go('/analytics'),
+                onViewAll: () => context.push('/analytics'),
               ),
 
               // Space for fixed button

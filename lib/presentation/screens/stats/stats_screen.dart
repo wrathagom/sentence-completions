@@ -20,7 +20,7 @@ class StatsScreen extends ConsumerWidget {
         title: const Text('Statistics'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SafeArea(
