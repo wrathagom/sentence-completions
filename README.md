@@ -1,16 +1,30 @@
-# sentence_completion
+# Sentence Completion
 
-A new Flutter project.
+Daily sentence completion journaling app for self‑reflection.
 
-## Getting Started
+**Features**
+- Guided sentence‑completion prompts
+- Favorites and history views
+- Goals and reminders
+- Analytics with word clouds and stats
+- Export and share options
+- Optional AI stem suggestions (Anthropic API key stored locally)
 
-This project is a starting point for a Flutter application.
+**Tech**
+- Flutter
+- Riverpod for state management
+- GoRouter for navigation
+- SQFLite for local storage
 
-A few resources to get you started if this is your first Flutter project:
+**Setup**
+```bash
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Run**
+```bash
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**License**
+PolyForm Noncommercial 1.0.0. See `LICENSE`.
