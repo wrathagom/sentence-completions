@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
+import '../../../core/navigation.dart';
 import '../../../data/models/goal.dart';
 import '../../providers/providers.dart';
 import '../../widgets/responsive_scaffold.dart';
@@ -33,7 +32,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
         title: const Text('Create Goal'),
       ),
@@ -230,7 +229,7 @@ class _CreateGoalScreenState extends ConsumerState<CreateGoalScreen> {
       ref.invalidate(activeGoalsWithProgressProvider);
 
       if (mounted) {
-        context.pop();
+        context.safePop();
       }
     } finally {
       if (mounted) {

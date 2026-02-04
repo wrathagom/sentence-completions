@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../data/models/user_settings.dart';
 
+/// Theme extension to store custom colors not in the standard ColorScheme
+class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
+  final Color backgroundColor;
+
+  const AppThemeExtension({required this.backgroundColor});
+
+  @override
+  AppThemeExtension copyWith({Color? backgroundColor}) {
+    return AppThemeExtension(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+    );
+  }
+
+  @override
+  AppThemeExtension lerp(ThemeExtension<AppThemeExtension>? other, double t) {
+    if (other is! AppThemeExtension) return this;
+    return AppThemeExtension(
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+    );
+  }
+}
+
 class AppTheme {
   static ThemeData getTheme(ColorTheme colorTheme, Brightness brightness) {
     final colors = _getColorPalette(colorTheme);
@@ -34,10 +56,11 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: isDark ? colors.backgroundDark : colors.backgroundLight,
+      scaffoldBackgroundColor: Colors.transparent,
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: isDark ? colors.backgroundDark : colors.backgroundLight,
         foregroundColor: isDark ? colors.onSurfaceDark : colors.onSurfaceLight,
       ),
@@ -114,6 +137,11 @@ class AppTheme {
           return null;
         }),
       ),
+      extensions: [
+        AppThemeExtension(
+          backgroundColor: isDark ? colors.backgroundDark : colors.backgroundLight,
+        ),
+      ],
     );
   }
 

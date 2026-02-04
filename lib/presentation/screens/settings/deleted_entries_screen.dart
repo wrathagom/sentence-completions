@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/navigation.dart';
 import '../../../data/models/deleted_entry.dart';
 import '../../providers/providers.dart';
 import '../../widgets/responsive_scaffold.dart';
@@ -18,7 +18,7 @@ class DeletedEntriesScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
         title: const Text('Recently Deleted'),
         actions: [

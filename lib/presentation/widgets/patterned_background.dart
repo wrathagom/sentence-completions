@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/theme.dart';
 import '../../data/models/user_settings.dart';
 import '../providers/providers.dart';
 
@@ -24,9 +25,9 @@ class PatternedBackground extends ConsumerWidget {
       return child;
     }
 
-    // Get the background color from appBarTheme since scaffoldBackgroundColor
-    // may be transparent (to allow pattern to show through)
-    final backgroundColor = Theme.of(context).appBarTheme.backgroundColor ??
+    // Get the background color from theme extension
+    final themeExtension = Theme.of(context).extension<AppThemeExtension>();
+    final backgroundColor = themeExtension?.backgroundColor ??
         Theme.of(context).colorScheme.surface;
 
     return ColoredBox(

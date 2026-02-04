@@ -13,6 +13,7 @@ import '../../providers/providers.dart';
 import '../../widgets/glowing_card.dart';
 import '../../widgets/goal_progress_card.dart';
 import '../../widgets/responsive_scaffold.dart';
+import '../../widgets/scroll_aware_scaffold.dart';
 import '../../widgets/word_cloud_widget.dart';
 import '../stats/widgets/calendar_widget.dart';
 import '../stats/widgets/day_entries_sheet.dart';
@@ -135,8 +136,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasCompletedToday = ref.watch(hasCompletedTodayProvider);
-    final todayEntry = ref.watch(todayEntryProvider);
     final todayEntryCount = ref.watch(todayEntryCountProvider);
+    final latestEntry = ref.watch(latestEntryProvider);
     final pendingResurfacing = ref.watch(pendingResurfacingProvider);
     final streakData = ref.watch(streakDataProvider);
     final goalsWithProgress = ref.watch(activeGoalsWithProgressProvider);
@@ -146,15 +147,18 @@ class HomeScreen extends ConsumerWidget {
     // Pre-fetch saved stems so it's ready for entry dialogs
     ref.watch(savedStemsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppConstants.appName),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.push('/settings'),
-          ),
-        ],
+    return ScrollAwareScaffold(
+      title: AppConstants.appName,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () => context.push('/settings'),
+        ),
+      ],
+      bottomNavigationBar: _FixedEntryButton(
+        hasCompletedToday: hasCompletedToday.valueOrNull ?? false,
+        onStartEntry: () => _showStartOptions(context, ref),
+        onAddAnother: () => _showAddAnotherOptions(context, ref),
       ),
       body: SafeArea(
         child: ResponsiveCenter(
@@ -245,28 +249,19 @@ class HomeScreen extends ConsumerWidget {
                 error: (e, s) => const SizedBox.shrink(),
               ),
 
-              // Today's entry preview (view only, no buttons)
-              hasCompletedToday.when(
-                data: (completed) {
-                  if (!completed) return const SizedBox.shrink();
-                  return todayEntry.when(
-                    data: (entry) {
-                      if (entry == null) return const SizedBox.shrink();
-                      final count = todayEntryCount.valueOrNull ?? 1;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _TodayEntryPreview(
-                          stemText: entry.stemText,
-                          completion: entry.completion,
-                          entryCount: count,
-                          onTap: () => context.push('/entry/${entry.id}'),
-                          onShowAllEntries: () => context.push('/history'),
-                        ),
-                      );
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (e, s) => const SizedBox.shrink(),
+              // Latest entry preview
+              latestEntry.when(
+                data: (entry) {
+                  if (entry == null) return const SizedBox.shrink();
+                  final todayCount = todayEntryCount.valueOrNull ?? 0;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _LatestEntryPreview(
+                      entry: entry,
+                      todayEntryCount: todayCount,
+                      onTap: () => context.push('/entry/${entry.id}'),
+                      onShowAllEntries: () => context.push('/history'),
+                    ),
                   );
                 },
                 loading: () => const SizedBox.shrink(),
@@ -299,11 +294,6 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: _FixedEntryButton(
-        hasCompletedToday: hasCompletedToday.valueOrNull ?? false,
-        onStartEntry: () => _showStartOptions(context, ref),
-        onAddAnother: () => _showAddAnotherOptions(context, ref),
       ),
     );
   }
@@ -464,20 +454,51 @@ class _CompactStreakCard extends StatelessWidget {
   }
 }
 
-class _TodayEntryPreview extends StatelessWidget {
-  final String stemText;
-  final String completion;
-  final int entryCount;
+class _LatestEntryPreview extends StatelessWidget {
+  final Entry entry;
+  final int todayEntryCount;
   final VoidCallback onTap;
   final VoidCallback onShowAllEntries;
 
-  const _TodayEntryPreview({
-    required this.stemText,
-    required this.completion,
-    required this.entryCount,
+  const _LatestEntryPreview({
+    required this.entry,
+    required this.todayEntryCount,
     required this.onTap,
     required this.onShowAllEntries,
   });
+
+  String _getTimeLabel() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final entryDate = DateTime(
+      entry.createdAt.year,
+      entry.createdAt.month,
+      entry.createdAt.day,
+    );
+
+    if (entryDate == today) {
+      if (todayEntryCount > 1) {
+        return '$todayEntryCount today';
+      }
+      return 'Today';
+    }
+
+    final yesterday = today.subtract(const Duration(days: 1));
+    if (entryDate == yesterday) {
+      return 'Yesterday';
+    }
+
+    final difference = today.difference(entryDate).inDays;
+    if (difference < 7) {
+      return '$difference days ago';
+    } else if (difference < 30) {
+      final weeks = (difference / 7).floor();
+      return '$weeks ${weeks == 1 ? 'week' : 'weeks'} ago';
+    } else {
+      final months = (difference / 30).floor();
+      return '$months ${months == 1 ? 'month' : 'months'} ago';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -489,7 +510,7 @@ class _TodayEntryPreview extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.check_circle,
+                Icons.article_outlined,
                 size: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -513,7 +534,7 @@ class _TodayEntryPreview extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  '$entryCount today',
+                  _getTimeLabel(),
                   style:
                       Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: Theme.of(context)
@@ -532,7 +553,7 @@ class _TodayEntryPreview extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  stemText,
+                  entry.stemText,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontStyle: FontStyle.italic,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -540,7 +561,7 @@ class _TodayEntryPreview extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  completion,
+                  entry.completion,
                   style: Theme.of(context).textTheme.bodyMedium,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/navigation.dart';
 import '../../../data/models/goal.dart';
 import '../../providers/providers.dart';
 import '../../widgets/goal_progress_card.dart';
@@ -18,7 +19,7 @@ class GoalsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
         title: const Text('Goals'),
         actions: [

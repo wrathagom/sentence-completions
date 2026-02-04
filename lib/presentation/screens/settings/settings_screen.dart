@@ -10,6 +10,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:window_manager/window_manager.dart' as wm;
 
 import '../../../core/constants.dart';
+import '../../../core/navigation.dart';
 import '../../../core/responsive.dart';
 import '../../../data/models/user_settings.dart';
 import '../../providers/providers.dart';
@@ -28,7 +29,7 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Settings'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
       ),
       body: Center(
@@ -641,6 +642,26 @@ class SettingsScreen extends ConsumerWidget {
     WidgetRef ref,
     UserSettings settings,
   ) async {
+    // Determine if we should show dark or light themes based on theme mode
+    final bool showDarkThemes;
+    switch (settings.themeMode) {
+      case ThemeModePreference.dark:
+        showDarkThemes = true;
+        break;
+      case ThemeModePreference.light:
+        showDarkThemes = false;
+        break;
+      case ThemeModePreference.system:
+        // Use the current system brightness
+        showDarkThemes = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+        break;
+    }
+
+    // Filter themes based on mode
+    final availableThemes = ColorTheme.values
+        .where((theme) => theme.isDark == showDarkThemes)
+        .toList();
+
     final result = await showModalBottomSheet<ColorTheme?>(
       context: context,
       isScrollControlled: true,
@@ -672,9 +693,9 @@ class SettingsScreen extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 controller: scrollController,
-                itemCount: ColorTheme.values.length,
+                itemCount: availableThemes.length,
                 itemBuilder: (context, index) {
-                  final theme = ColorTheme.values[index];
+                  final theme = availableThemes[index];
                   return _ColorThemeTile(
                     theme: theme,
                     isSelected: settings.colorTheme == theme,
@@ -894,28 +915,35 @@ class SettingsScreen extends ConsumerWidget {
 class _SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final bool initiallyExpanded;
 
   const _SettingsSection({
     required this.title,
     required this.children,
+    this.initiallyExpanded = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-          ),
-        ),
-        ...children,
-      ],
+    // For sections without a title (like the quit section), use the old layout
+    if (title.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      );
+    }
+
+    return ExpansionTile(
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+      ),
+      initiallyExpanded: initiallyExpanded,
+      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+      childrenPadding: EdgeInsets.zero,
+      children: children,
     );
   }
 }
@@ -964,7 +992,6 @@ class _ColorThemeTile extends StatelessWidget {
       onTap: onTap,
       leading: _ThemePreview(theme: theme),
       title: Text(theme.displayName),
-      subtitle: Text(theme.isDark ? 'Dark theme' : 'Light theme'),
       trailing: isSelected
           ? Icon(
               Icons.check_circle,

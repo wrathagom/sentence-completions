@@ -1,11 +1,13 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/navigation.dart';
 import '../../../data/models/analytics_data.dart';
 import '../../../data/models/user_settings.dart';
 import '../../providers/providers.dart';
+import '../../widgets/glowing_card.dart';
 import '../../widgets/word_cloud_widget.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
@@ -21,7 +23,7 @@ class AnalyticsScreen extends ConsumerWidget {
         title: const Text('Analytics'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
       ),
       body: analyticsAsync.when(
@@ -62,55 +64,53 @@ class _HomeWidgetSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.dashboard_customize_outlined,
-                  color: Theme.of(context).colorScheme.primary,
+    return GlowingCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.dashboard_customize_outlined,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Home Screen Widgets',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Choose which analytics to show on your home screen',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Home Screen Widgets',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Choose which analytics to show on your home screen',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 12),
-            _WidgetToggle(
-              title: 'Word Cloud',
-              icon: Icons.cloud_outlined,
-              value: enabledWidgets.contains(HomeAnalyticsWidget.wordCloud),
-              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.wordCloud),
-            ),
-            _WidgetToggle(
-              title: 'Category Pie Chart',
-              icon: Icons.pie_chart_outline,
-              value: enabledWidgets.contains(HomeAnalyticsWidget.categoryPieChart),
-              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.categoryPieChart),
-            ),
-            _WidgetToggle(
-              title: 'Stats Row',
-              icon: Icons.bar_chart,
-              value: enabledWidgets.contains(HomeAnalyticsWidget.statsRow),
-              onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.statsRow),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          _WidgetToggle(
+            title: 'Word Cloud',
+            icon: Icons.cloud_outlined,
+            value: enabledWidgets.contains(HomeAnalyticsWidget.wordCloud),
+            onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.wordCloud),
+          ),
+          _WidgetToggle(
+            title: 'Category Pie Chart',
+            icon: Icons.pie_chart_outline,
+            value: enabledWidgets.contains(HomeAnalyticsWidget.categoryPieChart),
+            onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.categoryPieChart),
+          ),
+          _WidgetToggle(
+            title: 'Stats Row',
+            icon: Icons.bar_chart,
+            value: enabledWidgets.contains(HomeAnalyticsWidget.statsRow),
+            onChanged: (_) => _toggleWidget(HomeAnalyticsWidget.statsRow),
+          ),
+        ],
       ),
     );
   }
@@ -198,13 +198,11 @@ class _AnalyticsContent extends StatelessWidget {
         const SizedBox(height: 24),
         _SectionHeader(title: 'Word Cloud'),
         const SizedBox(height: 8),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              height: 200,
-              child: WordCloudWidget(words: data.topWords.take(30).toList()),
-            ),
+        GlowingCard(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            height: 200,
+            child: WordCloudWidget(words: data.topWords.take(30).toList()),
           ),
         ),
         const SizedBox(height: 24),
@@ -216,6 +214,13 @@ class _AnalyticsContent extends StatelessWidget {
         ],
         if (data.entriesByMonth.isNotEmpty) ...[
           _SectionHeader(title: 'Activity Over Time'),
+          const SizedBox(height: 4),
+          Text(
+            'Entries per month (last 6 months)',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
           const SizedBox(height: 8),
           _ActivityChart(entriesByMonth: data.entriesByMonth),
           const SizedBox(height: 24),
@@ -295,31 +300,29 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-          ],
-        ),
+    return GlowingCard(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            size: 24,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ],
       ),
     );
   }
@@ -359,67 +362,65 @@ class _CategoryChart extends StatelessWidget {
       colorScheme.tertiaryContainer,
     ];
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 200,
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 40,
-                  sections: distribution.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final cat = entry.value;
-                    return PieChartSectionData(
-                      value: cat.entryCount.toDouble(),
-                      title: '${cat.percentage.toStringAsFixed(0)}%',
-                      color: colors[index % colors.length],
-                      radius: 50,
-                      titleStyle: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onPrimary,
-                      ),
-                    );
-                  }).toList(),
-                ),
+    return GlowingCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 200,
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 2,
+                centerSpaceRadius: 40,
+                sections: distribution.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final cat = entry.value;
+                  return PieChartSectionData(
+                    value: cat.entryCount.toDouble(),
+                    title: '${cat.percentage.toStringAsFixed(0)}%',
+                    color: colors[index % colors.length],
+                    radius: 50,
+                    titleStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onPrimary,
+                    ),
+                  );
+                }).toList(),
               ),
             ),
-            const SizedBox(height: 16),
-            ...distribution.asMap().entries.map((entry) {
-              final index = entry.key;
-              final cat = entry.value;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: colors[index % colors.length],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
+          ),
+          const SizedBox(height: 16),
+          ...distribution.asMap().entries.map((entry) {
+            final index = entry.key;
+            final cat = entry.value;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: colors[index % colors.length],
+                      borderRadius: BorderRadius.circular(2),
                     ),
-                    const SizedBox(width: 8),
-                    if (cat.emoji != null) ...[
-                      Text(_getEmojiDisplay(cat.emoji)),
-                      const SizedBox(width: 4),
-                    ],
-                    Expanded(child: Text(cat.categoryName)),
-                    Text(
-                      '${cat.entryCount}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  if (cat.emoji != null) ...[
+                    Text(_getEmojiDisplay(cat.emoji)),
+                    const SizedBox(width: 4),
                   ],
-                ),
-              );
-            }),
-          ],
-        ),
+                  Expanded(child: Text(cat.categoryName)),
+                  Text(
+                    '${cat.entryCount}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -429,6 +430,15 @@ class _ActivityChart extends StatelessWidget {
   final Map<String, int> entriesByMonth;
 
   const _ActivityChart({required this.entriesByMonth});
+
+  String _formatMonthLabel(String monthKey) {
+    try {
+      final date = DateTime.parse('$monthKey-01');
+      return DateFormat('MMM yy').format(date);
+    } catch (_) {
+      return monthKey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -446,84 +456,81 @@ class _ActivityChart extends StatelessWidget {
         .reduce((a, b) => a > b ? a : b)
         .toDouble();
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 200,
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              maxY: maxValue * 1.2,
-              barTouchData: BarTouchData(
-                touchTooltipData: BarTouchTooltipData(
-                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    final month = lastMonths[groupIndex];
-                    final count = entriesByMonth[month] ?? 0;
-                    return BarTooltipItem(
-                      '$month\n$count entries',
-                      TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+    return GlowingCard(
+      padding: const EdgeInsets.all(16),
+      child: SizedBox(
+        height: 200,
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceAround,
+            maxY: maxValue * 1.2,
+            barTouchData: BarTouchData(
+              touchTooltipData: BarTouchTooltipData(
+                getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                  final month = lastMonths[groupIndex];
+                  final count = entriesByMonth[month] ?? 0;
+                  return BarTooltipItem(
+                    '$month\n$count entries',
+                    TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  );
+                },
+              ),
+            ),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    final index = value.toInt();
+                    if (index < 0 || index >= lastMonths.length) {
+                      return const SizedBox.shrink();
+                    }
+                    final month = lastMonths[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        _formatMonthLabel(month),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     );
                   },
+                  reservedSize: 30,
                 ),
               ),
-              titlesData: FlTitlesData(
-                show: true,
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      final index = value.toInt();
-                      if (index < 0 || index >= lastMonths.length) {
-                        return const SizedBox.shrink();
-                      }
-                      final month = lastMonths[index];
-                      final shortMonth = month.substring(5);
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          shortMonth,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      );
-                    },
-                    reservedSize: 30,
-                  ),
-                ),
-                leftTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                rightTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
+              leftTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
               ),
-              borderData: FlBorderData(show: false),
-              gridData: const FlGridData(show: false),
-              barGroups: lastMonths.asMap().entries.map((entry) {
-                final index = entry.key;
-                final month = entry.value;
-                final count = entriesByMonth[month] ?? 0;
-                return BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(
-                      toY: count.toDouble(),
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 20,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(4),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
             ),
+            borderData: FlBorderData(show: false),
+            gridData: const FlGridData(show: false),
+            barGroups: lastMonths.asMap().entries.map((entry) {
+              final index = entry.key;
+              final month = entry.value;
+              final count = entriesByMonth[month] ?? 0;
+              return BarChartGroupData(
+                x: index,
+                barRods: [
+                  BarChartRodData(
+                    toY: count.toDouble(),
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 20,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
         ),
       ),

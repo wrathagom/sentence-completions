@@ -56,21 +56,23 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen> {
   Future<void> _loadStem() async {
     Stem? stem;
 
-    if (widget.stemText != null) {
-      // Create a synthetic stem for AI-generated text
+    if (widget.stemId != null) {
+      // Try to load specific stem by ID
+      final stemRepository = ref.read(stemRepositoryProvider);
+      stem = await stemRepository.getStemById(widget.stemId!);
+    }
+
+    // If no stem found by ID but we have stemText, create a synthetic stem
+    if (stem == null && widget.stemText != null) {
       stem = Stem(
-        id: 'ai_${DateTime.now().millisecondsSinceEpoch}',
+        id: widget.stemId ?? 'custom_${DateTime.now().millisecondsSinceEpoch}',
         text: widget.stemText!,
-        categoryId: 'ai_generated',
+        categoryId: 'custom',
         keywords: const [],
         difficultyLevel: 1,
         isFoundational: false,
       );
-    } else if (widget.stemId != null) {
-      // Load specific stem by ID
-      final stemRepository = ref.read(stemRepositoryProvider);
-      stem = await stemRepository.getStemById(widget.stemId!);
-    } else {
+    } else if (stem == null && widget.stemId == null && widget.stemText == null) {
       // Get a random stem, optionally filtered by category
       final completionService = ref.read(completionServiceProvider);
       stem = await completionService.getStemForCompletion(

@@ -352,6 +352,12 @@ final todayEntryCountProvider = FutureProvider<int>((ref) async {
   return repository.getTodayEntryCount();
 });
 
+final latestEntryProvider = FutureProvider<Entry?>((ref) async {
+  final repository = ref.watch(entryRepositoryProvider);
+  final entries = await repository.getAllEntries();
+  return entries.isNotEmpty ? entries.first : null;
+});
+
 // Resurfacing providers
 final pendingResurfacingProvider =
     FutureProvider<List<ResurfacingEntry>>((ref) async {

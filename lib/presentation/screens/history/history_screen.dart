@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/navigation.dart';
 import '../../../core/responsive.dart';
 import '../../../data/models/entry.dart';
 import '../../providers/providers.dart';
@@ -21,7 +22,7 @@ class HistoryScreen extends ConsumerWidget {
         title: const Text('History'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
       ),
       body: Column(

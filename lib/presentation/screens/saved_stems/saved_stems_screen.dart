@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/navigation.dart';
 import '../../../core/responsive.dart';
 import '../../../data/models/saved_stem.dart';
 import '../../providers/providers.dart';
@@ -68,7 +69,7 @@ class SavedStemsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
         title: const Text('Saved Prompts'),
       ),
@@ -157,18 +158,14 @@ class SavedStemsScreen extends ConsumerWidget {
                   ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
-                    // Use stemText for AI-generated stems, stemId for regular stems
-                    if (savedStem.stemId.startsWith('ai_')) {
-                      context.push(
-                        '/completion',
-                        extra: {'stemText': savedStem.stemText},
-                      );
-                    } else {
-                      context.push(
-                        '/completion',
-                        extra: {'stemId': savedStem.stemId},
-                      );
-                    }
+                    // Always pass both stemId and stemText for fallback support
+                    context.push(
+                      '/completion',
+                      extra: {
+                        'stemId': savedStem.stemId,
+                        'stemText': savedStem.stemText,
+                      },
+                    );
                   },
                 ),
               );

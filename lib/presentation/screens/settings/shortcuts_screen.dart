@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
+import '../../../core/navigation.dart';
 import '../../../data/models/keyboard_shortcut.dart';
 import '../../../domain/services/shortcut_service.dart';
 import '../../widgets/responsive_scaffold.dart';
@@ -17,7 +16,7 @@ class ShortcutsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
         title: const Text('Keyboard Shortcuts'),
       ),

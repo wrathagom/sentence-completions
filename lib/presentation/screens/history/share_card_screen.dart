@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import '../../../core/navigation.dart';
 import '../../../data/models/share_card_options.dart';
 import '../../providers/providers.dart';
 import '../../widgets/share_card_preview.dart';
@@ -210,7 +210,7 @@ class _ShareCardScreenState extends ConsumerState<ShareCardScreen> {
       if (!result.success && mounted) {
         _showError(result.error ?? 'Failed to generate image');
       } else if (mounted) {
-        context.pop();
+        context.safePop();
       }
     } catch (e) {
       _showError('Error sharing: $e');

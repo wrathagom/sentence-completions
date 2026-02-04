@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/navigation.dart';
 import '../../../data/models/entry.dart';
 import '../../../data/models/stem_rating.dart';
 import '../../providers/providers.dart';
 import '../../widgets/glowing_card.dart';
-import '../../widgets/mood_selector.dart';
 import '../../widgets/responsive_scaffold.dart';
-import '../../widgets/stem_rating_widget.dart';
 
 class EntryDetailScreen extends ConsumerWidget {
   final String entryId;
@@ -29,9 +28,7 @@ class EntryDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.pop();
-          },
+          onPressed: () => context.safePop(),
         ),
         title: Text(showComparison ? 'Comparison' : 'Entry Details'),
         actions: [
@@ -185,22 +182,6 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
     }
   }
 
-  Future<void> _rateStem(StemRatingValue rating) async {
-    final repository = ref.read(stemRatingRepositoryProvider);
-    await repository.rateStem(
-      stemId: widget.entry.stemId,
-      rating: rating,
-      entryId: widget.entry.id,
-    );
-
-    setState(() {
-      _selectedRating = rating;
-    });
-
-    ref.invalidate(stemRatingForStemProvider(widget.entry.stemId));
-    ref.invalidate(stemRatingForEntryProvider(widget.entry.id));
-  }
-
   @override
   Widget build(BuildContext context) {
     final entry = widget.entry;
@@ -272,100 +253,96 @@ class _EntryDetailViewState extends ConsumerState<_EntryDetailView> {
                         fontStyle: FontStyle.italic,
                       ),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          GlowingCard(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Your Completion',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  entry.completion,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          GlowingCard(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Stem Rating',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-                const SizedBox(height: 12),
-                if (!_ratingLoaded)
-                  const Center(
-                    child: SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  )
-                else
-                  StemRatingWidget(
-                    selectedRating: _selectedRating,
-                    onRatingSelected: _rateStem,
-                    compact: true,
+                if (_ratingLoaded && _selectedRating != null) ...[
+                  const SizedBox(height: 12),
+                  Divider(
+                    color: Theme.of(context).colorScheme.outlineVariant,
                   ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        _selectedRating!.emoji,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _selectedRating!.label,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
-          if (entry.preMood != null || entry.postMood != null) ...[
-            const SizedBox(height: 16),
-            GlowingCard(
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: GlowingCard(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Mood',
+                    'Your Completion',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      if (entry.preMood != null)
-                        Expanded(
-                          child: MoodDisplay(
-                            mood: entry.preMood,
-                            label: 'Before',
-                          ),
-                        ),
-                      if (entry.preMood != null && entry.postMood != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Icon(
-                            Icons.arrow_forward,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      if (entry.postMood != null)
-                        Expanded(
-                          child: MoodDisplay(
-                            mood: entry.postMood,
-                            label: 'After',
-                          ),
-                        ),
-                    ],
+                  const SizedBox(height: 8),
+                  Text(
+                    entry.completion,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
+              ),
+            ),
+          ),
+          if (entry.preMood != null || entry.postMood != null) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: GlowingCard(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Mood',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        if (entry.preMood != null)
+                          Text(
+                            '${entry.preMood!.emoji} ${entry.preMood!.label}',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        if (entry.preMood != null && entry.postMood != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              '→',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ),
+                        if (entry.postMood != null)
+                          Text(
+                            '${entry.postMood!.emoji} ${entry.postMood!.label}',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

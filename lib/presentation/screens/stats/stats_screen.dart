@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
+import '../../../core/navigation.dart';
 import '../../providers/providers.dart';
 import '../../widgets/responsive_scaffold.dart';
 import 'widgets/calendar_widget.dart';
@@ -20,7 +19,7 @@ class StatsScreen extends ConsumerWidget {
         title: const Text('Statistics'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
       ),
       body: SafeArea(

@@ -39,32 +39,51 @@ class WordCloudWidget extends StatelessWidget {
     ];
 
     final random = Random(42);
+    const angles = [0.0, -0.12, 0.12, -0.25, 0.25];
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 8,
-          runSpacing: 4,
-          children: words.map((word) {
-            final fontSize = minFontSize +
-                (maxFontSize - minFontSize) * word.normalizedSize;
-            final color = colors[random.nextInt(colors.length)];
+        return ClipRect(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+                minHeight: constraints.maxHeight,
+              ),
+              child: Center(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: words.map((word) {
+                    final fontSize = minFontSize +
+                        (maxFontSize - minFontSize) * word.normalizedSize;
+                    final color = colors[random.nextInt(colors.length)];
+                    final angle = word.normalizedSize > 0.75
+                        ? 0.0
+                        : angles[random.nextInt(angles.length)];
 
-            return Tooltip(
-              message: '${word.word}: ${word.count} ${word.count == 1 ? 'time' : 'times'}',
-              child: Text(
-                word.word,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: word.normalizedSize > 0.7
-                      ? FontWeight.bold
-                      : FontWeight.normal,
-                  color: color,
+                    return Tooltip(
+                      message: '${word.word}: ${word.count} ${word.count == 1 ? 'time' : 'times'}',
+                      child: Transform.rotate(
+                        angle: angle,
+                        child: Text(
+                          word.word,
+                          style: TextStyle(
+                            fontSize: fontSize,
+                            fontWeight: word.normalizedSize > 0.7
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: color,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-            );
-          }).toList(),
+            ),
+          ),
         );
       },
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
+import '../../../core/navigation.dart';
 import '../../../data/models/reminder_settings.dart';
 import '../../providers/providers.dart';
 
@@ -132,7 +131,7 @@ class _ReminderSettingsScreenState
         title: const Text('Reminders'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safePop(),
         ),
       ),
       body: ListView(
